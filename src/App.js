@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PathFindingVisuallization from './PathFindingVisualization/PathFindingVisualization/PathFindingVisualization'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Hey, there!</h1>
-    </div>
-  );
+export default class App extends Component {
+  render() {
+    return (
+      <div className="App">
+          <PathFindingVisuallization></PathFindingVisuallization>
+      </div>
+    );
+  }
 }
 
-export default App;
+
