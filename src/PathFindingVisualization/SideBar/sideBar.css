@@ -1,0 +1,19 @@
+.side-bar {
+    background: var(--side);
+    margin-top: 100px;
+    padding: 15px;
+    display:block;
+    position: relative;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.side-bar-text {
+    font-family: Open Sans;
+    border-bottom: 1px solid var(--hover);
+    margin-bottom: 10px;
+    color: #000a82;
+    font-size: 1em;
+}
