@@ -1,32 +1,21 @@
-import React from 'react';
-import './Button.css'
-const Button = (props) =>{
-    const ClickEvent = (e) =>{
-        //button_text is a variable that is set to props(object).onClick(property)
-        let button_text = props.onClick;
-        let algorithm = props.text;
-        // if(algorithm === 'reset')
-        // {
-        //     button_text(false);
-        // }
-        // else{
-        //     button_text();
-        // }
+import React from "react";
+import "./Button.css";
+import DFS from "../Algorithms/DFS";
+const Button = (props) => {
+  const { id, name, text } = props;
+  const clickEvent = () => {
+    if (id === 1) {
+      console.log("reset");
+    } else {
+      console.log(name);
     }
-    return(
-        <div className = "button-container" onClick = {ClickEvent}>
-            <button className = "button-text">{props.text}</button>
-        </div>
-    );
+  };
+  return (
+    <div className="button-container">
+      <button className="button-text" onClick={clickEvent}>
+        {text}
+      </button>
+    </div>
+  );
 };
-// function Button(){
-//     const sayHello = () =>{
-//         console.log("Hello");
-//     }
-//     return(
-//         <div> 
-//             <button onClick = {sayHello}>Hello</button>
-//         </div>
-//     );
-// }
 export default Button;
