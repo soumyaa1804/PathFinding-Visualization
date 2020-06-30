@@ -1,0 +1,8 @@
+.container {
+    overflow: hidden;
+    touch-action: none;
+}
+
+.side-bar {
+    z-index: 100px;
+}

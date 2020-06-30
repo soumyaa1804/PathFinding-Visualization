@@ -4,14 +4,14 @@ import Node from "../Node/Node";
 import "./Grid.css";
 
 const size = 30;
-var width = window.innerWidth;
-var height = window.innerHeight;
-var noOfRows = Math.floor(height / size) - 1;
-var noOfColumn = Math.floor(width / size) - 1;
-var START_NODE_ROW = Math.floor(noOfRows / 2);
-var START_NODE_COL = Math.floor(noOfColumn / 4);
-var FINISH_NODE_ROW = Math.floor(noOfRows / 2);
-var FINISH_NODE_COL = Math.floor((3 * noOfColumn) / 4);
+const width = window.innerWidth;
+const height = window.innerHeight;
+const noOfRows = Math.floor(height / size) - 1;
+const noOfColumn = Math.floor(width / size) - 1;
+const START_NODE_ROW = Math.floor(noOfRows / 2);
+const START_NODE_COL = Math.floor(noOfColumn / 4);
+const FINISH_NODE_ROW = Math.floor(noOfRows / 2);
+const FINISH_NODE_COL = Math.floor((3 * noOfColumn) / 4);
 
 export default class Grid extends Component {
   constructor() {
@@ -25,6 +25,26 @@ export default class Grid extends Component {
   componentDidMount() {
     const grid = getInitialGrid();
     this.setState({ grid });
+  }
+
+  handleMouseDown(row, col) {
+    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    this.setState({
+      grid: newGrid,
+      mouseIsPressed: true
+    });
+  }
+
+  handleMouseEnter(row, col) {
+    if (!this.state.mouseIsPressed) return;
+    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    this.setState({grid: newGrid});
+    console.log(`Mouse Enter! ${row}-${col} `);
+  }
+
+  handleMouseUp() {
+    this.setState({mouseIsPressed: false});
+    console.log("Mouse Up!")
   }
 
   render() {
@@ -45,8 +65,13 @@ export default class Grid extends Component {
                       isFinish={isFinish}
                       isStart={isStart}
                       isWall={isWall}
-                      row={row}
                       mouseIsPressed={mouseIsPressed}
+                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                      onMouseEnter={(row, col) =>
+                        this.handleMouseEnter(row, col)
+                      }
+                      onMouseUp={() => this.handleMouseUp()}
+                      row={row}
                     ></Node>
                   );
                 })}
@@ -83,3 +108,14 @@ const createNode = (row, col) => {
     previousNode: null,
   };
 };
+
+const getNewGridWithWallToggled = (grid, row, col) => {
+  const newGrid = grid.slice(); // The slice() method returns the selected elements in an array, as a new array object.
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isWall: !node.isWall,
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
+}

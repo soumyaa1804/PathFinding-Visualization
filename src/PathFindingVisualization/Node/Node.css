@@ -1,8 +1,10 @@
 .node {
     width: 25px;
     height: 25px;
-    outline: 1px solid rgb(175, 216, 248);
-    display: inline-block;
+    border: 0.5px solid rgb(175, 216, 248);
+    display: table-cell;
+    border-collapse: collapse;
+    overflow: hidden;
 }
 
 .node-start {
@@ -12,3 +14,7 @@
     background-color: green;
 }
 
+.node-wall {
+    background-color: rgb(0, 0, 0);
+    opacity: 0.5;
+}
