@@ -56,6 +56,11 @@ td {
     border-radius: 5px;
     max-width: 400px;
 } */
-.btn-grp {
-  background-color: red;
+.btn {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+.btn-space {
+  margin-right: 5px;
 }
