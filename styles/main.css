@@ -80,3 +80,12 @@ td {
 .btn-space {
   margin-right: 5px;
 }
+.start {
+  background-color: rgb(218, 32, 110);
+}
+.end {
+  background-color: rgb(214, 202, 96);
+}
+.wall {
+  background-color: lightsalmon;
+}
