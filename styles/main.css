@@ -99,12 +99,14 @@ td:hover {
 
 .start {
   background-color: rgb(218, 32, 110);
+  opacity: 0.8;
 }
 
 .end {
   background-color: rgb(214, 202, 96);
+  opacity: 0.8;
 }
 
 .wall {
-  background-color: lightsalmon;
+  background: transparent;
 }
