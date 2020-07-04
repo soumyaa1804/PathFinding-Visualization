@@ -1,180 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
 
-    <!-- Style sheet script.js -->
-    <link rel="stylesheet" href="./styles/main.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Girassol&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-    <!-- Material Design Bootstrap
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Style sheet script.js -->
+  <link rel="stylesheet" href="./styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Girassol&display=swap" rel="stylesheet" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <!-- Material Design Bootstrap
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet"> -->
-    <title>PathFinding Visualization</title>
-  </head>
+  <title>PathFinding Visualization</title>
+</head>
 
-  <body>
-    <div id="particles-js"></div>
+<body>
+  <div id="particles-js"></div>
 
-    <div class="float-container main">
-      <!-- Heading Mangalyaan -->
-      <div class="header mb-3">
-        <p>
-          Mangalyaan<img
-            class="ml-3"
-            style="height: 50px; width: 50px;"
-            src="./assets/rocket.gif"
-          />
-        </p>
-      </div>
-      <!-- Grid -->
-      <div id="tableContainer"></div>
+  <div class="float-container main">
+    <!-- Heading Mangalyaan -->
+    <div class="header pt-4">
+      <p>
+        Mangalyaan<img class="ml-3" style="height: 50px; width: 50px;" src="./assets/rocket.gif" />
+      </p>
     </div>
+    <!-- Grid -->
+    <div id="tableContainer"></div>
+  </div>
 
-    <!-- Draggable Sidebar -->
-    <div class="side-bar" id="side-bar">
-      <div class="card mb-3">
-        <div class="card-header title">
-          <a class="card-link" href="#">
-            Algorithms
+  <!-- Draggable Sidebar -->
+  <div class="side-bar" id="side-bar">
+    <div class="card mb-3">
+      <div class="card-header title">
+        <a class="card-link" href="#">
+          Algorithms
+        </a>
+      </div>
+    </div>
+    <div id="accordion" class="mb-3">
+      <div class="card">
+        <div class="card-header">
+          <a class="card-link" data-toggle="collapse" href="#collapseOne">
+            A*
           </a>
         </div>
+        <div id="collapseOne" class="collapse show" data-parent="#accordion">
+          <div class="card-body">
+            Lorem ipsum..
+          </div>
+        </div>
       </div>
-      <div id="accordion">
-        <div class="card">
-          <div class="card-header">
-            <a class="card-link" data-toggle="collapse" href="#collapseOne">
-              A*
-            </a>
-          </div>
-          <div id="collapseOne" class="collapse show" data-parent="#accordion">
-            <div class="card-body">
-              Lorem ipsum..
-            </div>
+
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+            Dijkstra
+          </a>
+        </div>
+        <div id="collapseTwo" class="collapse" data-parent="#accordion">
+          <div class="card-body">
+            Lorem ipsum..
           </div>
         </div>
+      </div>
 
-        <div class="card">
-          <div class="card-header">
-            <a
-              class="collapsed card-link"
-              data-toggle="collapse"
-              href="#collapseTwo"
-            >
-              Dijkstra
-            </a>
-          </div>
-          <div id="collapseTwo" class="collapse" data-parent="#accordion">
-            <div class="card-body">
-              Lorem ipsum..
-            </div>
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+            Greedy Best-First Search
+          </a>
+        </div>
+        <div id="collapseThree" class="collapse" data-parent="#accordion">
+          <div class="card-body">
+            Lorem ipsum..
           </div>
         </div>
+      </div>
 
-        <div class="card">
-          <div class="card-header">
-            <a
-              class="collapsed card-link"
-              data-toggle="collapse"
-              href="#collapseThree"
-            >
-              Greedy Best-First Search
-            </a>
-          </div>
-          <div id="collapseThree" class="collapse" data-parent="#accordion">
-            <div class="card-body">
-              Lorem ipsum..
-            </div>
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed card-link" data-toggle="collapse" href="#collapseFour">
+            Breadth-First Search (BFS)
+          </a>
+        </div>
+        <div id="collapseFour" class="collapse" data-parent="#accordion">
+          <div class="card-body">
+            Lorem ipsum..
           </div>
         </div>
+      </div>
 
-        <div class="card">
-          <div class="card-header">
-            <a
-              class="collapsed card-link"
-              data-toggle="collapse"
-              href="#collapseFour"
-            >
-              Breadth-First Search (BFS)
-            </a>
-          </div>
-          <div id="collapseFour" class="collapse" data-parent="#accordion">
-            <div class="card-body">
-              Lorem ipsum..
-            </div>
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed card-link" data-toggle="collapse" href="#collapseFive">
+            Depth-First Search (DFS)
+          </a>
+        </div>
+        <div id="collapseFive" class="collapse" data-parent="#accordion">
+          <div class="card-body">
+            Lorem ipsum..
           </div>
         </div>
+      </div>
 
-        <div class="card">
-          <div class="card-header">
-            <a
-              class="collapsed card-link"
-              data-toggle="collapse"
-              href="#collapseFive"
-            >
-              Depth-First Search (DFS)
-            </a>
-          </div>
-          <div id="collapseFive" class="collapse" data-parent="#accordion">
-            <div class="card-body">
-              Lorem ipsum..
-            </div>
-          </div>
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed card-link" data-toggle="collapse" href="#collapseSix">
+            Jump Point Search
+          </a>
         </div>
-
-        <div class="card">
-          <div class="card-header">
-            <a
-              class="collapsed card-link"
-              data-toggle="collapse"
-              href="#collapseSix"
-            >
-              Jump Point Search
-            </a>
-          </div>
-          <div id="collapseSix" class="collapse" data-parent="#accordion">
-            <div class="card-body">
-              Lorem ipsum..
-            </div>
+        <div id="collapseSix" class="collapse" data-parent="#accordion">
+          <div class="card-body">
+            Lorem ipsum..
           </div>
         </div>
       </div>
     </div>
+    <div class="card">
+      <div class="card-header">
+        <button type="button" class="btn btn-primary btn-lg btn-block">Start Visualization</button>
+        <button type="button" class="btn btn-secondary btn-lg btn-block">Clear Grid</button>
+      </div>
+    </div>
+  </div>
 
-    <!-- Optional JavaScript -->
+  <!-- Optional JavaScript -->
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-    <script src="./scripts/script.js"></script>
-    <script src="./scripts/particles.js"></script>
-    <script src="./scripts/app.js"></script>
-  </body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+  <script src="./scripts/script.js"></script>
+  <script src="./scripts/particles.js"></script>
+  <script src="./scripts/app.js"></script>
+</body>
+
 </html>
