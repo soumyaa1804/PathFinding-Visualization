@@ -77,8 +77,8 @@ function dragElement(elmnt) {
     pos3 = e.clientX;
     pos4 = e.clientY;
     // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+    elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
   }
 
   function closeDragElement() {
@@ -98,24 +98,24 @@ function dragElement(elmnt) {
 
 class Queue {
   constructor() {
-    this.stack = new Array();
+    this.items = new Array();
   }
 
   dequeue() {
-    return this.stack.pop();
+    return this.items.shift();
   }
 
-  enqueue(item) {
-    this.stack.unshift(item);
+  enqueue(element) {
+    this.items.push(element);
     return;
   }
 
   empty() {
-    return (this.stack.length === 0);
+    return this.items.length === 0;
   }
 
   clear() {
-    this.stack = new Array();
+    this.items = new Array();
     return;
   }
 }
@@ -128,7 +128,7 @@ class MinHeap {
   }
 
   isEmpty() {
-    return (this.heap.length === 0);
+    return this.heap.length === 0;
   }
 
   clear() {
@@ -140,6 +140,6 @@ class MinHeap {
       return null;
     }
     var min = this.heap[0];
-    this.heap[0]
+    return min;
   }
 }
