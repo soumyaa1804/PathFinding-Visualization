@@ -53,13 +53,21 @@ td {
 .side-bar {
   position: absolute;
   z-index: 100;
-  width: 40%;
-  background: whitesmoke;
-  opacity: 0.9;
+  width: 30%;
+  background: transparent;
   right: 2%;
   top: 20%;
   border-radius: 5px;
-  max-width: 400px;
+  max-width: 300px;
+}
+
+.card {
+  background: whitesmoke;
+  opacity: 0.9;
+}
+
+.card-header.title {
+  font-size: 28px;
 }
 
 .btn {
