@@ -38,9 +38,9 @@ function generateGrid(rows, cols) {
 var myGrid = generateGrid(totalRows, totalCols);
 $("#tableContainer").append(myGrid);
 
-/* --------------------- */
-/*---- Mouse Function -- */
-/*---------------------- */
+/* ---------------------- */
+/*-- Draggable Feature -- */
+/*----------------------- */
 
 dragElement(document.getElementById("side-bar"));
 
@@ -85,5 +85,61 @@ function dragElement(elmnt) {
     // stop moving when mouse button is released:
     document.onmouseup = null;
     document.onmousemove = null;
+  }
+}
+
+/* ------ Draggable Feature ends
+
+/* ------------------------ */
+/*-- Class Declarations  -- */
+/*------------------------- */
+
+/* -------- Queue ------- */
+
+class Queue {
+  constructor() {
+    this.stack = new Array();
+  }
+
+  dequeue() {
+    return this.stack.pop();
+  }
+
+  enqueue(item) {
+    this.stack.unshift(item);
+    return;
+  }
+
+  empty() {
+    return (this.stack.length === 0);
+  }
+
+  clear() {
+    this.stack = new Array();
+    return;
+  }
+}
+
+/* ------ MinHeap ------ (Not completed yet) */
+
+class MinHeap {
+  constructor() {
+    this.heap = [];
+  }
+
+  isEmpty() {
+    return (this.heap.length === 0);
+  }
+
+  clear() {
+    this.heap = [];
+  }
+
+  getMin() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    var min = this.heap[0];
+    this.heap[0]
   }
 }
