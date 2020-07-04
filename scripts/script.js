@@ -140,6 +140,37 @@ class MinHeap {
       return null;
     }
     var min = this.heap[0];
+    this.heap[0] = this.heap[this.heap.length - 1];
+    this.heap[this.heap.length - 1] = min;
     return min;
   }
 }
+
+/* ------------------------- */
+/* ---- MOUSE FUNCTIONS ---- */
+/* ------------------------- */
+
+$("td").mousedown(
+  () => {
+    var index = $("td").index(this);
+    var startCellIndex = (startCell[0] * (totalCols)) + startCell[1];
+    var endCellIndex = (endCell[0] * (totalCols)) + endCell[1];
+    if (!inProgress) {
+      // Clear grid if just finished and keep walls
+      if (justFinished && !inProgress) {
+        clearBoard(keepWalls = true);
+        justFinished = false;
+      }
+      if (index == startCellIndex) {
+        movingStart = true;
+        console.log(`Now moving start! ${index}`);
+      } else if (index == endCellIndex) {
+        movingEnd = true;
+        console.log(`Moving ends ${index}`);
+      } else {
+        createWalls = true;
+        console.log("Walls in making!" + index)
+      }
+    }
+  }
+);
