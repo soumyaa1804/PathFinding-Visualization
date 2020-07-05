@@ -34,14 +34,15 @@ class Node {
 //Generate the grid
 
 class Grid {
+  grid;
   constructor() {
-    this.grid;
+    this.grid = [];
   }
-  generateGrid(totalRows, totalCols) {
-    grid += `<table>`;
+  generateGrid() {
+    let mygrid = `<table>`;
     for (let row = 0; row < totalRows; row++) {
       let currRow = [];
-      grid += `<tr>`;
+      mygrid += `<tr>`;
       for (let col = 0; col < totalCols; col++) {
         let new_nodeId = `${row}-${col}`,
           new_nodeClass;
@@ -54,19 +55,20 @@ class Grid {
         }
         //Instantiate a new Node object
         let node = new Node(row, col, new_nodeClass, new_nodeId);
-        grid += `<td class = ${new_nodeClass} id = ${new_nodeId}></td>`;
+        mygrid += `<td class = ${new_nodeClass} id = ${new_nodeId}></td>`;
         currRow.push(node);
       }
-      grid += `</tr>`;
+      mygrid += `</tr>`;
       gridArray.push(currRow);
     }
-    grid += `</table>`;
-    return grid;
+    this.grid = gridArray;
+    mygrid += `</table>`;
+    return mygrid;
   }
 }
-let grid = new Grid();
-grid.generateGrid(totalRows, totalCols);
-document.getElementById("tableContainer").innerHTML = grid;
+let gridObject = new Grid();
+let newGrid = gridObject.generateGrid();
+document.getElementById("tableContainer").innerHTML = newGrid;
 
 //Create Walls
 /* 1) If the click is on the Start Node and it is being dragged then move the startNode
