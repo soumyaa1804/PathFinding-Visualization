@@ -115,12 +115,14 @@ for (let r = 0; r < totalRows; r += 1) {
     });
   }
 }
+
 function getNode(id) {
   let info = id.split("-");
   let row = parseInt(info[0]);
   let col = parseInt(info[1]);
   return gridArray[row][col];
 }
+
 function updateStatus(currNode) {
   let element = document.getElementById(currNode.id);
   console.log(element, currNode);
@@ -166,6 +168,7 @@ function moveSpecialNode(currNode) {
 let node = new Node();
 console.log(node);
 let clearBtn = document.getElementById("clearBtn");
+
 function clearGrid() {
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
@@ -187,7 +190,7 @@ clearBtn.addEventListener("click", clearGrid);
 const algorithms = new Map([
   ["aStar", "A*"],
   ["dijkstra", "Dijkstra"],
-  ["GBFS", "Greedy Breadth First Search"],
+  ["GBFS", "Greedy Best First Search"],
   ["BFS", "Breadth First Search"],
   ["DFS", "Depth First Search"],
   ["JPS", "Jump Point Search"],
@@ -203,6 +206,7 @@ algoID.addEventListener("click", (e) => {
 });
 //Get the start Element
 let startBtn = document.getElementById("startBtn");
+
 function updateStartBtn(id) {
   //get the name
   let name = algorithms.get(id);
