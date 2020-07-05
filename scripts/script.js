@@ -1,44 +1,4 @@
-// /* Variables */
-
-// var height = window.innerHeight * 0.8;
-// var width = window.innerWidth * 0.9;
-// var cellSize = 25;
-// var totalRows = Math.floor(height / cellSize) - 1;
-// var totalCols = Math.floor(width / cellSize) - 1;
-// var inProgress = false;
-// var cellsToAnimate = [];
-// var createWalls = false;
-// var algorithm = null;
-// var justFinished = false;
-// var animationSpeed = "Fast";
-// var animationState = null;
-// var startCell = [Math.floor(totalRows / 4), Math.floor(totalCols / 4)];
-// var endCell = [
-//   Math.floor((3 * totalRows) / 4),
-//   Math.floor((3 * totalCols) / 4),
-// ];
-// var movingStart = false;
-// var movingEnd = false;
-
-// /* Generate Grid */
-
-// function generateGrid(rows, cols) {
-//   var grid = `<table>`;
-//   for (row = 1; row <= rows; row++) {
-//     grid += `<tr>`;
-//     for (col = 1; col <= cols; col++) {
-//       let output = "cell";
-//       grid += `<td class = "${output}"></td>`;
-//     }
-//     grid += `</tr>`;
-//   }
-//   grid += `</table>`;
-//   return grid;
-// }
-
-// let grid = generateGrid(totalRows, totalCols);
-// document.getElementById("tableContainer").innerHTML = grid;
-
+//GLOBAL VARIABLES
 var height = window.innerHeight * 0.8;
 var width = window.innerWidth * 0.9;
 var cellSize = 25;
@@ -51,6 +11,8 @@ var totalCols = Math.floor(width / cellSize) - 1;
 // var justFinished = false;
 // var animationSpeed = "Fast";
 // var animationState = null;
+let end = null;
+let start = null;
 let keyDown = false;
 let mousePressed = false;
 let gridArray = [];
@@ -110,6 +72,7 @@ class Grid {
 let grid = new Grid();
 grid.generateGrid(totalRows, totalCols);
 document.getElementById("tableContainer").innerHTML = grid;
+
 //Create Walls
 /* 1) If the click is on the Start Node and it is being dragged then move the startNode
    2) If the click is on the End Node and it is being dragged then change position
@@ -140,15 +103,36 @@ for (let r = 0; r < totalRows; r += 1) {
         updateStatus(currNode);
       }
     });
+    currElement.addEventListener("mouseenter", (e) => {
+      //1. mousePressed = true && PressedNodeStatus = "start,end,wall,normal,unvisited";
+      if (mousePressed) {
+        //IF not normal the it may be a wall or start or end or unvisited
+        if (currNode.status === "wall") {
+          currNode.status = "unvsited";
+          currElement.className = "unvisited";
+        } else if (currNode.status === "start" || currNode.status === "end") {
+          /*I need to get the prevNode so that if prevNode has the class of "start"
+          then the currNode should be updated to start and the prevNode should become "unvisited"*/
+          moveSpecialButtons(currNode);
+        } else {
+          currNode.status = "wall";
+          currElement.className = "wall";
+        }
+
+        console.log("mouseenter", currId);
+      }
+      //console.log("mouseenter", currId);
+    });
     currElement.addEventListener("mouseup", (e) => {
+      //console.log("mouseup", currId);
+      mousePressed = false;
       if (pressedNodeStatus === "start") {
         start = currId;
-      } else if (board.pressedNodeStatus === "end") {
-        object = currId;
+      } else if (pressedNodeStatus === "end") {
+        end = currId;
       }
       pressedNodeStatus = "normal";
     });
-    currElement.addEventListener("mouseenter", (e) => {});
   }
 }
 function getNode(id) {
@@ -168,7 +152,7 @@ function updateStatus(currNode) {
     }
   }
 }
-
+function moveSpecialButtons(currNode) {}
 /* ---------------------- */
 /*-- Draggable Feature -- */
 /*----------------------- */
