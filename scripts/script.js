@@ -158,6 +158,31 @@ function moveSpecialNode(currNode) {
     }
   }
 }
+
+/* BUTTONS ----> EventListeners -----> Algorithm Selection -----> Algorithm Fetch*/
+/* Parameters will be startNode,endNode,gridArray and the grid*/
+
+//Clear Grid
+let node = new Node();
+console.log(node);
+let clearBtn = document.getElementById("clearBtn");
+function clearGrid() {
+  for (let r = 0; r < totalRows; r++) {
+    for (let c = 0; c < totalCols; c++) {
+      node = gridArray[r][c];
+      //console.log(node);
+      if (node.isClass !== "start" && node.isClass !== "end") {
+        let element = document.getElementById(node.id);
+        element.className = "unvisited";
+        node.status = "unvisited";
+        node.isClass = "unvisited";
+      }
+    }
+  }
+}
+clearBtn.addEventListener("click", clearGrid);
+// Start Button
+
 /* ---------------------- */
 /*-- Draggable Feature -- */
 /*----------------------- */
