@@ -4,13 +4,6 @@ var width = window.innerWidth * 0.9;
 var cellSize = 25;
 var totalRows = Math.floor(height / cellSize) - 1;
 var totalCols = Math.floor(width / cellSize) - 1;
-// var inProgress = false;
-// var cellsToAnimate = [];
-// var createWalls = false;
-// var algorithm = null;
-// var justFinished = false;
-// var animationSpeed = "Fast";
-// var animationState = null;
 let end = null;
 let start = null;
 let keyDown = false;
@@ -20,16 +13,18 @@ let startRow = Math.floor(totalRows / 4);
 let startCol = Math.floor(totalCols / 4);
 let endRow = Math.floor((3 * totalRows) / 4);
 let endCol = Math.floor((3 * totalCols) / 4);
+let prevNode = null;
+let prevNodeFlag = true;
 
 //Instantiate the grid
 class Node {
   constructor(row, col, nodeClass, nodeId) {
     this.row = row;
     this.col = col;
-    this.isStart = false;
-    this.isFinish = false;
-    this.isWall = false;
-    this.isVisited = false;
+    // this.isStart = false;
+    // this.isFinish = false;
+    // this.isWall = false;
+    // this.isVisited = false;
     this.isClass = nodeClass;
     this.id = nodeId;
     this.status = nodeClass;
@@ -43,7 +38,7 @@ class Grid {
     this.grid;
   }
   generateGrid(totalRows, totalCols) {
-    // grid += `<table>`;
+    grid += `<table>`;
     for (let row = 0; row < totalRows; row++) {
       let currRow = [];
       grid += `<tr>`;
@@ -65,7 +60,7 @@ class Grid {
       grid += `</tr>`;
       gridArray.push(currRow);
     }
-    grid = `<table>` + grid + `</table>`;
+    grid += `</table>`;
     return grid;
   }
 }
@@ -93,45 +88,30 @@ for (let r = 0; r < totalRows; r += 1) {
     //                      --mouseup
     //             helper  --mousePressed
 
-    currElement.addEventListener("mousedown", () => {
+    currElement.addEventListener("mousedown", (e) => {
       mousePressed = true;
       if (currNode.status === "start" || currNode.status === "end") {
         pressedNodeStatus = currNode.status;
+        prevNode = new Node(r, c, currNode.isClass, currNode.id);
       } else {
         pressedNodeStatus = "normal";
         //Manipulate the normal node - convert to "WALL" or "A normal node"
         updateStatus(currNode);
       }
+      e.preventDefault();
     });
     currElement.addEventListener("mouseenter", (e) => {
-      //1. mousePressed = true && PressedNodeStatus = "start,end,wall,normal,unvisited";
-      if (mousePressed) {
-        //IF not normal the it may be a wall or start or end or unvisited
-        if (currNode.status === "wall") {
-          currNode.status = "unvsited";
-          currElement.className = "unvisited";
-        } else if (currNode.status === "start" || currNode.status === "end") {
-          /*I need to get the prevNode so that if prevNode has the class of "start"
-          then the currNode should be updated to start and the prevNode should become "unvisited"*/
-          moveSpecialButtons(currNode);
-        } else {
-          currNode.status = "wall";
-          currElement.className = "wall";
-        }
-
-        console.log("mouseenter", currId);
+      if (mousePressed && pressedNodeStatus !== "normal") {
+        //Means that the pressed node is a "Start" or "end"
+        //User wants to move the start or end button
+        prevNode = moveSpecialNode(currNode);
+      } else if (mousePressed && pressedNodeStatus === "normal") {
+        updateStatus(currNode);
       }
-      //console.log("mouseenter", currId);
     });
     currElement.addEventListener("mouseup", (e) => {
       //console.log("mouseup", currId);
       mousePressed = false;
-      if (pressedNodeStatus === "start") {
-        start = currId;
-      } else if (pressedNodeStatus === "end") {
-        end = currId;
-      }
-      pressedNodeStatus = "normal";
     });
   }
 }
@@ -149,10 +129,35 @@ function updateStatus(currNode) {
     if (!relevantStatuses.includes(currNode.status)) {
       element.className = currNode.status !== "wall" ? "wall" : "unvisited";
       currNode.status = element.className !== "wall" ? "unvisited" : "wall";
+      currNode.isClass = currNode.status;
     }
   }
 }
-function moveSpecialButtons(currNode) {}
+//Pressed down on the start node....update the next node that is traversed
+//But once the next node is hovered over with pressed down then the node is not updated---so uodate the
+//prevNode as the updated node
+function moveSpecialNode(currNode) {
+  let currElement = document.getElementById(currNode.id);
+  let prevElement;
+  //Keep a track if prevElement was pressed or not
+  prevElement = document.getElementById(prevNode.id);
+  //Check if the node is a wall or end node or start node
+  if (mousePressed) {
+    if (
+      currNode.status !== "start" &&
+      currNode.status !== "end" &&
+      currNode.status !== "wall"
+    ) {
+      currElement.className = prevNode.status;
+      currNode.status = prevNode.status;
+      currNode.isClass = prevNode.status;
+      prevNode.status = "unvisited";
+      prevNode.isClass = "unvisited";
+      prevElement.className = "unvisited";
+      return currNode;
+    }
+  }
+}
 /* ---------------------- */
 /*-- Draggable Feature -- */
 /*----------------------- */
