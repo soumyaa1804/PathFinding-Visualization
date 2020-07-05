@@ -181,7 +181,35 @@ function clearGrid() {
   }
 }
 clearBtn.addEventListener("click", clearGrid);
-// Start Button
+
+//Handling Algo buttons + start button
+//algorithms Object Literal
+const algorithms = new Map([
+  ["aStar", "A*"],
+  ["dijkstra", "Dijkstra"],
+  ["GBFS", "Greedy Breadth First Search"],
+  ["BFS", "Breadth First Search"],
+  ["DFS", "Depth First Search"],
+  ["JPS", "Jump Point Search"],
+]);
+const algoID = document.getElementById("accordion");
+algoID.addEventListener("click", (e) => {
+  const validID = ["aStar", "dijkstra", "GBFS", "BFS", "DFS", "JPS"];
+  let target_id = e.target.id;
+  if (validID.includes(target_id)) {
+    updateStartBtn(target_id);
+  }
+  e.preventDefault();
+});
+//Get the start Element
+let startBtn = document.getElementById("startBtn");
+function updateStartBtn(id) {
+  //get the name
+  let name = algorithms.get(id);
+  //console.log(name);
+  let updated_string = "Start " + name;
+  startBtn.innerHTML = updated_string;
+}
 
 /* ---------------------- */
 /*-- Draggable Feature -- */
