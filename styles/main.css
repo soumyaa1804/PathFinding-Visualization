@@ -88,6 +88,8 @@ td:hover {
 }
 
 .btn {
+  white-space: normal !important;
+  word-wrap: break-word !important;
   display: inline-block;
   text-align: center;
   vertical-align: middle;
