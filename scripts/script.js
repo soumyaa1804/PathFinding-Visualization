@@ -107,7 +107,7 @@ for (let r = 0; r < totalRows; r += 1) {
       if (mousePressed && pressedNodeStatus !== "normal") {
         //Means that the pressed node is a "Start" or "end"
         //User wants to move the start or end button
-        moveSpecialNode(currNode);
+        prevNode = moveSpecialNode(currNode);
       } else if (mousePressed && pressedNodeStatus === "normal") {
         updateStatus(currNode);
       }
@@ -159,6 +159,7 @@ function moveSpecialNode(currNode) {
       prevNode.isClass = "unvisited";
       prevElement.className = "unvisited";
     }
+    return currNode;
   }
 }
 
