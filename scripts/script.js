@@ -94,7 +94,8 @@ for (let r = 0; r < totalRows; r += 1) {
       mousePressed = true;
       if (currNode.status === "start" || currNode.status === "end") {
         pressedNodeStatus = currNode.status;
-        prevNode = new Node(r, c, currNode.isClass, currNode.id);
+        prevNode = new Node();
+        prevNode = currNode;
       } else {
         pressedNodeStatus = "normal";
         //Manipulate the normal node - convert to "WALL" or "A normal node"
@@ -106,7 +107,7 @@ for (let r = 0; r < totalRows; r += 1) {
       if (mousePressed && pressedNodeStatus !== "normal") {
         //Means that the pressed node is a "Start" or "end"
         //User wants to move the start or end button
-        prevNode = moveSpecialNode(currNode);
+        moveSpecialNode(currNode);
       } else if (mousePressed && pressedNodeStatus === "normal") {
         updateStatus(currNode);
       }
@@ -127,7 +128,6 @@ function getNode(id) {
 
 function updateStatus(currNode) {
   let element = document.getElementById(currNode.id);
-  //sconsole.log(element, currNode);
   relevantStatuses = ["start", "end"];
   if (!keyDown) {
     if (!relevantStatuses.includes(currNode.status)) {
@@ -158,8 +158,6 @@ function moveSpecialNode(currNode) {
       prevNode.status = "unvisited";
       prevNode.isClass = "unvisited";
       prevElement.className = "unvisited";
-      console.log(prevNode, currNode);
-      return currNode;
     }
   }
 }
