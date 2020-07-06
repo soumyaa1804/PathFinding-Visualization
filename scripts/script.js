@@ -123,7 +123,7 @@ function getNode(id) {
 }
 function updateStatus(currNode) {
   let element = document.getElementById(currNode.id);
-  console.log(element, currNode);
+  //sconsole.log(element, currNode);
   relevantStatuses = ["start", "end"];
   if (!keyDown) {
     if (!relevantStatuses.includes(currNode.status)) {
@@ -154,6 +154,7 @@ function moveSpecialNode(currNode) {
       prevNode.status = "unvisited";
       prevNode.isClass = "unvisited";
       prevElement.className = "unvisited";
+      console.log(prevNode, currNode);
       return currNode;
     }
   }
@@ -164,7 +165,7 @@ function moveSpecialNode(currNode) {
 
 //Clear Grid
 let node = new Node();
-console.log(node);
+//console.log(node);
 let clearBtn = document.getElementById("clearBtn");
 function clearGrid() {
   for (let r = 0; r < totalRows; r++) {
