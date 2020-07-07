@@ -219,6 +219,27 @@ function updateStartBtn(id) {
   startBtn.innerHTML = updated_string;
 }
 
+//Invoked when start visualizing is 'CLICKED'
+getSpecialNodes = () => {
+  for (let r = 0; r < totalRows; r++) {
+    for (let c = 0; c < totalCols; c++) {
+      if (
+        gridArray[r][c].status === "start" &&
+        gridArray[r][c].isClass === "start"
+      ) {
+        copy_start = gridArray[r][c];
+      } else if (
+        gridArray[r][c].status === "end" &&
+        gridArray[r][c].isClass === "end"
+      ) {
+        copy_end = gridArray[r][c];
+      }
+    }
+  }
+  let valid_buttons = [copy_start, copy_end];
+  return valid_buttons;
+};
+
 /* ---------------------- */
 /*-- Draggable Feature -- */
 /*----------------------- */
@@ -315,7 +336,10 @@ class MinHeap {
       let idx = this.heap.length - 1;
       while (this.heap[idx] < this.heap[Math.floor(idx / 2)]) {
         if (idx >= 1) {
-          [this.heap[Math.floor(idx / 2)], this.heap[idx]] = [this.heap[idx], this.heap[Math.floor(idx / 2)]];
+          [this.heap[Math.floor(idx / 2)], this.heap[idx]] = [
+            this.heap[idx],
+            this.heap[Math.floor(idx / 2)],
+          ];
           if (Math.floor(idx / 2) > 1) {
             idx = Math.floor(idx / 2);
           } else {
@@ -340,7 +364,10 @@ class MinHeap {
       let i = 1;
       let left = 2 * i;
       let right = 2 * i + 1;
-      while (this.heap[i] >= this.heap[left] || this.heap[i] >= this.heap[right]) {
+      while (
+        this.heap[i] >= this.heap[left] ||
+        this.heap[i] >= this.heap[right]
+      ) {
         if (this.heap[left] < this.heap[right]) {
           [this.heap[i], this.heap[left]] = [this.heap[left], this.heap[i]];
           i = 2 * i;
