@@ -121,12 +121,12 @@ for (let r = 0; r < totalRows; r += 1) {
   }
 }
 
-function getNode(id) {
-  let info = id.split("-");
-  let row = parseInt(info[0]);
-  let col = parseInt(info[1]);
-  return gridArray[row][col];
-}
+// function getNode(id) {
+//   let info = id.split("-");
+//   let row = parseInt(info[0]);
+//   let col = parseInt(info[1]);
+//   return gridArray[row][col];
+// }
 
 function updateStatus(currNode) {
   let element = document.getElementById(currNode.id);
