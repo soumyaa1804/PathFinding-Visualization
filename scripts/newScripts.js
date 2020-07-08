@@ -9,6 +9,7 @@ let justFinished = false;
 let movingStart = false;
 let movingEnd = false;
 let createWalls = false; // if true, create walls through drag and if false create walls through click
+let createUnvisited = false;
 let keepWalls = false;
 let cellsToAnimate = [];
 
@@ -86,23 +87,29 @@ for (let i = 0; i < cells.length; i += 1) {
   cells[i].addEventListener("mousedown", (e) => {
     if (!inProgress && !e.button) {
       // clear board if just finished
-      if (justFinished && !inProgress) {
-        clearBoard(keepWalls = true);
-        justFinished = false;
-      }
+      // if (justFinished && !inProgress) {
+      //   clearBoard(keepWalls = true);
+      //   justFinished = false;
+      // }
       if (i == startCellIndex) {
         movingStart = true;
       } else if (i == endCellIndex) {
         movingEnd = true;
       } else {
-        createWalls = true;
+        if (cells[i].className == "unvisited") {
+          createWalls = true;
+          // cells[i].className = "wall";
+        } else if (cells[i].className == "wall") {
+          createUnvisited = true;
+          // cells[i].className = "unvisited";
+        }
         // cells[i].className = "wall";
         // gridObject.grid[Math.floor(i / totalCols)][Math.floor(i / totalRows)].status = "wall";
         myGrid[currCellRowIdx][currCellColIdx].status = (myGrid[currCellRowIdx][currCellColIdx].status == "unvisited") ? "wall" : "unvisited";
         cells[i].className = myGrid[currCellRowIdx][currCellColIdx].status;
-        console.log("mousedown");
-        console.log(cells[i]);
-        console.log(myGrid[currCellRowIdx][currCellColIdx]);
+        // console.log("mousedown");
+        // console.log(cells[i]);
+        // console.log(myGrid[currCellRowIdx][currCellColIdx]);
       }
     }
   });
@@ -115,7 +122,7 @@ for (let i = 0; i < cells.length; i += 1) {
   // });
 
   cells[i].addEventListener("mouseenter", () => {
-    if (!createWalls && !movingStart && !movingEnd) {
+    if (!createWalls && !createUnvisited && !movingStart && !movingEnd) {
       return;
     }
     if (!inProgress) {
@@ -123,12 +130,15 @@ for (let i = 0; i < cells.length; i += 1) {
         moveStartOrEnd(startCellIndex, i, "start", cells[i]);
       } else if (movingEnd && i != startCellIndex) {
         moveStartOrEnd(endCellIndex, i, "end", cells[i]);
-      } else if (i != startCellIndex && i != endCellIndex && createWalls) {
-        cells[i].className = "wall";
-        // gridObject.grid[Math.floor(i / totalCols)][Math.floor(i / totalRows)].status = "wall";
-        if (myGrid[currCellRowIdx][currCellColIdx].status == "unvisited") {
-          myGrid[currCellRowIdx][currCellColIdx].status = cells[i].className;
+      } else if (i != startCellIndex && i != endCellIndex) {
+        if (createWalls) {
+          cells[i].className = "wall";
         }
+        if (createUnvisited) {
+          cells[i].className = "unvisited";
+        }
+        // gridObject.grid[Math.floor(i / totalCols)][Math.floor(i / totalRows)].status = "wall";
+        myGrid[currCellRowIdx][currCellColIdx].status = cells[i].className;
       }
       console.log("mouse enter", myGrid[currCellRowIdx][currCellColIdx]);
       console.log(cells[i].className);
@@ -202,6 +212,7 @@ bodyElement.addEventListener("mouseup", () => {
   createWalls = false;
   movingStart = false;
   movingEnd = false;
+  createUnvisited = false;
   console.log("Mouseup in body")
 });
 
@@ -254,10 +265,57 @@ function dragElement(elmnt) {
     document.onmousemove = null;
   }
 }
-
 /* --- Draggable Feature ends ----- */
 
 
+/* --- Update Start button according to selected Algo ----- */
+const algorithms = new Map([
+  ["aStar", "A*"],
+  ["dijkstra", "Dijkstra"],
+  ["GBFS", "Greedy Best First Search"],
+  ["BFS", "Breadth First Search"],
+  ["DFS", "Depth First Search"],
+  ["JPS", "Jump Point Search"],
+]);
+
+const algoID = document.getElementById("accordion");
+
+algoID.addEventListener("click", (e) => {
+  const validID = ["aStar", "dijkstra", "GBFS", "BFS", "DFS", "JPS"];
+  let target_id = e.target.id;
+  if (validID.includes(target_id)) {
+    updateStartBtn(target_id);
+  }
+  e.preventDefault();
+});
+//Get the start Element
+let startBtn = document.getElementById("startBtn");
+
+function updateStartBtn(id) {
+  //get the name
+  let name = algorithms.get(id);
+  //console.log(name);
+  let updated_string = "Start " + name;
+  startBtn.innerHTML = updated_string;
+}
+
+
+/* --- Clear grid button ----- */
+let clearBtn = document.getElementById("clearBtn");
+
+function clearGrid() {
+  for (let r = 0; r < totalRows; r++) {
+    for (let c = 0; c < totalCols; c++) {
+      //console.log(node);
+      let element = document.getElementById(`${r}-${c}`);
+      if (element.className !== "start" && element.className !== "end") {
+        element.className = "unvisited";
+        myGrid[r][c].status = "unvisited";
+      }
+    }
+  }
+}
+clearBtn.addEventListener("click", clearGrid);
 
 /* ------------------------ */
 /*-- Class Declarations  -- */
@@ -469,7 +527,7 @@ async function animateCells() {
   var endCellIndex = (myGrid.endNodeRow * (totalCols)) + myGrid.endNodeCol;
   //var endCellIndex = (endCell[0] * (totalCols)) + endCell[1];
   // var delay = getDelay();
-  var delay = 0;
+  // var delay = 0;
   // console.log(cellsToAnimate);
   for (var i = 0; i < cellsToAnimate.length; i++) {
     var cellCoordinates = cellsToAnimate[i][0];
@@ -483,10 +541,12 @@ async function animateCells() {
     var colorClass = cellsToAnimate[i][1]; // success or searching
     // console.log(cellsToAnimate[i][1])
     // Wait until its time to animate
-    await new Promise(resolve => setTimeout(resolve, delay));
+    await new Promise(resolve => setTimeout(resolve, 0.01));
 
     // $(cell).removeClass();
-    cell.className = colorClass;
+    if (cell.className == "start" || cell.className == "end") {
+      continue;
+    } else cell.className = colorClass;
     // $(cell).addClass(colorClass);
 
   }
@@ -505,7 +565,9 @@ var startButton = document.getElementById("startBtn");
 startBtn.addEventListener("click", () => {
   if (inProgress) {
     alert("Visualization in progress");
-  } else if (BFS()) {
-    animateCells();
-  } else alert("Path do not exist");
+  } else if (startBtn.innerText == "Start Breadth First Search") {
+    if (BFS()) {
+      animateCells();
+    } else alert("Path does not exist");
+  }
 });
