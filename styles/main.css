@@ -112,3 +112,15 @@ td:hover {
 .wall {
   background: transparent;
 }
+
+.searching {
+  background-color: lawngreen;
+}
+
+.success {
+  background-color: red;
+}
+
+.visited {
+  background-color: springgreen;
+}
