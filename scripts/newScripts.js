@@ -85,7 +85,8 @@ for (let i = 0; i < cells.length; i += 1) {
   let currCellColIdx = Math.floor(i % totalCols);
 
   cells[i].addEventListener("mousedown", (e) => {
-    if (!inProgress && !e.button) {
+    e.preventDefault();
+    if (!inProgress && !e.button && !justFinished) {
       // clear board if just finished
       // if (justFinished && !inProgress) {
       //   clearBoard(keepWalls = true);
@@ -121,11 +122,12 @@ for (let i = 0; i < cells.length; i += 1) {
   //   console.log("mouseup");
   // });
 
-  cells[i].addEventListener("mouseenter", () => {
+  cells[i].addEventListener("mouseenter", (e) => {
+    e.preventDefault();
     if (!createWalls && !createUnvisited && !movingStart && !movingEnd) {
       return;
     }
-    if (!inProgress) {
+    if (!inProgress && !justFinished) {
       if (movingStart && i != endCellIndex) {
         moveStartOrEnd(startCellIndex, i, "start", cells[i]);
       } else if (movingEnd && i != startCellIndex) {
@@ -208,7 +210,8 @@ let moveStartOrEnd = (prevIndex, newIndex, startOrEnd, newCell) => {
 // }
 
 let bodyElement = document.querySelector("body");
-bodyElement.addEventListener("mouseup", () => {
+bodyElement.addEventListener("mouseup", (e) => {
+  e.preventDefault();
   createWalls = false;
   movingStart = false;
   movingEnd = false;
@@ -304,6 +307,7 @@ function updateStartBtn(id) {
 let clearBtn = document.getElementById("clearBtn");
 
 function clearGrid() {
+  justFinished = false;
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       //console.log(node);
@@ -502,16 +506,16 @@ function BFS() {
 
 function getNeighbours(i, j) {
   var neighbors = [];
-  if (i > 0) {
+  if (i > 0 && myGrid[i - 1][j].status != "wall") {
     neighbors.push([i - 1, j]);
   }
-  if (j > 0) {
+  if (j > 0 && myGrid[i][j - 1].status != "wall") {
     neighbors.push([i, j - 1]);
   }
-  if (i < (totalRows - 1)) {
+  if (i < (totalRows - 1) && myGrid[i + 1][j].status != "wall") {
     neighbors.push([i + 1, j]);
   }
-  if (j < (totalCols - 1)) {
+  if (j < (totalCols - 1) && myGrid[i][j + 1].status != "wall") {
     neighbors.push([i, j + 1]);
   }
   return neighbors;
@@ -541,7 +545,7 @@ async function animateCells() {
     var colorClass = cellsToAnimate[i][1]; // success or searching
     // console.log(cellsToAnimate[i][1])
     // Wait until its time to animate
-    await new Promise(resolve => setTimeout(resolve, 0.01));
+    //await new Promise(resolve => setTimeout(resolve, 0.01));
 
     // $(cell).removeClass();
     if (cell.className == "start" || cell.className == "end") {
@@ -553,10 +557,12 @@ async function animateCells() {
   cellsToAnimate = [];
   inProgress = false;
   //console.log("End of animation has been reached!");
+  justFinished = true;
   return new Promise(resolve => resolve(true));
 }
 
 function cellIsAWall(i, j, cells) {
+  justFinished = false;
   var cellNum = (i * (totalCols)) + j;
   return cells[cellNum].classList.contains("wall");
 }
