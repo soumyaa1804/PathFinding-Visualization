@@ -29,8 +29,8 @@ class Grid {
     this.grid = [];
     this.startNodeRow = Math.floor(totalRows / 4);
     this.startNodeCol = Math.floor(totalCols / 4);
-    this.endNodeRow = Math.floor(3 * totalRows / 4);
-    this.endNodeCol = Math.floor(3 * totalCols / 4);
+    this.endNodeRow = Math.floor((3 * totalRows) / 4);
+    this.endNodeCol = Math.floor((3 * totalCols) / 4);
   }
 
   generateGrid() {
@@ -63,11 +63,10 @@ class Grid {
   }
 }
 
-let gridObject = new Grid;
+let gridObject = new Grid();
 let gridHTML = gridObject.generateGrid();
 let myGrid = gridObject.grid;
 document.getElementById("tableContainer").innerHTML = gridHTML;
-
 
 /* ------------------------- */
 /* ---- MOUSE FUNCTIONS ---- */
@@ -79,8 +78,8 @@ for (let i = 0; i < cells.length; i += 1) {
   let startCellCol = gridObject.startNodeCol;
   let endCellRow = gridObject.endNodeRow;
   let endCellCol = gridObject.endNodeCol;
-  let startCellIndex = (startCellRow * totalCols) + startCellCol;
-  let endCellIndex = (endCellRow * totalCols) + endCellCol;
+  let startCellIndex = startCellRow * totalCols + startCellCol;
+  let endCellIndex = endCellRow * totalCols + endCellCol;
   let currCellRowIdx = Math.floor(i / totalCols);
   let currCellColIdx = Math.floor(i % totalCols);
 
@@ -105,7 +104,10 @@ for (let i = 0; i < cells.length; i += 1) {
         }
         // cells[i].className = "wall";
         // gridObject.grid[Math.floor(i / totalCols)][Math.floor(i / totalRows)].status = "wall";
-        myGrid[currCellRowIdx][currCellColIdx].status = (myGrid[currCellRowIdx][currCellColIdx].status == "unvisited") ? "wall" : "unvisited";
+        myGrid[currCellRowIdx][currCellColIdx].status =
+          myGrid[currCellRowIdx][currCellColIdx].status == "unvisited"
+            ? "wall"
+            : "unvisited";
         cells[i].className = myGrid[currCellRowIdx][currCellColIdx].status;
         // console.log("mousedown");
         // console.log(cells[i]);
@@ -165,13 +167,15 @@ let moveStartOrEnd = (prevIndex, newIndex, startOrEnd, newCell) => {
   var prevCellRow = Math.floor(prevIndex / totalCols);
   var prevCellCol = prevIndex % totalCols;
   var newCellElement = document.getElementById(`${newCellRow}-${newCellCol}`);
-  var prevCellElement = document.getElementById(`${prevCellRow}-${prevCellCol}`);
+  var prevCellElement = document.getElementById(
+    `${prevCellRow}-${prevCellCol}`
+  );
 
   if (startOrEnd == "start") {
     if (newCellRow == myGrid.endNodeRow && newCellCol == myGrid.endNodeCol) {
       return;
     }
-    console.log("Moving start to [" + newCellRow + ", " + newCellCol + "]")
+    console.log("Moving start to [" + newCellRow + ", " + newCellCol + "]");
     newCellElement.className = prevCellElement.className;
     prevCellElement.className = "unvisited";
     myGrid[prevCellRow][prevCellCol].status = "unvisited";
@@ -182,7 +186,7 @@ let moveStartOrEnd = (prevIndex, newIndex, startOrEnd, newCell) => {
   }
   //clearBoard(keepWalls = true);
   return;
-}
+};
 
 // function moveSpecialNode(currNode) {
 //   let currElement = document.getElementById(currNode.id);
@@ -213,7 +217,7 @@ bodyElement.addEventListener("mouseup", () => {
   movingStart = false;
   movingEnd = false;
   createUnvisited = false;
-  console.log("Mouseup in body")
+  console.log("Mouseup in body");
 });
 
 /* ------------------------------------ */
@@ -267,7 +271,6 @@ function dragElement(elmnt) {
 }
 /* --- Draggable Feature ends ----- */
 
-
 /* --- Update Start button according to selected Algo ----- */
 const algorithms = new Map([
   ["aStar", "A*"],
@@ -298,7 +301,6 @@ function updateStartBtn(id) {
   let updated_string = "Start " + name;
   startBtn.innerHTML = updated_string;
 }
-
 
 /* --- Clear grid button ----- */
 let clearBtn = document.getElementById("clearBtn");
@@ -361,7 +363,10 @@ class MinHeap {
       let idx = this.heap.length - 1;
       while (this.heap[idx] < this.heap[Math.floor(idx / 2)]) {
         if (idx >= 1) {
-          [this.heap[Math.floor(idx / 2)], this.heap[idx]] = [this.heap[idx], this.heap[Math.floor(idx / 2)]];
+          [this.heap[Math.floor(idx / 2)], this.heap[idx]] = [
+            this.heap[idx],
+            this.heap[Math.floor(idx / 2)],
+          ];
           if (Math.floor(idx / 2) > 1) {
             idx = Math.floor(idx / 2);
           } else {
@@ -386,7 +391,10 @@ class MinHeap {
       let i = 1;
       let left = 2 * i;
       let right = 2 * i + 1;
-      while (this.heap[i] >= this.heap[left] || this.heap[i] >= this.heap[right]) {
+      while (
+        this.heap[i] >= this.heap[left] ||
+        this.heap[i] >= this.heap[right]
+      ) {
         if (this.heap[left] < this.heap[right]) {
           [this.heap[i], this.heap[left]] = [this.heap[left], this.heap[i]];
           i = 2 * i;
@@ -411,7 +419,7 @@ class MinHeap {
 
 function BFS() {
   var pathFound = false;
-  var myQueue = new Queue;
+  var myQueue = new Queue();
   // var prev = createPrev();
   // var visited = createVisited();
   // var specialNodes = getSpecialNodes();
@@ -456,16 +464,12 @@ function BFS() {
   if (pathFound) {
     var r = newEndNode[0];
     var c = newEndNode[1];
-    cellsToAnimate.push([
-      [r, c], "success"
-    ]);
+    cellsToAnimate.push([[r, c], "success"]);
     while (myGrid[r][c].prevNode.length != 0) {
       var prevCell = myGrid[r][c].prevNode;
       r = prevCell[0];
       c = prevCell[1];
-      cellsToAnimate.push([
-        [r, c], "success"
-      ]);
+      cellsToAnimate.push([[r, c], "success"]);
     }
   }
   return pathFound;
@@ -508,10 +512,10 @@ function getNeighbours(i, j) {
   if (j > 0) {
     neighbors.push([i, j - 1]);
   }
-  if (i < (totalRows - 1)) {
+  if (i < totalRows - 1) {
     neighbors.push([i + 1, j]);
   }
-  if (j < (totalCols - 1)) {
+  if (j < totalCols - 1) {
     neighbors.push([i, j + 1]);
   }
   return neighbors;
@@ -523,8 +527,8 @@ async function animateCells() {
   var cells = document.getElementsByTagName("td");
   //var cells = $("#tableContainer").find("td");
   // var specialCells = getSpecialNodes(); // specialCells[0] is startNode and specialCells[1] is endNode
-  var startCellIndex = (myGrid.startNodeRow * (totalCols)) + myGrid.startNodeCol;
-  var endCellIndex = (myGrid.endNodeRow * (totalCols)) + myGrid.endNodeCol;
+  var startCellIndex = myGrid.startNodeRow * totalCols + myGrid.startNodeCol;
+  var endCellIndex = myGrid.endNodeRow * totalCols + myGrid.endNodeCol;
   //var endCellIndex = (endCell[0] * (totalCols)) + endCell[1];
   // var delay = getDelay();
   // var delay = 0;
@@ -533,7 +537,7 @@ async function animateCells() {
     var cellCoordinates = cellsToAnimate[i][0];
     var x = cellCoordinates[0];
     var y = cellCoordinates[1];
-    var num = (x * (totalCols)) + y;
+    var num = x * totalCols + y;
     if (num == startCellIndex || num == endCellIndex) {
       continue;
     }
@@ -541,23 +545,22 @@ async function animateCells() {
     var colorClass = cellsToAnimate[i][1]; // success or searching
     // console.log(cellsToAnimate[i][1])
     // Wait until its time to animate
-    await new Promise(resolve => setTimeout(resolve, 0.01));
+    await new Promise((resolve) => setTimeout(resolve, 0.01));
 
     // $(cell).removeClass();
     if (cell.className == "start" || cell.className == "end") {
       continue;
     } else cell.className = colorClass;
     // $(cell).addClass(colorClass);
-
   }
   cellsToAnimate = [];
   inProgress = false;
   //console.log("End of animation has been reached!");
-  return new Promise(resolve => resolve(true));
+  return new Promise((resolve) => resolve(true));
 }
 
 function cellIsAWall(i, j, cells) {
-  var cellNum = (i * (totalCols)) + j;
+  var cellNum = i * totalCols + j;
   return cells[cellNum].classList.contains("wall");
 }
 

@@ -21,13 +21,12 @@ class Node {
   constructor(row, col, nodeClass, nodeId) {
     this.row = row;
     this.col = col;
-    // this.isStart = false;
-    // this.isFinish = false;
-    // this.isWall = false;
-    // this.isVisited = false;
     this.isClass = nodeClass;
     this.id = nodeId;
     this.status = nodeClass;
+    //For algorithms
+    this.distance = Infinity;
+    this.parent = null;
   }
 }
 
@@ -325,7 +324,7 @@ class Queue {
 
 /*------ Min Heap ----- */
 
-class MinHeap {
+/*class MinHeap {
   heap;
   constructor() {
     this.heap = [null];
@@ -389,4 +388,154 @@ class MinHeap {
     }
     return smallest;
   };
+}*/
+
+/* ------------------------*/
+/*-------ALGORITHMS---------*/
+/*--------------------------------------------------------------------------------------------*/
+//ALGORITHMS
+function dijkstra() {
+  let specialNodes = getSpecialNodes();
+  startNode = specialNodes[0];
+  endNode = specialNodes[1];
+  console.log(startNode, endNode);
+  let visitedNodesInOrder = [startNode];
+  //Assign distance as 0 for startNode
+  startNode.distance = 0;
+  let currNode = new Node();
+  currNode = startNode;
+  //Get the unvisited nodes
+  let unvisitedNodes = getUnvisitedNodes();
+  while (unvisitedNodes.length) {
+    //Get the neighbours
+    let neighbours = updateNeighbours(currNode);
+    unvisitedNodes.sort((a, b) => {
+      return a.distance - b.distance;
+    });
+    // if (unvisitedNodes[0].distance === 1) {
+    //   unvisitedNodes[0].parent = startNode;
+    // }
+    let closestNode = unvisitedNodes.shift();
+    //Check if distnace is infintiy---no path exists
+    if (closestNode.distance === Infinity) {
+      break;
+    }
+    visitedNodesInOrder.push(closestNode);
+    //Update the status of the closest node as visited
+    if (closestNode.status === "end") {
+      shortestPath = backtrack(visitedNodesInOrder);
+      console.log(shortestPath);
+      break;
+    }
+    closestNode.status = "visited";
+    closestNode.isClass = "visited";
+    let element = document.getElementById(closestNode.id);
+    element.className = "visited";
+    //Check if the end point
+    unvisitedNodes = getUnvisitedNodes();
+    currNode = closestNode;
+  }
 }
+function getUnvisitedNodes() {
+  let nodes = [];
+  let relevantStatuses = ["start", "wall", "visited"];
+  for (let i = 0; i < totalRows; i++) {
+    for (let j = 0; j < totalCols; j++) {
+      if (!relevantStatuses.includes(gridArray[i][j].status)) {
+        nodes.push(gridArray[i][j]);
+      }
+    }
+  }
+  return nodes;
+}
+function backtrack(nodes) {
+  let nodesToAnimate = [endNode];
+  //Provided that it is a visted node
+  let node = new Node();
+  node = endNode.parent;
+  //console.log(node);
+  while (node != startNode) {
+    if (nodes.includes(node)) {
+      node.isClass = "shortest";
+      node.status = "shortest";
+      let element = document.getElementById(node.id);
+      element.className = "shortest";
+      nodesToAnimate.push(node);
+      node = node.parent;
+    }
+  }
+  nodesToAnimate.push(startNode);
+  //nodesToAnimate.reverse();
+  return nodesToAnimate;
+}
+function updateNeighbours(currNode) {
+  let r = currNode.row;
+  let c = currNode.col;
+  let relevantStatuses = ["start", "wall", "visited"];
+  let actual_neighbours = [];
+  let neighbours = [];
+  if (r - 1 >= 0) {
+    neighbours.push(gridArray[r - 1][c]);
+    // if (c - 1 >= 0) {
+    //   neighbours.push(gridArray[r - 1][c - 1]);
+    // }
+    // if (c + 1 <= totalCols - 1) {
+    //   neighbours.push(gridArray[r - 1][c + 1]);
+    // }
+  }
+  if (r + 1 <= totalRows - 1) {
+    neighbours.push(gridArray[r + 1][c]);
+    if (c - 1 >= 0) {
+      //gridArray[r + 1][c - 1],
+      neighbours.push(gridArray[r][c - 1]);
+    }
+    if (c + 1 <= totalCols - 1) {
+      //gridArray[r + 1][c + 1]
+      neighbours.push(gridArray[r][c + 1]);
+    }
+  }
+  neighbours.forEach((neighbour) => {
+    if (!relevantStatuses.includes(neighbour.status)) {
+      actual_neighbours.push(neighbour);
+      if (1 + currNode.distance < neighbour.distance) {
+        neighbour.distance = 1 + currNode.distance;
+        neighbour.parent = currNode;
+      }
+    }
+  });
+  return actual_neighbours;
+}
+// function UpdateDistanceFromStart(startNode, neighbours) {
+//   neighbours.forEach((node) => {
+//     let dx = abs(startNode.row - node.row);
+//     let dy = abs(startNode.col - node.col);
+//     let minimum = min(dx, dy);
+//     let maximum = min(dx, dy);
+//     let diagnol_movement = minimum;
+//     let straight_movement = maximum;
+//     nodes.distance = sqrt(2) + diagnol_movement + straight_movement;
+//   });
+// }
+
+//REFERENCE
+
+// const algorithms = new Map([
+//   ["aStar", "A*"],
+//   ["dijkstra", "Dijkstra"],
+//   ["GBFS", "Greedy Best First Search"],
+//   ["BFS", "Breadth First Search"],
+//   ["DFS", "Depth First Search"],
+//   ["JPS", "Jump Point Search"],
+// ]);
+const startAlgo = () => {
+  if (startBtn.value === "Start Visualization") {
+    alert("Pick an algorithm");
+  } else {
+    if (startBtn.innerText === "Start Dijkstra") {
+      console.log("dijkstra");
+      dijkstra();
+    }
+  }
+};
+
+startBtn.addEventListener("click", startAlgo);
