@@ -1,10 +1,11 @@
+// import { dijkstra } from "./dijkstra";
+// import { aStar } from "./aStar";
 //GLOBAL VARIABLES
 var height = window.innerHeight * 0.8;
 var width = window.innerWidth * 0.9;
 var cellSize = 25;
 var totalRows = Math.floor(height / cellSize) - 1;
 var totalCols = Math.floor(width / cellSize) - 1;
-
 let keyDown = false;
 let mousePressed = false;
 let gridArray = [];
@@ -14,6 +15,7 @@ let endRow = Math.floor((3 * totalRows) / 4);
 let endCol = Math.floor((3 * totalCols) / 4);
 let prevNode = null;
 let nodesToAnimate = [];
+let pressedNodeStatus = "normal";
 let pathFound = false;
 
 //Instantiate the grid
@@ -21,17 +23,23 @@ class Node {
   constructor(row, col, nodeClass, nodeId) {
     this.row = row;
     this.col = col;
+    this.isClass = nodeClass;
     this.id = nodeId;
     this.status = nodeClass;
-    this.isVisited = false;
-    //For algorithms
+    //For Algorithm
     this.distance = Infinity;
     this.parent = null;
+    //For heuristics
+    this.f = Infinity;
+    this.g = Infinity;
+    this.h = Infinity;
+    this.cost = 1;
   }
 }
-
-let startNode = new Node(startRow, startCol, "start", `${startRow}-${startCol}`);
-let endNode = new Node(endRow, endCol, "end", `${endRow}-${endCol}`);
+let startNode = new Node();
+let endNode = new Node();
+let copy_start = new Node();
+let copy_end = new Node();
 //Generate the grid
 
 class Grid {
@@ -45,8 +53,8 @@ class Grid {
       let currRow = [];
       mygrid += `<tr>`;
       for (let col = 0; col < totalCols; col++) {
-        let new_nodeId = `${row}-${col}`;
-        let new_nodeClass = "";
+        let new_nodeId = `${row}-${col}`,
+          new_nodeClass;
         if (row === startRow && col === startCol) {
           new_nodeClass = "start";
         } else if (row === endRow && col === endCol) {
@@ -56,6 +64,13 @@ class Grid {
         }
         //Instantiate a new Node object
         let node = new Node(row, col, new_nodeClass, new_nodeId);
+
+        if (node.isClass === "start" && node.status === "start") {
+          startNode = node;
+        } else if (node.isClass === "end" && node.status === "end") {
+          endNode = node;
+        }
+
         mygrid += `<td class = ${new_nodeClass} id = ${new_nodeId}></td>`;
         currRow.push(node);
       }
@@ -106,19 +121,24 @@ for (let r = 0; r < totalRows; r += 1) {
       }
       e.preventDefault();
     });
-
     currElement.addEventListener("mouseenter", (e) => {
       if (mousePressed && pressedNodeStatus !== "normal") {
         //Means that the pressed node is a "Start" or "end"
         //User wants to move the start or end button
         prevNode = moveSpecialNode(currNode);
+
+        //set to default position
       } else if (mousePressed && pressedNodeStatus === "normal") {
         updateStatus(currNode);
       }
     });
-
     currElement.addEventListener("mouseup", (e) => {
       //console.log("mouseup", currId);
+      // if (pressedNodeStatus === "start") {
+      //   copy_start = currNode;
+      // } else if (pressedNodeStatus === "end") {
+      //   cpoy_end = currNode;
+      // }
       mousePressed = false;
     });
   }
@@ -138,6 +158,7 @@ function updateStatus(currNode) {
     if (!relevantStatuses.includes(currNode.status)) {
       element.className = currNode.status !== "wall" ? "wall" : "unvisited";
       currNode.status = element.className !== "wall" ? "unvisited" : "wall";
+      currNode.isClass = currNode.status;
     }
   }
 }
@@ -154,12 +175,13 @@ function moveSpecialNode(currNode) {
     if (
       currNode.status !== "start" &&
       currNode.status !== "end" &&
-      currNode.status !== "wall" &&
-      (prevNode.status == "start" || prevNode.status == "end")
+      currNode.status !== "wall"
     ) {
       currElement.className = prevNode.status;
       currNode.status = prevNode.status;
+      currNode.isClass = prevNode.status;
       prevNode.status = "unvisited";
+      prevNode.isClass = "unvisited";
       prevElement.className = "unvisited";
     }
     return currNode;
@@ -179,10 +201,11 @@ function clearGrid() {
     for (let c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
       //console.log(node);
-      if (node.status !== "start" && node.status !== "end") {
+      if (node.isClass !== "start" && node.isClass !== "end") {
         let element = document.getElementById(node.id);
         element.className = "unvisited";
         node.status = "unvisited";
+        node.isClass = "unvisited";
       }
     }
   }
@@ -199,7 +222,9 @@ const algorithms = new Map([
   ["DFS", "Depth First Search"],
   ["JPS", "Jump Point Search"],
 ]);
+
 const algoID = document.getElementById("accordion");
+
 algoID.addEventListener("click", (e) => {
   const validID = ["aStar", "dijkstra", "GBFS", "BFS", "DFS", "JPS"];
   let target_id = e.target.id;
@@ -218,27 +243,6 @@ function updateStartBtn(id) {
   let updated_string = "Start " + name;
   startBtn.innerHTML = updated_string;
 }
-
-//Invoked when start visualizing is 'CLICKED'
-getSpecialNodes = () => {
-  var copy_start = null;
-  var copy_end = null;
-  for (let r = 0; r < totalRows; r++) {
-    for (let c = 0; c < totalCols; c++) {
-      if (
-        gridArray[r][c].status === "start"
-      ) {
-        copy_start = gridArray[r][c];
-      } else if (
-        gridArray[r][c].status === "end"
-      ) {
-        copy_end = gridArray[r][c];
-      }
-    }
-  }
-  let valid_buttons = [copy_start, copy_end];
-  return valid_buttons;
-};
 
 /* ---------------------- */
 /*-- Draggable Feature -- */
@@ -291,13 +295,11 @@ function dragElement(elmnt) {
 }
 
 /* ------ Draggable Feature ends
-
 /* ------------------------ */
 /*-- Class Declarations  -- */
 /*------------------------- */
 
 /* -------- Queue ------- */
-
 class Queue {
   constructor() {
     this.items = new Array();
@@ -395,81 +397,31 @@ class minHeap {
   };
 }
 
-/*class MinHeap {
-  heap;
-  constructor() {
-    this.heap = [null];
-  }
-
-  insert = (num) => {
-    this.heap.push(num);
-    if (this.heap.length > 2) {
-      let idx = this.heap.length - 1;
-      while (this.heap[idx] < this.heap[Math.floor(idx / 2)]) {
-        if (idx >= 1) {
-          [this.heap[Math.floor(idx / 2)], this.heap[idx]] = [
-            this.heap[idx],
-            this.heap[Math.floor(idx / 2)],
-          ];
-          if (Math.floor(idx / 2) > 1) {
-            idx = Math.floor(idx / 2);
-          } else {
-            break;
-          }
-        }
-      }
-    }
-  };
-
-  remove = () => {
-    let smallest = this.heap[1];
-    if (this.heap.length > 2) {
-      this.heap[1] = this.heap[this.heap.length - 1];
-      this.heap.splice(this.heap.length - 1);
-      if (this.heap.length == 3) {
-        if (this.heap[1] > this.heap[2]) {
-          [this.heap[1], this.heap[2]] = [this.heap[2], this.heap[1]];
-        }
-        return smallest;
-      }
-      let i = 1;
-      let left = 2 * i;
-      let right = 2 * i + 1;
-      while (
-        this.heap[i] >= this.heap[left] ||
-        this.heap[i] >= this.heap[right]
-      ) {
-        if (this.heap[left] < this.heap[right]) {
-          [this.heap[i], this.heap[left]] = [this.heap[left], this.heap[i]];
-          i = 2 * i;
-        } else {
-          [this.heap[i], this.heap[right]] = [this.heap[right], this.heap[i]];
-          i = 2 * i + 1;
-        }
-        left = 2 * i;
-        right = 2 * i + 1;
-        if (this.heap[left] == undefined || this.heap[right] == undefined) {
-          break;
-        }
-      }
-    } else if (this.heap.length == 2) {
-      this.heap.splice(1, 1);
-    } else {
-      return null;
-    }
-    return smallest;
-  };
-}*/
-
-/* ------------------------*/
-/*-------ALGORITHMS---------*/
-/*--------------------------------------------------------------------------------------------*/
 //ALGORITHMS
+const getSpecialNodes = () => {
+  for (let r = 0; r < totalRows; r++) {
+    for (let c = 0; c < totalCols; c++) {
+      if (
+        gridArray[r][c].status === "start" &&
+        gridArray[r][c].isClass === "start"
+      ) {
+        copy_start = gridArray[r][c];
+      } else if (
+        gridArray[r][c].status === "end" &&
+        gridArray[r][c].isClass === "end"
+      ) {
+        copy_end = gridArray[r][c];
+      }
+    }
+  }
+  let valid_buttons = [copy_start, copy_end];
+  return valid_buttons;
+};
+
 function dijkstra() {
   let specialNodes = getSpecialNodes();
   startNode = specialNodes[0];
   endNode = specialNodes[1];
-  // console.log(startNode, endNode);
   let visitedNodesInOrder = [startNode];
   //Assign distance as 0 for startNode
   startNode.distance = 0;
@@ -479,7 +431,8 @@ function dijkstra() {
   let unvisitedNodes = getUnvisitedNodes();
   while (unvisitedNodes.length) {
     //Get the neighbours
-    updateNeighbours(currNode);
+    let neighbours = getNeighbours(currNode);
+    updateNeighbours(neighbours, currNode, "dijkstra");
     unvisitedNodes.sort((a, b) => {
       return a.distance - b.distance;
     });
@@ -494,11 +447,11 @@ function dijkstra() {
     visitedNodesInOrder.push(closestNode);
     //Update the status of the closest node as visited
     if (closestNode.status === "end") {
-      shortestPath = backtrack(visitedNodesInOrder);
-      console.log(shortestPath);
+      backtrack(startNode, endNode);
       break;
     }
     closestNode.status = "visited";
+    //closestNode.isClass = "visited";
     let element = document.getElementById(closestNode.id);
     element.className = "visited";
     //Check if the end point
@@ -520,25 +473,7 @@ function getUnvisitedNodes() {
   return nodes;
 }
 
-function backtrack(nodes) {
-  let nodesToAnimate = [endNode];
-  //Provided that it is a visted node
-  let node = new Node();
-  node = endNode.parent;
-  //console.log(node);
-  while (node != startNode) {
-    if (nodes.includes(node)) {
-      node.status = "shortest";
-      let element = document.getElementById(node.id);
-      element.className = "shortest";
-      nodesToAnimate.push(node);
-      node = node.parent;
-    }
-  }
-  nodesToAnimate.push(startNode);
-}
-
-function updateNeighbours(currNode) {
+function getNeighbours(currNode) {
   let r = currNode.row;
   let c = currNode.col;
   let relevantStatuses = ["start", "wall", "visited"];
@@ -567,25 +502,118 @@ function updateNeighbours(currNode) {
   neighbours.forEach((neighbour) => {
     if (!relevantStatuses.includes(neighbour.status)) {
       actual_neighbours.push(neighbour);
-      if (1 + currNode.distance < neighbour.distance) {
-        neighbour.distance = 1 + currNode.distance;
-        neighbour.parent = currNode;
-      }
     }
   });
   return actual_neighbours;
 }
-// function UpdateDistanceFromStart(startNode, neighbours) {
-//   neighbours.forEach((node) => {
-//     let dx = abs(startNode.row - node.row);
-//     let dy = abs(startNode.col - node.col);
-//     let minimum = min(dx, dy);
-//     let maximum = min(dx, dy);
-//     let diagnol_movement = minimum;
-//     let straight_movement = maximum;
-//     nodes.distance = sqrt(2) + diagnol_movement + straight_movement;
-//   });
-// }
+
+function updateNeighbours(neighbours, currNode, algo) {
+  if (algo === "dijkstra") {
+    neighbours.forEach((neighbour) => {
+      if (1 + currNode.distance < neighbour.distance) {
+        neighbour.distance = 1 + currNode.distance;
+        neighbour.parent = currNode;
+      }
+    });
+  } else if (algo === "aStar") {
+    neighbours.forEach((neighbour) => {
+      var newGCost = 10 + currNode.g;
+      // if (newGCost < neighbour.g) {
+      //   neighbour.g = newGCost;
+      //   neighbour.parent = currNode;
+      // }
+      let estimation_cost = getDistance(neighbour, endNode);
+      let newCost = newGCost + estimation_cost;
+      if (newCost < neighbour.f) {
+        neighbour.g = newGCost;
+        neighbour.f = newCost;
+        neighbour.h = estimation_cost;
+        neighbour.parent = currNode;
+      }
+    });
+  }
+}
+
+//Astar Algorithm
+function getDistance(nodeA, nodeB) {
+  var dx = Math.abs(nodeA.row - nodeB.row);
+  var dy = Math.abs(nodeA.col - nodeB.col);
+  if (dx > dy) {
+    //Better results than using sqrt(2) and 1
+    return 14 * dy + 10 * (dx - dy);
+  }
+  return 14 * dx + 10 * (dy - dx);
+  //return dx + dy;
+}
+
+function backtrack(startNode, endNode) {
+  nodesToAnimate.push(endNode);
+  let currNode = new Node();
+  currNode = endNode.parent;
+  while (currNode !== startNode) {
+    nodesToAnimate.push(currNode);
+    currNode.status = "shortest";
+    let element = document.getElementById(currNode.id);
+    element.className = "shortest";
+    currNode = currNode.parent;
+  }
+  nodesToAnimate.push(startNode);
+  nodesToAnimate.reverse();
+  return nodesToAnimate;
+}
+//Astar Algorithm
+
+const aStar = () => {
+  //Get the startNode and the endNode
+  let specialNodes = getSpecialNodes();
+  startNode = specialNodes[0];
+  endNode = specialNodes[1];
+  //Make a min heap to keep track of nodes with lowest f
+  //UnvisitedNodes array
+  let openList = new minHeap();
+  let visitedNodesInOrder = [];
+  //Update the distances of startNode
+  //Distance of startNode from startNode
+  startNode.g = 0;
+  startNode.h = getDistance(startNode, endNode);
+  //Considering directions as only four
+  startNode.f = startNode.g + startNode.h;
+  //Push start node in the open List
+  openList.push([startNode.f, startNode]);
+  //nodesToAnimate.push([startNode, "searching"]);
+  while (!openList.isEmpty()) {
+    //The node having the lowest f value
+    var currNode = new Node();
+    let currArr = openList.getMin();
+    currNode = currArr[1];
+    //nodesToAnimate.push([currNode, "searching"]);
+    visitedNodesInOrder.push(currNode);
+    //Check if the endNode
+    if (currNode === endNode) {
+      return backtrack(startNode, endNode);
+    }
+    if (currNode.status !== "start") {
+      console.log(currNode);
+      currNode.status = "visited";
+    }
+    //get element
+    let element = document.getElementById(currNode.id);
+    if (element.className !== "start" || element.className !== "end") {
+      element.className = "visited";
+    }
+    //nodesToAnimate.push([currNode, "visited"]);
+    var neighbours = getNeighbours(currNode);
+    updateNeighbours(neighbours, currNode, "aStar");
+    for (let i = 0; i < neighbours.length; i++) {
+      var neighbour = neighbours[i];
+      // if (!openList.includes(neighbour)) {
+      openList.push([neighbour.f, neighbour]);
+      // }
+    }
+  }
+  alert("No Path Exists");
+  return;
+};
 
 /* ------------ BFS Algorithm ------ */
 
@@ -637,16 +665,10 @@ function BFS() {
 
 async function animateCells() {
   inProgress = true;
-  // animationState = null;
   var cells = document.getElementsByTagName("td");
-  //var cells = $("#tableContainer").find("td");
-  // var specialCells = getSpecialNodes(); // specialCells[0] is startNode and specialCells[1] is endNode
   var startNodeIndex = gridArray[startNode.row] * totalCols + gridArray[startNode.col];
   var endNodeIndex = gridArray[endNode.row] * totalCols + gridArray[endNode.col];
-  //var endCellIndex = (endCell[0] * (totalCols)) + endCell[1];
-  // var delay = getDelay();
-  // var delay = 0;
-  // console.log(nodesToAnimate);
+
   for (var i = 0; i < nodesToAnimate.length; i++) {
     var nodeCoordinates = nodesToAnimate[i][0];
     var x = nodeCoordinates.row;
@@ -657,19 +679,17 @@ async function animateCells() {
     }
     var cell = cells[num];
     var colorClass = nodesToAnimate[i][1]; // success, visited or searching
-    // console.log(nodesToAnimate[i][1])
     // Wait until its time to animate
     await new Promise((resolve) => setTimeout(resolve, 5));
-    // $(cell).removeClass();
     if (cell.className == "start" || cell.className == "end") {
       continue;
     } else cell.className = colorClass;
-    // $(cell).addClass(colorClass);
   }
+
   nodesToAnimate = [];
   inProgress = false;
-  //console.log("End of animation has been reached!");
   justFinished = true;
+
   return new Promise(resolve => resolve(true));
 }
 
@@ -690,33 +710,31 @@ function getNeighbours(i, j) {
   return neighbors;
 }
 
-//REFERENCE
-
-// const algorithms = new Map([
-//   ["aStar", "A*"],
-//   ["dijkstra", "Dijkstra"],
-//   ["GBFS", "Greedy Best First Search"],
-//   ["BFS", "Breadth First Search"],
-//   ["DFS", "Depth First Search"],
-//   ["JPS", "Jump Point Search"],
-// ]);
 const startAlgo = () => {
-  let newGridObject = new Grid;
-  gridObject = newGridObject;
-  if (startBtn.value === "Start Visualization") {
-    alert("Pick an algorithm");
-  } else {
-    if (startBtn.innerText === "Start Dijkstra") {
-      console.log("dijkstra");
-      dijkstra();
-    } else if (startBtn.innerText === "Start Breadth First Search") {
-      // animateCells();
-      if (BFS()) {
+  let startBtnText = startBtn.innerText;
+  switch (startBtnText) {
+    case "Start Visualization": {
+      startBtn.innerText = "Pick an Algorithm!";
+      break;
+    }
+    case "Start A*": {
+      aStar(nodesToAnimate, gridArray);
+      break;
+    }
+    case "Start Dijkstra": {
+      dijkstra(nodesToAnimate, gridArray);
+      break;
+    }
+    case "Start Breadth First Search": {
+      if(BFS()) {
         animateCells();
-        pathfound = false;
       } else {
-        alert("path does not exist!");
+        alert("Path does not exist!");
       }
+      break;
+    }
+    default: {
+      break;
     }
   }
 };
