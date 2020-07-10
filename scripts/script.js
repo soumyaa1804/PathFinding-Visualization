@@ -4,9 +4,6 @@ var width = window.innerWidth * 0.9;
 var cellSize = 25;
 var totalRows = Math.floor(height / cellSize) - 1;
 var totalCols = Math.floor(width / cellSize) - 1;
-let end = null;
-let start = null;
-let keyDown = false;
 let mousePressed = false;
 let gridArray = [];
 let startRow = Math.floor(totalRows / 4);
@@ -15,7 +12,9 @@ let endRow = Math.floor((3 * totalRows) / 4);
 let endCol = Math.floor((3 * totalCols) / 4);
 let prevNode = null;
 let prevNodeFlag = true;
-
+let shortestPath = [];
+let nodesToAnimate = [];
+let cellsToAnimate = [];
 //Instantiate the grid
 class Node {
   constructor(row, col, nodeClass, nodeId) {
@@ -130,12 +129,10 @@ for (let r = 0; r < totalRows; r += 1) {
 function updateStatus(currNode) {
   let element = document.getElementById(currNode.id);
   relevantStatuses = ["start", "end"];
-  if (!keyDown) {
-    if (!relevantStatuses.includes(currNode.status)) {
-      element.className = currNode.status !== "wall" ? "wall" : "unvisited";
-      currNode.status = element.className !== "wall" ? "unvisited" : "wall";
-      currNode.isClass = currNode.status;
-    }
+  if (!relevantStatuses.includes(currNode.status)) {
+    element.className = currNode.status !== "wall" ? "wall" : "unvisited";
+    currNode.status = element.className !== "wall" ? "unvisited" : "wall";
+    currNode.isClass = currNode.status;
   }
 }
 //Pressed down on the start node....update the next node that is traversed
@@ -505,17 +502,6 @@ function updateNeighbours(currNode) {
   });
   return actual_neighbours;
 }
-// function UpdateDistanceFromStart(startNode, neighbours) {
-//   neighbours.forEach((node) => {
-//     let dx = abs(startNode.row - node.row);
-//     let dy = abs(startNode.col - node.col);
-//     let minimum = min(dx, dy);
-//     let maximum = min(dx, dy);
-//     let diagnol_movement = minimum;
-//     let straight_movement = maximum;
-//     nodes.distance = sqrt(2) + diagnol_movement + straight_movement;
-//   });
-// }
 
 //REFERENCE
 
@@ -528,14 +514,23 @@ function updateNeighbours(currNode) {
 //   ["JPS", "Jump Point Search"],
 // ]);
 const startAlgo = () => {
-  if (startBtn.value === "Start Visualization") {
-    alert("Pick an algorithm");
-  } else {
-    if (startBtn.innerText === "Start Dijkstra") {
-      console.log("dijkstra");
+  let startBtnText = startBtn.innerText;
+  switch (startBtnText) {
+    case "Select an Algorithm": {
+      startBtn.innerText = "Pick an Algorithm!";
+      break;
+    }
+    case "Start A*": {
+      aStar();
+      break;
+    }
+    case "Start Dijkstra": {
       dijkstra();
+      break;
+    }
+    default: {
+      break;
     }
   }
 };
-
 startBtn.addEventListener("click", startAlgo);
