@@ -4,8 +4,7 @@ var width = window.innerWidth * 0.9;
 var cellSize = 25;
 var totalRows = Math.floor(height / cellSize) - 1;
 var totalCols = Math.floor(width / cellSize) - 1;
-let end = null;
-let start = null;
+
 let keyDown = false;
 let mousePressed = false;
 let gridArray = [];
@@ -14,22 +13,25 @@ let startCol = Math.floor(totalCols / 4);
 let endRow = Math.floor((3 * totalRows) / 4);
 let endCol = Math.floor((3 * totalCols) / 4);
 let prevNode = null;
-let prevNodeFlag = true;
+let nodesToAnimate = [];
+let pathFound = false;
 
 //Instantiate the grid
 class Node {
   constructor(row, col, nodeClass, nodeId) {
     this.row = row;
     this.col = col;
-    this.isClass = nodeClass;
     this.id = nodeId;
     this.status = nodeClass;
+    this.isVisited = false;
     //For algorithms
     this.distance = Infinity;
     this.parent = null;
   }
 }
 
+let startNode = new Node(startRow, startCol, "start", `${startRow}-${startCol}`);
+let endNode = new Node(endRow, endCol, "end", `${endRow}-${endCol}`);
 //Generate the grid
 
 class Grid {
@@ -43,8 +45,8 @@ class Grid {
       let currRow = [];
       mygrid += `<tr>`;
       for (let col = 0; col < totalCols; col++) {
-        let new_nodeId = `${row}-${col}`,
-          new_nodeClass;
+        let new_nodeId = `${row}-${col}`;
+        let new_nodeClass = "";
         if (row === startRow && col === startCol) {
           new_nodeClass = "start";
         } else if (row === endRow && col === endCol) {
@@ -104,6 +106,7 @@ for (let r = 0; r < totalRows; r += 1) {
       }
       e.preventDefault();
     });
+
     currElement.addEventListener("mouseenter", (e) => {
       if (mousePressed && pressedNodeStatus !== "normal") {
         //Means that the pressed node is a "Start" or "end"
@@ -113,6 +116,7 @@ for (let r = 0; r < totalRows; r += 1) {
         updateStatus(currNode);
       }
     });
+
     currElement.addEventListener("mouseup", (e) => {
       //console.log("mouseup", currId);
       mousePressed = false;
@@ -134,7 +138,6 @@ function updateStatus(currNode) {
     if (!relevantStatuses.includes(currNode.status)) {
       element.className = currNode.status !== "wall" ? "wall" : "unvisited";
       currNode.status = element.className !== "wall" ? "unvisited" : "wall";
-      currNode.isClass = currNode.status;
     }
   }
 }
@@ -156,9 +159,7 @@ function moveSpecialNode(currNode) {
     ) {
       currElement.className = prevNode.status;
       currNode.status = prevNode.status;
-      currNode.isClass = prevNode.status;
       prevNode.status = "unvisited";
-      prevNode.isClass = "unvisited";
       prevElement.className = "unvisited";
     }
     return currNode;
@@ -178,11 +179,10 @@ function clearGrid() {
     for (let c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
       //console.log(node);
-      if (node.isClass !== "start" && node.isClass !== "end") {
+      if (node.status !== "start" && node.status !== "end") {
         let element = document.getElementById(node.id);
         element.className = "unvisited";
         node.status = "unvisited";
-        node.isClass = "unvisited";
       }
     }
   }
@@ -221,16 +221,16 @@ function updateStartBtn(id) {
 
 //Invoked when start visualizing is 'CLICKED'
 getSpecialNodes = () => {
+  var copy_start = null;
+  var copy_end = null;
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       if (
-        gridArray[r][c].status === "start" &&
-        gridArray[r][c].isClass === "start"
+        gridArray[r][c].status === "start"
       ) {
         copy_start = gridArray[r][c];
       } else if (
-        gridArray[r][c].status === "end" &&
-        gridArray[r][c].isClass === "end"
+        gridArray[r][c].status === "end"
       ) {
         copy_end = gridArray[r][c];
       }
@@ -324,6 +324,77 @@ class Queue {
 
 /*------ Min Heap ----- */
 
+class minHeap {
+  constructor() {
+    this.heap = [];
+  }
+  isEmpty = function () {
+    return this.heap.length == 0;
+  };
+  clear = function () {
+    this.heap = [];
+    return;
+  };
+  getMin = function () {
+    if (this.isEmpty()) {
+      return null;
+    }
+    var min = this.heap[0];
+    this.heap[0] = this.heap[this.heap.length - 1];
+    this.heap[this.heap.length - 1] = min;
+    this.heap.pop();
+    if (!this.isEmpty()) {
+      this.siftDown(0);
+    }
+    return min;
+  };
+  push = function (item) {
+    this.heap.push(item);
+    this.siftUp(this.heap.length - 1);
+    return;
+  };
+  parent = function (index) {
+    if (index == 0) {
+      return null;
+    }
+    return Math.floor((index - 1) / 2);
+  };
+  children = function (index) {
+    return [index * 2 + 1, index * 2 + 2];
+  };
+  siftDown = function (index) {
+    var children = this.children(index);
+    var leftChildValid = children[0] <= this.heap.length - 1;
+    var rightChildValid = children[1] <= this.heap.length - 1;
+    var newIndex = index;
+    if (leftChildValid && this.heap[newIndex][0] > this.heap[children[0]][0]) {
+      newIndex = children[0];
+    }
+    if (rightChildValid && this.heap[newIndex][0] > this.heap[children[1]][0]) {
+      newIndex = children[1];
+    }
+    // No sifting down needed
+    if (newIndex === index) {
+      return;
+    }
+    var val = this.heap[index];
+    this.heap[index] = this.heap[newIndex];
+    this.heap[newIndex] = val;
+    this.siftDown(newIndex);
+    return;
+  };
+  siftUp = function (index) {
+    var parent = this.parent(index);
+    if (parent !== null && this.heap[index][0] < this.heap[parent][0]) {
+      var val = this.heap[index];
+      this.heap[index] = this.heap[parent];
+      this.heap[parent] = val;
+      this.siftUp(parent);
+    }
+    return;
+  };
+}
+
 /*class MinHeap {
   heap;
   constructor() {
@@ -398,7 +469,7 @@ function dijkstra() {
   let specialNodes = getSpecialNodes();
   startNode = specialNodes[0];
   endNode = specialNodes[1];
-  console.log(startNode, endNode);
+  // console.log(startNode, endNode);
   let visitedNodesInOrder = [startNode];
   //Assign distance as 0 for startNode
   startNode.distance = 0;
@@ -408,7 +479,7 @@ function dijkstra() {
   let unvisitedNodes = getUnvisitedNodes();
   while (unvisitedNodes.length) {
     //Get the neighbours
-    let neighbours = updateNeighbours(currNode);
+    updateNeighbours(currNode);
     unvisitedNodes.sort((a, b) => {
       return a.distance - b.distance;
     });
@@ -428,7 +499,6 @@ function dijkstra() {
       break;
     }
     closestNode.status = "visited";
-    closestNode.isClass = "visited";
     let element = document.getElementById(closestNode.id);
     element.className = "visited";
     //Check if the end point
@@ -436,6 +506,7 @@ function dijkstra() {
     currNode = closestNode;
   }
 }
+
 function getUnvisitedNodes() {
   let nodes = [];
   let relevantStatuses = ["start", "wall", "visited"];
@@ -448,6 +519,7 @@ function getUnvisitedNodes() {
   }
   return nodes;
 }
+
 function backtrack(nodes) {
   let nodesToAnimate = [endNode];
   //Provided that it is a visted node
@@ -456,7 +528,6 @@ function backtrack(nodes) {
   //console.log(node);
   while (node != startNode) {
     if (nodes.includes(node)) {
-      node.isClass = "shortest";
       node.status = "shortest";
       let element = document.getElementById(node.id);
       element.className = "shortest";
@@ -465,9 +536,8 @@ function backtrack(nodes) {
     }
   }
   nodesToAnimate.push(startNode);
-  //nodesToAnimate.reverse();
-  return nodesToAnimate;
 }
+
 function updateNeighbours(currNode) {
   let r = currNode.row;
   let c = currNode.col;
@@ -517,6 +587,109 @@ function updateNeighbours(currNode) {
 //   });
 // }
 
+/* ------------ BFS Algorithm ------ */
+
+function BFS() {
+  let myQueue = new Queue();
+  let specialNodes = getSpecialNodes();
+  startNode = specialNodes[0];
+  endNode = specialNodes[1];
+  // console.log(startNode, endNode);
+  myQueue.enqueue(gridArray[startNode.row][startNode.col]);
+  gridArray[startNode.row][startNode.col].isVisited = true;
+  nodesToAnimate.push([startNode, "searching"]);
+  var currNode = new Node;
+  // console.log(myQueue.items.length);
+  while (!myQueue.empty()) {
+    currNode = myQueue.dequeue();
+    // console.log(currNode);
+    var r = currNode.row;
+    var c = currNode.col;
+    nodesToAnimate.push([gridArray[currNode.row][currNode.col], "visited"]);
+    if (r == endNode.row && c == endNode.col) {
+      pathFound = true;
+      break;
+    }
+    var neighbours = getNeighbours(r, c);
+    for (var k = 0; k < neighbours.length; k++) {
+      var m = neighbours[k][0];
+      var n = neighbours[k][1];
+      if (gridArray[m][n].isVisited || gridArray[m][n].status == "wall") {
+        continue;
+      }
+      gridArray[m][n].isVisited = true;
+      gridArray[m][n].parent = currNode;
+      nodesToAnimate.push([gridArray[m][n], "searching"]);
+      myQueue.enqueue(gridArray[m][n]);
+    }
+  }
+
+  if (pathFound) {
+    nodesToAnimate.push([gridArray[endNode.row][endNode.col], "shortest"]);
+    while (currNode.parent != null) {
+      var prevNode = currNode.parent;
+      nodesToAnimate.push([gridArray[prevNode.row][prevNode.col], "shortest"]);
+      currNode = prevNode;
+    }
+  }
+  return pathFound;
+}
+
+async function animateCells() {
+  inProgress = true;
+  // animationState = null;
+  var cells = document.getElementsByTagName("td");
+  //var cells = $("#tableContainer").find("td");
+  // var specialCells = getSpecialNodes(); // specialCells[0] is startNode and specialCells[1] is endNode
+  var startNodeIndex = gridArray[startNode.row] * totalCols + gridArray[startNode.col];
+  var endNodeIndex = gridArray[endNode.row] * totalCols + gridArray[endNode.col];
+  //var endCellIndex = (endCell[0] * (totalCols)) + endCell[1];
+  // var delay = getDelay();
+  // var delay = 0;
+  // console.log(nodesToAnimate);
+  for (var i = 0; i < nodesToAnimate.length; i++) {
+    var nodeCoordinates = nodesToAnimate[i][0];
+    var x = nodeCoordinates.row;
+    var y = nodeCoordinates.col;
+    var num = x * totalCols + y;
+    if (num == startNodeIndex || num == endNodeIndex) {
+      continue;
+    }
+    var cell = cells[num];
+    var colorClass = nodesToAnimate[i][1]; // success, visited or searching
+    // console.log(nodesToAnimate[i][1])
+    // Wait until its time to animate
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    // $(cell).removeClass();
+    if (cell.className == "start" || cell.className == "end") {
+      continue;
+    } else cell.className = colorClass;
+    // $(cell).addClass(colorClass);
+  }
+  nodesToAnimate = [];
+  inProgress = false;
+  //console.log("End of animation has been reached!");
+  justFinished = true;
+  return new Promise(resolve => resolve(true));
+}
+
+function getNeighbours(i, j) {
+  var neighbors = [];
+  if (i > 0) {
+    neighbors.push([i - 1, j]);
+  }
+  if (j > 0) {
+    neighbors.push([i, j - 1]);
+  }
+  if (i < totalRows - 1) {
+    neighbors.push([i + 1, j]);
+  }
+  if (j < totalCols - 1) {
+    neighbors.push([i, j + 1]);
+  }
+  return neighbors;
+}
+
 //REFERENCE
 
 // const algorithms = new Map([
@@ -528,14 +701,25 @@ function updateNeighbours(currNode) {
 //   ["JPS", "Jump Point Search"],
 // ]);
 const startAlgo = () => {
+  let newGridObject = new Grid;
+  gridObject = newGridObject;
   if (startBtn.value === "Start Visualization") {
     alert("Pick an algorithm");
   } else {
     if (startBtn.innerText === "Start Dijkstra") {
       console.log("dijkstra");
       dijkstra();
+    } else if (startBtn.innerText === "Start Breadth First Search") {
+      // animateCells();
+      if (BFS()) {
+        animateCells();
+        pathfound = false;
+      } else {
+        alert("path does not exist!");
+      }
     }
   }
 };
 
 startBtn.addEventListener("click", startAlgo);
+

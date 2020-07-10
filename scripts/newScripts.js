@@ -12,15 +12,17 @@ let createWalls = false; // if true, create walls through drag and if false crea
 let createUnvisited = false;
 let keepWalls = false;
 let cellsToAnimate = [];
+let pathFound = false;
+
 
 class Node {
   constructor(row, col, id, status) {
     this.row = row;
     this.col = col;
     this.id = id;
-    this.status = status; //start, end, wall or unvisited
+    this.status = status; //start, end, wall, unvisited, visited, searching, success
     this.isVisited = false;
-    this.prevNode = []; // id of previous node
+    this.prevNode = []; // [row, col] of previous node
   }
 }
 
@@ -422,7 +424,6 @@ class MinHeap {
 }
 
 function BFS() {
-  var pathFound = false;
   var myQueue = new Queue();
   // var prev = createPrev();
   // var visited = createVisited();
@@ -471,6 +472,7 @@ function BFS() {
     cellsToAnimate.push([
       [r, c], "success"
     ]);
+    // loop till reach starting node which will have an empty array as prevNode
     while (myGrid[r][c].prevNode.length != 0) {
       var prevCell = myGrid[r][c].prevNode;
       r = prevCell[0];
@@ -514,10 +516,10 @@ function BFS() {
 
 function getNeighbours(i, j) {
   var neighbors = [];
-  if (i > 0 && myGrid[i - 1][j].status != "wall") {
+  if (i > 0) {
     neighbors.push([i - 1, j]);
   }
-  if (j > 0 && myGrid[i][j - 1].status != "wall") {
+  if (j > 0) {
     neighbors.push([i, j - 1]);
   }
   if (i < totalRows - 1) {
@@ -531,7 +533,7 @@ function getNeighbours(i, j) {
 
 async function animateCells() {
   inProgress = true;
-  animationState = null;
+  // animationState = null;
   var cells = document.getElementsByTagName("td");
   //var cells = $("#tableContainer").find("td");
   // var specialCells = getSpecialNodes(); // specialCells[0] is startNode and specialCells[1] is endNode
@@ -567,11 +569,11 @@ async function animateCells() {
   return new Promise(resolve => resolve(true));
 }
 
-function cellIsAWall(i, j, cells) {
-  justFinished = false;
-  var cellNum = (i * (totalCols)) + j;
-  return cells[cellNum].classList.contains("wall");
-}
+// function cellIsAWall(i, j, cells) {
+//   justFinished = false;
+//   var cellNum = (i * (totalCols)) + j;
+//   return cells[cellNum].classList.contains("wall");
+// }
 
 var startButton = document.getElementById("startBtn");
 startBtn.addEventListener("click", () => {
@@ -579,6 +581,8 @@ startBtn.addEventListener("click", () => {
     alert("Visualization in progress");
   } else if (startBtn.innerText == "Start Breadth First Search") {
     if (BFS()) {
+      BFS();
+      pathFound = false;
       animateCells();
     } else alert("Path does not exist");
   }
