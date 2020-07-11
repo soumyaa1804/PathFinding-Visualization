@@ -1,5 +1,5 @@
-// import { dijkstra } from "./dijkstra";
-// import { aStar } from "./aStar";
+// import { dijkstra } from "./dijkstra.js";
+// import { aStar } from "./aStar.js";
 //GLOBAL VARIABLES
 var height = window.innerHeight * 0.8;
 var width = window.innerWidth * 0.9;
