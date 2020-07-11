@@ -31,22 +31,20 @@ function getNeighbours(currNode) {
   let neighbours = [];
   if (r - 1 >= 0) {
     neighbours.push(gridArray[r - 1][c]);
-    // if (c - 1 >= 0) {
-    //   neighbours.push(gridArray[r - 1][c - 1]);
-    // }
-    // if (c + 1 <= totalCols - 1) {
-    //   neighbours.push(gridArray[r - 1][c + 1]);
-    // }
+    if (c - 1 >= 0) {
+      neighbours.push(gridArray[r - 1][c - 1]);
+    }
+    if (c + 1 <= totalCols - 1) {
+      neighbours.push(gridArray[r - 1][c + 1]);
+    }
   }
   if (r + 1 <= totalRows - 1) {
     neighbours.push(gridArray[r + 1][c]);
     if (c - 1 >= 0) {
-      //gridArray[r + 1][c - 1],
-      neighbours.push(gridArray[r][c - 1]);
+      neighbours.push(gridArray[r + 1][c - 1], gridArray[r][c - 1]);
     }
     if (c + 1 <= totalCols - 1) {
-      //gridArray[r + 1][c + 1]
-      neighbours.push(gridArray[r][c + 1]);
+      neighbours.push(gridArray[r][c + 1], gridArray[r + 1][c + 1]);
     }
   }
   neighbours.forEach((neighbour) => {
@@ -60,7 +58,7 @@ function getNeighbours(currNode) {
 function updateNeighbours(neighbours, currNode, algo, startNode, endNode) {
   if (algo === "aStar") {
     neighbours.forEach((neighbour) => {
-      var newGCost = 10 + currNode.g;
+      var newGCost = neighbour.weight + currNode.g;
       // if (newGCost < neighbour.g) {
       //   neighbour.g = newGCost;
       //   neighbour.parent = currNode;

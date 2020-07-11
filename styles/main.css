@@ -127,3 +127,6 @@ td:hover {
 .shortest {
   background-color: aqua;
 }
+.unvisited-weight {
+  background-color: silver;
+}
