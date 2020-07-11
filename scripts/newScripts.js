@@ -12,15 +12,17 @@ let createWalls = false; // if true, create walls through drag and if false crea
 let createUnvisited = false;
 let keepWalls = false;
 let cellsToAnimate = [];
+let pathFound = false;
+
 
 class Node {
   constructor(row, col, id, status) {
     this.row = row;
     this.col = col;
     this.id = id;
-    this.status = status; //start, end, wall or unvisited
+    this.status = status; //start, end, wall, unvisited, visited, searching, success
     this.isVisited = false;
-    this.prevNode = []; // id of previous node
+    this.prevNode = []; // [row, col] of previous node
   }
 }
 
@@ -84,7 +86,8 @@ for (let i = 0; i < cells.length; i += 1) {
   let currCellColIdx = Math.floor(i % totalCols);
 
   cells[i].addEventListener("mousedown", (e) => {
-    if (!inProgress && !e.button) {
+    e.preventDefault();
+    if (!inProgress && !e.button && !justFinished) {
       // clear board if just finished
       // if (justFinished && !inProgress) {
       //   clearBoard(keepWalls = true);
@@ -105,9 +108,9 @@ for (let i = 0; i < cells.length; i += 1) {
         // cells[i].className = "wall";
         // gridObject.grid[Math.floor(i / totalCols)][Math.floor(i / totalRows)].status = "wall";
         myGrid[currCellRowIdx][currCellColIdx].status =
-          myGrid[currCellRowIdx][currCellColIdx].status == "unvisited"
-            ? "wall"
-            : "unvisited";
+          myGrid[currCellRowIdx][currCellColIdx].status == "unvisited" ?
+          "wall" :
+          "unvisited";
         cells[i].className = myGrid[currCellRowIdx][currCellColIdx].status;
         // console.log("mousedown");
         // console.log(cells[i]);
@@ -123,11 +126,12 @@ for (let i = 0; i < cells.length; i += 1) {
   //   console.log("mouseup");
   // });
 
-  cells[i].addEventListener("mouseenter", () => {
+  cells[i].addEventListener("mouseenter", (e) => {
+    e.preventDefault();
     if (!createWalls && !createUnvisited && !movingStart && !movingEnd) {
       return;
     }
-    if (!inProgress) {
+    if (!inProgress && !justFinished) {
       if (movingStart && i != endCellIndex) {
         moveStartOrEnd(startCellIndex, i, "start", cells[i]);
       } else if (movingEnd && i != startCellIndex) {
@@ -212,7 +216,8 @@ let moveStartOrEnd = (prevIndex, newIndex, startOrEnd, newCell) => {
 // }
 
 let bodyElement = document.querySelector("body");
-bodyElement.addEventListener("mouseup", () => {
+bodyElement.addEventListener("mouseup", (e) => {
+  e.preventDefault();
   createWalls = false;
   movingStart = false;
   movingEnd = false;
@@ -306,6 +311,7 @@ function updateStartBtn(id) {
 let clearBtn = document.getElementById("clearBtn");
 
 function clearGrid() {
+  justFinished = false;
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       //console.log(node);
@@ -418,7 +424,6 @@ class MinHeap {
 }
 
 function BFS() {
-  var pathFound = false;
   var myQueue = new Queue();
   // var prev = createPrev();
   // var visited = createVisited();
@@ -464,12 +469,17 @@ function BFS() {
   if (pathFound) {
     var r = newEndNode[0];
     var c = newEndNode[1];
-    cellsToAnimate.push([[r, c], "success"]);
+    cellsToAnimate.push([
+      [r, c], "success"
+    ]);
+    // loop till reach starting node which will have an empty array as prevNode
     while (myGrid[r][c].prevNode.length != 0) {
       var prevCell = myGrid[r][c].prevNode;
       r = prevCell[0];
       c = prevCell[1];
-      cellsToAnimate.push([[r, c], "success"]);
+      cellsToAnimate.push([
+        [r, c], "success"
+      ]);
     }
   }
   return pathFound;
@@ -523,7 +533,7 @@ function getNeighbours(i, j) {
 
 async function animateCells() {
   inProgress = true;
-  animationState = null;
+  // animationState = null;
   var cells = document.getElementsByTagName("td");
   //var cells = $("#tableContainer").find("td");
   // var specialCells = getSpecialNodes(); // specialCells[0] is startNode and specialCells[1] is endNode
@@ -546,7 +556,6 @@ async function animateCells() {
     // console.log(cellsToAnimate[i][1])
     // Wait until its time to animate
     await new Promise((resolve) => setTimeout(resolve, 0.01));
-
     // $(cell).removeClass();
     if (cell.className == "start" || cell.className == "end") {
       continue;
@@ -556,13 +565,15 @@ async function animateCells() {
   cellsToAnimate = [];
   inProgress = false;
   //console.log("End of animation has been reached!");
-  return new Promise((resolve) => resolve(true));
+  justFinished = true;
+  return new Promise(resolve => resolve(true));
 }
 
-function cellIsAWall(i, j, cells) {
-  var cellNum = i * totalCols + j;
-  return cells[cellNum].classList.contains("wall");
-}
+// function cellIsAWall(i, j, cells) {
+//   justFinished = false;
+//   var cellNum = (i * (totalCols)) + j;
+//   return cells[cellNum].classList.contains("wall");
+// }
 
 var startButton = document.getElementById("startBtn");
 startBtn.addEventListener("click", () => {
@@ -570,6 +581,8 @@ startBtn.addEventListener("click", () => {
     alert("Visualization in progress");
   } else if (startBtn.innerText == "Start Breadth First Search") {
     if (BFS()) {
+      BFS();
+      pathFound = false;
       animateCells();
     } else alert("Path does not exist");
   }
