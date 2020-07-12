@@ -3,13 +3,16 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+exports.minHeap = exports.Queue = void 0;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 /* -------- Queue ------- */
-var Queue = exports.Queue = function () {
+var Queue = /*#__PURE__*/function () {
   function Queue() {
     _classCallCheck(this, Queue);
 
@@ -42,10 +45,12 @@ var Queue = exports.Queue = function () {
 
   return Queue;
 }();
-
 /*------ Min Heap ----- */
 
-var minHeap = exports.minHeap = function () {
+
+exports.Queue = Queue;
+
+var minHeap = /*#__PURE__*/function () {
   function minHeap() {
     _classCallCheck(this, minHeap);
 
@@ -69,13 +74,16 @@ var minHeap = exports.minHeap = function () {
       if (this.isEmpty()) {
         return null;
       }
+
       var min = this.heap[0];
       this.heap[0] = this.heap[this.heap.length - 1];
       this.heap[this.heap.length - 1] = min;
       this.heap.pop();
+
       if (!this.isEmpty()) {
         this.siftDown(0);
       }
+
       return min;
     }
   }, {
@@ -91,6 +99,7 @@ var minHeap = exports.minHeap = function () {
       if (index == 0) {
         return null;
       }
+
       return Math.floor((index - 1) / 2);
     }
   }, {
@@ -105,16 +114,20 @@ var minHeap = exports.minHeap = function () {
       var leftChildValid = children[0] <= this.heap.length - 1;
       var rightChildValid = children[1] <= this.heap.length - 1;
       var newIndex = index;
+
       if (leftChildValid && this.heap[newIndex][0] > this.heap[children[0]][0]) {
         newIndex = children[0];
       }
+
       if (rightChildValid && this.heap[newIndex][0] > this.heap[children[1]][0]) {
         newIndex = children[1];
-      }
-      // No sifting down needed
+      } // No sifting down needed
+
+
       if (newIndex === index) {
         return;
       }
+
       var val = this.heap[index];
       this.heap[index] = this.heap[newIndex];
       this.heap[newIndex] = val;
@@ -125,15 +138,19 @@ var minHeap = exports.minHeap = function () {
     key: "siftUp",
     value: function siftUp(index) {
       var parent = this.parent(index);
+
       if (parent !== null && this.heap[index][0] < this.heap[parent][0]) {
         var val = this.heap[index];
         this.heap[index] = this.heap[parent];
         this.heap[parent] = val;
         this.siftUp(parent);
       }
+
       return;
     }
   }]);
 
   return minHeap;
 }();
+
+exports.minHeap = minHeap;
