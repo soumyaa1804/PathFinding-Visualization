@@ -216,7 +216,11 @@ function clearPath() {
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       let element = document.getElementById(gridArray[r][c].id);
-      if (element.className === "shortest" || element.className === "visited") {
+      if (
+        element.className === "shortest" ||
+        element.className === "visited" ||
+        element.className === "searching"
+      ) {
         element.className = "unvisited";
         gridArray[r][c].status = "unvisited";
         gridArray[r][c] = new Node(
