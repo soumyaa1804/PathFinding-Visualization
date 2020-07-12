@@ -21,7 +21,6 @@ var width = window.innerWidth * 0.9;
 var cellSize = 25;
 var totalRows = exports.totalRows = Math.floor(height / cellSize) - 1;
 var totalCols = exports.totalCols = Math.floor(width / cellSize) - 1;
-var keyDown = false;
 var mousePressed = false;
 var gridArray = exports.gridArray = [];
 var startRow = Math.floor(totalRows / 4);
@@ -32,7 +31,9 @@ var prevNode = null;
 var nodesToAnimate = exports.nodesToAnimate = [];
 var pressedNodeStatus = "normal";
 var pathFound = false;
-
+var inProgress = false;
+//To add the weights
+var keyDown = false;
 //Instantiate the grid
 
 var Node = exports.Node = function Node(row, col, nodeClass, nodeId) {
@@ -46,17 +47,17 @@ var Node = exports.Node = function Node(row, col, nodeClass, nodeId) {
   //For Algorithm
   this.distance = Infinity;
   this.parent = null;
+  this.weight = 1;
   //For heuristics
   this.f = Infinity;
   this.g = Infinity;
   this.h = Infinity;
 };
+//Generate the grid
+
 
 var startNode = new Node();
 var endNode = new Node();
-var copy_start = new Node();
-var copy_end = new Node();
-//Generate the grid
 
 var Grid = function () {
   function Grid() {
@@ -137,7 +138,7 @@ for (var r = 0; r < totalRows; r += 1) {
         prevNode = currNode;
       } else {
         pressedNodeStatus = "normal";
-        //Manipulate the normal node - convert to "WALL" or "A normal node"
+        //Manipulate the normal node - convert to "WALL" or "A normal node" or to a weight
         updateStatus(currNode);
       }
       e.preventDefault();
@@ -162,14 +163,31 @@ for (var r = 0; r < totalRows; r += 1) {
     _loop(c);
   }
 }
+/*---------WEIGHTS----------*/
+window.addEventListener("keydown", function (e) {
+  //Return the key that is pressed
+  keyDown = e.code;
+});
+window.addEventListener("keyup", function () {
+  keyDown = false;
+});
 function updateStatus(currNode) {
   var element = document.getElementById(currNode.id);
-  relevantStatuses = ["start", "end"];
+  var relevantStatuses = ["start", "end"];
   if (!keyDown) {
-    if (!relevantStatuses.includes(currNode.status)) {
+    if (!relevantStatuses.includes(currNode.status) && currNode.weight !== 5) {
       element.className = currNode.status !== "wall" ? "wall" : "unvisited";
       currNode.status = element.className !== "wall" ? "unvisited" : "wall";
       currNode.isClass = currNode.status;
+    } else if (currNode.weight === 5) {
+      element.className = currNode.status;
+      currNode.weight = 1;
+    }
+  } else {
+    if (!relevantStatuses.includes(currNode.status) && keyDown === "KeyW") {
+      element.className = currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
+      currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
+      currNode.status = "unvisited";
     }
   }
 }
@@ -198,7 +216,7 @@ function moveSpecialNode(currNode) {
 /* BUTTONS ----> EventListeners -----> Algorithm Selection -----> Algorithm Fetch*/
 /* Parameters will be startNode,endNode,gridArray and the grid*/
 
-//Clear Grid
+//CEAR GRID
 var node = new Node();
 //console.log(node);
 var clearBtn = document.getElementById("clearBtn");
@@ -218,7 +236,56 @@ function clearGrid() {
   }
 }
 clearBtn.addEventListener("click", clearGrid);
+//CLEAR PATH
+var clearPathBtn = document.getElementById("clearPathBtn");
+function clearPath() {
+  for (var _r2 = 0; _r2 < totalRows; _r2++) {
+    for (var c = 0; c < totalCols; c++) {
+      var element = document.getElementById(gridArray[_r2][c].id);
+      if (element.className === "shortest" || element.className === "visited") {
+        element.className = "unvisited";
+        gridArray[_r2][c].status = "unvisited";
+        gridArray[_r2][c] = new Node(_r2, c, gridArray[_r2][c].status, gridArray[_r2][c].id);
+      }
+    }
+  }
+  var startAlgo = function startAlgo() {
+    var startBtnText = startBtn.innerText;
+    switch (startBtnText) {
+      case "Start Visualization":
+        {
+          startBtn.innerText = "Pick an Algorithm!";
+          break;
+        }
+      case "Start A*":
+        {
+          (0, _aStar.aStar)(nodesToAnimate, gridArray);
+          break;
+        }
+      case "Start Dijkstra":
+        {
+          (0, _dijkstra.dijkstra)(nodesToAnimate, gridArray);
+          break;
+        }
+      case "Start Breadth First Search":
+        {
+          if ((0, _BFS.BFS)(pathFound, nodesToAnimate)) {
+            (0, _BFS.animateCells)(inProgress, nodesToAnimate);
+          } else {
+            alert("Path does not exist!");
+          }
+          break;
+        }
+      default:
+        {
+          break;
+        }
+    }
+  };
 
+  startBtn.addEventListener("click", startAlgo);
+}
+clearPathBtn.addEventListener("click", clearPath);
 //Handling Algo buttons + start button
 //algorithms Object Literal
 var algorithms = new Map([["aStar", "A*"], ["dijkstra", "Dijkstra"], ["GBFS", "Greedy Best First Search"], ["BFS", "Breadth First Search"], ["DFS", "Depth First Search"], ["JPS", "Jump Point Search"]]);
@@ -296,304 +363,6 @@ function dragElement(elmnt) {
 
 /* ------ Draggable Feature ends
 /* ------------------------ */
-/*-- Class Declarations  -- */
-/*------------------------- */
-
-// /* -------- Queue ------- */
-
-// function dijkstra() {
-//   let specialNodes = getSpecialNodes();
-//   startNode = specialNodes[0];
-//   endNode = specialNodes[1];
-//   let visitedNodesInOrder = [startNode];
-//   //Assign distance as 0 for startNode
-//   startNode.distance = 0;
-//   let currNode = new Node();
-//   currNode = startNode;
-//   //Get the unvisited nodes
-//   let unvisitedNodes = getUnvisitedNodes();
-//   while (unvisitedNodes.length) {
-//     //Get the neighbours
-//     let neighbours = getNeighbours(currNode);
-//     updateNeighbours(neighbours, currNode, "dijkstra");
-//     unvisitedNodes.sort((a, b) => {
-//       return a.distance - b.distance;
-//     });
-//     // if (unvisitedNodes[0].distance === 1) {
-//     //   unvisitedNodes[0].parent = startNode;
-//     // }
-//     let closestNode = unvisitedNodes.shift();
-//     //Check if distnace is infintiy---no path exists
-//     if (closestNode.distance === Infinity) {
-//       break;
-//     }
-//     visitedNodesInOrder.push(closestNode);
-//     //Update the status of the closest node as visited
-//     if (closestNode.status === "end") {
-//       backtrack(startNode, endNode);
-//       break;
-//     }
-//     closestNode.status = "visited";
-//     //closestNode.isClass = "visited";
-//     let element = document.getElementById(closestNode.id);
-//     element.className = "visited";
-//     //Check if the end point
-//     unvisitedNodes = getUnvisitedNodes();
-//     currNode = closestNode;
-//   }
-// }
-
-// function getUnvisitedNodes() {
-//   let nodes = [];
-//   let relevantStatuses = ["start", "wall", "visited"];
-//   for (let i = 0; i < totalRows; i++) {
-//     for (let j = 0; j < totalCols; j++) {
-//       if (!relevantStatuses.includes(gridArray[i][j].status)) {
-//         nodes.push(gridArray[i][j]);
-//       }
-//     }
-//   }
-//   return nodes;
-// }
-
-// function getNeighbours(currNode) {
-//   let r = currNode.row;
-//   let c = currNode.col;
-//   let relevantStatuses = ["start", "wall", "visited"];
-//   let actual_neighbours = [];
-//   let neighbours = [];
-//   if (r - 1 >= 0) {
-//     neighbours.push(gridArray[r - 1][c]);
-//     // if (c - 1 >= 0) {
-//     //   neighbours.push(gridArray[r - 1][c - 1]);
-//     // }
-//     // if (c + 1 <= totalCols - 1) {
-//     //   neighbours.push(gridArray[r - 1][c + 1]);
-//     // }
-//   }
-//   if (r + 1 <= totalRows - 1) {
-//     neighbours.push(gridArray[r + 1][c]);
-//     if (c - 1 >= 0) {
-//       //gridArray[r + 1][c - 1],
-//       neighbours.push(gridArray[r][c - 1]);
-//     }
-//     if (c + 1 <= totalCols - 1) {
-//       //gridArray[r + 1][c + 1]
-//       neighbours.push(gridArray[r][c + 1]);
-//     }
-//   }
-//   neighbours.forEach((neighbour) => {
-//     if (!relevantStatuses.includes(neighbour.status)) {
-//       actual_neighbours.push(neighbour);
-//     }
-//   });
-//   return actual_neighbours;
-// }
-
-// function updateNeighbours(neighbours, currNode, algo) {
-//   if (algo === "dijkstra") {
-//     neighbours.forEach((neighbour) => {
-//       if (1 + currNode.distance < neighbour.distance) {
-//         neighbour.distance = 1 + currNode.distance;
-//         neighbour.parent = currNode;
-//       }
-//     });
-//   } else if (algo === "aStar") {
-//     neighbours.forEach((neighbour) => {
-//       var newGCost = 10 + currNode.g;
-//       // if (newGCost < neighbour.g) {
-//       //   neighbour.g = newGCost;
-//       //   neighbour.parent = currNode;
-//       // }
-//       let estimation_cost = getDistance(neighbour, endNode);
-//       let newCost = newGCost + estimation_cost;
-//       if (newCost < neighbour.f) {
-//         neighbour.g = newGCost;
-//         neighbour.f = newCost;
-//         neighbour.h = estimation_cost;
-//         neighbour.parent = currNode;
-//       }
-//     });
-//   }
-// }
-
-// //Astar Algorithm
-// function getDistance(nodeA, nodeB) {
-//   var dx = Math.abs(nodeA.row - nodeB.row);
-//   var dy = Math.abs(nodeA.col - nodeB.col);
-//   if (dx > dy) {
-//     //Better results than using sqrt(2) and 1
-//     return 14 * dy + 10 * (dx - dy);
-//   }
-//   return 14 * dx + 10 * (dy - dx);
-//   //return dx + dy;
-// }
-
-// function backtrack(startNode, endNode) {
-//   nodesToAnimate.push(endNode);
-//   let currNode = new Node();
-//   currNode = endNode.parent;
-//   while (currNode !== startNode) {
-//     nodesToAnimate.push(currNode);
-//     currNode.status = "shortest";
-//     let element = document.getElementById(currNode.id);
-//     element.className = "shortest";
-//     currNode = currNode.parent;
-//   }
-//   nodesToAnimate.push(startNode);
-//   nodesToAnimate.reverse();
-//   return nodesToAnimate;
-// }
-// //Astar Algorithm
-
-// const aStar = () => {
-//   //Get the startNode and the endNode
-//   let specialNodes = getSpecialNodes();
-//   startNode = specialNodes[0];
-//   endNode = specialNodes[1];
-//   //Make a min heap to keep track of nodes with lowest f
-//   //UnvisitedNodes array
-//   let openList = new minHeap();
-//   let visitedNodesInOrder = [];
-//   //Update the distances of startNode
-//   //Distance of startNode from startNode
-//   startNode.g = 0;
-//   startNode.h = getDistance(startNode, endNode);
-//   //Considering directions as only four
-//   startNode.f = startNode.g + startNode.h;
-//   //Push start node in the open List
-//   openList.push([startNode.f, startNode]);
-//   //nodesToAnimate.push([startNode, "searching"]);
-//   while (!openList.isEmpty()) {
-//     //The node having the lowest f value
-//     var currNode = new Node();
-//     let currArr = openList.getMin();
-//     currNode = currArr[1];
-//     //nodesToAnimate.push([currNode, "searching"]);
-//     visitedNodesInOrder.push(currNode);
-//     //Check if the endNode
-//     if (currNode === endNode) {
-//       return backtrack(startNode, endNode);
-//     }
-//     if (currNode.status !== "start") {
-//       console.log(currNode);
-//       currNode.status = "visited";
-//     }
-//     //get element
-//     let element = document.getElementById(currNode.id);
-//     if (element.className !== "start" || element.className !== "end") {
-//       element.className = "visited";
-//     }
-//     //nodesToAnimate.push([currNode, "visited"]);
-//     var neighbours = getNeighbours(currNode);
-//     updateNeighbours(neighbours, currNode, "aStar");
-//     for (let i = 0; i < neighbours.length; i++) {
-//       var neighbour = neighbours[i];
-//       // if (!openList.includes(neighbour)) {
-//       openList.push([neighbour.f, neighbour]);
-//       // }
-//     }
-//   }
-//   alert("No Path Exists");
-//   return;
-// };
-
-// /* ------------ BFS Algorithm ------ */
-
-// // function BFS() {
-// //   let myQueue = new Queue();
-// //   let specialNodes = getSpecialNodes();
-// //   startNode = specialNodes[0];
-// //   endNode = specialNodes[1];
-// //   // console.log(startNode, endNode);
-// //   myQueue.enqueue(gridArray[startNode.row][startNode.col]);
-// //   gridArray[startNode.row][startNode.col].isVisited = true;
-// //   nodesToAnimate.push([startNode, "searching"]);
-// //   var currNode = new Node();
-// //   // console.log(myQueue.items.length);
-// //   while (!myQueue.empty()) {
-// //     currNode = myQueue.dequeue();
-// //     // console.log(currNode);
-// //     var r = currNode.row;
-// //     var c = currNode.col;
-// //     nodesToAnimate.push([gridArray[currNode.row][currNode.col], "visited"]);
-// //     if (r == endNode.row && c == endNode.col) {
-// //       pathFound = true;
-// //       break;
-// //     }
-// //     var neighbours = getNeighbours(r, c);
-// //     for (var k = 0; k < neighbours.length; k++) {
-// //       var m = neighbours[k][0];
-// //       var n = neighbours[k][1];
-// //       if (gridArray[m][n].isVisited || gridArray[m][n].status == "wall") {
-// //         continue;
-// //       }
-// //       gridArray[m][n].isVisited = true;
-// //       gridArray[m][n].parent = currNode;
-// //       nodesToAnimate.push([gridArray[m][n], "searching"]);
-// //       myQueue.enqueue(gridArray[m][n]);
-// //     }
-// //   }
-
-// //   if (pathFound) {
-// //     nodesToAnimate.push([gridArray[endNode.row][endNode.col], "shortest"]);
-// //     while (currNode.parent != null) {
-// //       var prevNode = currNode.parent;
-// //       nodesToAnimate.push([gridArray[prevNode.row][prevNode.col], "shortest"]);
-// //       currNode = prevNode;
-// //     }
-// //   }
-// //   return pathFound;
-// // }
-
-// // async function animateCells() {
-// //   inProgress = true;
-// //   var cells = document.getElementsByTagName("td");
-// //   var startNodeIndex =
-// //     gridArray[startNode.row] * totalCols + gridArray[startNode.col];
-// //   var endNodeIndex =
-// //     gridArray[endNode.row] * totalCols + gridArray[endNode.col];
-
-// //   for (var i = 0; i < nodesToAnimate.length; i++) {
-// //     var nodeCoordinates = nodesToAnimate[i][0];
-// //     var x = nodeCoordinates.row;
-// //     var y = nodeCoordinates.col;
-// //     var num = x * totalCols + y;
-// //     if (num == startNodeIndex || num == endNodeIndex) {
-// //       continue;
-// //     }
-// //     var cell = cells[num];
-// //     var colorClass = nodesToAnimate[i][1]; // success, visited or searching
-// //     // Wait until its time to animate
-// //     await new Promise((resolve) => setTimeout(resolve, 5));
-// //     if (cell.className == "start" || cell.className == "end") {
-// //       continue;
-// //     } else cell.className = colorClass;
-// //   }
-
-// //   nodesToAnimate = [];
-// //   inProgress = false;
-// //   justFinished = true;
-
-// //   return new Promise((resolve) => resolve(true));
-// // }
-
-// // function getNeighbours(i, j) {
-// //   var neighbors = [];
-// //   if (i > 0) {
-// //     neighbors.push([i - 1, j]);
-// //   }
-// //   if (j > 0) {
-// //     neighbors.push([i, j - 1]);
-// //   }
-// //   if (i < totalRows - 1) {
-// //     neighbors.push([i + 1, j]);
-// //   }
-// //   if (j < totalCols - 1) {
-// //     neighbors.push([i, j + 1]);
-// //   }
-// //   return neighbors;
-// // }
 
 var startAlgo = function startAlgo() {
   var startBtnText = startBtn.innerText;
@@ -616,7 +385,7 @@ var startAlgo = function startAlgo() {
     case "Start Breadth First Search":
       {
         if ((0, _BFS.BFS)(pathFound, nodesToAnimate)) {
-          (0, _BFS.animateCells)();
+          (0, _BFS.animateCells)(inProgress, nodesToAnimate);
         } else {
           alert("Path does not exist!");
         }

@@ -32,19 +32,39 @@ function getNeighbours(currNode) {
   if (r - 1 >= 0) {
     neighbours.push(gridArray[r - 1][c]);
     if (c - 1 >= 0) {
-      neighbours.push(gridArray[r - 1][c - 1]);
+      if (
+        gridArray[r - 1][c].status !== "wall" &&
+        gridArray[r][c - 1].status !== "wall"
+      )
+        neighbours.push(gridArray[r - 1][c - 1]);
     }
     if (c + 1 <= totalCols - 1) {
-      neighbours.push(gridArray[r - 1][c + 1]);
+      if (
+        gridArray[r - 1][c].status !== "wall" &&
+        gridArray[r][c + 1].status !== "wall"
+      )
+        neighbours.push(gridArray[r - 1][c + 1]);
     }
   }
   if (r + 1 <= totalRows - 1) {
     neighbours.push(gridArray[r + 1][c]);
     if (c - 1 >= 0) {
-      neighbours.push(gridArray[r + 1][c - 1], gridArray[r][c - 1]);
+      if (
+        gridArray[r + 1][c - 1].status !== "wall" &&
+        gridArray[r + 1][c].status !== "wall"
+      ) {
+        neighbours.push(gridArray[r + 1][c - 1]);
+      }
+      neighbours.push(gridArray[r][c - 1]);
     }
     if (c + 1 <= totalCols - 1) {
-      neighbours.push(gridArray[r][c + 1], gridArray[r + 1][c + 1]);
+      if (
+        gridArray[r][c + 1].status !== "wall" &&
+        gridArray[r + 1][c].status !== "wall"
+      ) {
+        neighbours.push(gridArray[r + 1][c + 1]);
+      }
+      neighbours.push(gridArray[r][c + 1]);
     }
   }
   neighbours.forEach((neighbour) => {
@@ -129,12 +149,12 @@ const aStar = (nodesToAnimate) => {
     if (currNode === endNode) {
       return backtrack(startNode, endNode, nodesToAnimate);
     }
-    if (currNode.status !== "start") {
+    if (currNode !== startNode) {
       currNode.status = "visited";
     }
     //get element
     let element = document.getElementById(currNode.id);
-    if (element.className !== "start" || element.className !== "end") {
+    if (element.className !== "start" && element.className !== "end") {
       element.className = "visited";
     }
     //nodesToAnimate.push([currNode, "visited"]);
