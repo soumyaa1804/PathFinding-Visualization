@@ -5,21 +5,21 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.aStar = undefined;
 
-var _utility = require("./utility.js");
+var _utility = require("/src/utility.js");
 
-var _app = require("./app.js");
+var _script = require("./script.js");
 
 //Invoked when start visualizing is 'CLICKED'
 //Get the start and end node
 var getSpecialNodes = function getSpecialNodes() {
   var copy_start = null;
   var copy_end = null;
-  for (var r = 0; r < _app.totalRows; r++) {
-    for (var c = 0; c < _app.totalCols; c++) {
-      if (_app.gridArray[r][c].status === "start" && _app.gridArray[r][c].isClass === "start") {
-        copy_start = _app.gridArray[r][c];
-      } else if (_app.gridArray[r][c].status === "end" && _app.gridArray[r][c].isClass === "end") {
-        copy_end = _app.gridArray[r][c];
+  for (var r = 0; r < _script.totalRows; r++) {
+    for (var c = 0; c < _script.totalCols; c++) {
+      if (_script.gridArray[r][c].status === "start" && _script.gridArray[r][c].isClass === "start") {
+        copy_start = _script.gridArray[r][c];
+      } else if (_script.gridArray[r][c].status === "end" && _script.gridArray[r][c].isClass === "end") {
+        copy_end = _script.gridArray[r][c];
       }
     }
   }
@@ -33,23 +33,21 @@ function getNeighbours(currNode) {
   var actual_neighbours = [];
   var neighbours = [];
   if (r - 1 >= 0) {
-    neighbours.push(_app.gridArray[r - 1][c]);
-    // if (c - 1 >= 0) {
-    //   neighbours.push(gridArray[r - 1][c - 1]);
-    // }
-    // if (c + 1 <= totalCols - 1) {
-    //   neighbours.push(gridArray[r - 1][c + 1]);
-    // }
-  }
-  if (r + 1 <= _app.totalRows - 1) {
-    neighbours.push(_app.gridArray[r + 1][c]);
+    neighbours.push(_script.gridArray[r - 1][c]);
     if (c - 1 >= 0) {
-      //gridArray[r + 1][c - 1],
-      neighbours.push(_app.gridArray[r][c - 1]);
+      neighbours.push(_script.gridArray[r - 1][c - 1]);
     }
-    if (c + 1 <= _app.totalCols - 1) {
-      //gridArray[r + 1][c + 1]
-      neighbours.push(_app.gridArray[r][c + 1]);
+    if (c + 1 <= _script.totalCols - 1) {
+      neighbours.push(_script.gridArray[r - 1][c + 1]);
+    }
+  }
+  if (r + 1 <= _script.totalRows - 1) {
+    neighbours.push(_script.gridArray[r + 1][c]);
+    if (c - 1 >= 0) {
+      neighbours.push(_script.gridArray[r + 1][c - 1], _script.gridArray[r][c - 1]);
+    }
+    if (c + 1 <= _script.totalCols - 1) {
+      neighbours.push(_script.gridArray[r][c + 1], _script.gridArray[r + 1][c + 1]);
     }
   }
   neighbours.forEach(function (neighbour) {
@@ -63,7 +61,7 @@ function getNeighbours(currNode) {
 function updateNeighbours(neighbours, currNode, algo, startNode, endNode) {
   if (algo === "aStar") {
     neighbours.forEach(function (neighbour) {
-      var newGCost = 10 + currNode.g;
+      var newGCost = neighbour.weight + currNode.g;
       // if (newGCost < neighbour.g) {
       //   neighbour.g = newGCost;
       //   neighbour.parent = currNode;
@@ -92,7 +90,7 @@ function getDistance(nodeA, nodeB) {
 }
 function backtrack(startNode, endNode, nodesToAnimate) {
   nodesToAnimate.push(endNode);
-  var currNode = new _app.Node();
+  var currNode = new _script.Node();
   currNode = endNode.parent;
   while (currNode !== startNode) {
     nodesToAnimate.push(currNode);
@@ -125,7 +123,7 @@ var aStar = function aStar(nodesToAnimate) {
   //nodesToAnimate.push([startNode, "searching"]);
   while (!openList.isEmpty()) {
     //The node having the lowest f value
-    var currNode = new _app.Node();
+    var currNode = new _script.Node();
     var currArr = openList.getMin();
     currNode = currArr[1];
     //nodesToAnimate.push([currNode, "searching"]);
@@ -134,16 +132,16 @@ var aStar = function aStar(nodesToAnimate) {
     if (currNode === endNode) {
       return backtrack(startNode, endNode, nodesToAnimate);
     }
-    if (currNode.status !== "start") {
+    if (currNode !== startNode) {
       currNode.status = "visited";
     }
     //get element
     var element = document.getElementById(currNode.id);
-    if (element.className !== "start" || element.className !== "end") {
+    if (element.className !== "start" && element.className !== "end") {
       element.className = "visited";
     }
     //nodesToAnimate.push([currNode, "visited"]);
-    var neighbours = getNeighbours(currNode, _app.gridArray);
+    var neighbours = getNeighbours(currNode, _script.gridArray);
     updateNeighbours(neighbours, currNode, "aStar", startNode, endNode);
     for (var i = 0; i < neighbours.length; i++) {
       var neighbour = neighbours[i];

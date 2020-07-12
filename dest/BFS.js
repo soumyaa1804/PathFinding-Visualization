@@ -10,20 +10,31 @@ var _utility = require("./utility.js");
 
 var _script = require("./script.js");
 
-var _script2 = _interopRequireDefault(_script);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+var getSpecialNodes = function getSpecialNodes() {
+  var copy_end = null,
+      copy_start = null;
+  for (var r = 0; r < _script.totalRows; r++) {
+    for (var c = 0; c < _script.totalCols; c++) {
+      if (_script.gridArray[r][c].status === "start" && _script.gridArray[r][c].isClass === "start") {
+        copy_start = _script.gridArray[r][c];
+      } else if (_script.gridArray[r][c].status === "end" && _script.gridArray[r][c].isClass === "end") {
+        copy_end = _script.gridArray[r][c];
+      }
+    }
+  }
+  var valid_buttons = [copy_start, copy_end];
+  return valid_buttons;
+};
 function BFS(pathFound, nodesToAnimate) {
   var myQueue = new _utility.Queue();
   var specialNodes = getSpecialNodes();
-  startNode = specialNodes[0];
-  endNode = specialNodes[1];
+  var startNode = specialNodes[0];
+  var endNode = specialNodes[1];
   // console.log(startNode, endNode);
   myQueue.enqueue(_script.gridArray[startNode.row][startNode.col]);
   _script.gridArray[startNode.row][startNode.col].isVisited = true;
   nodesToAnimate.push([startNode, "searching"]);
-  var currNode = new _script2.default();
+  var currNode = new _script.Node();
   // console.log(myQueue.items.length);
   while (!myQueue.empty()) {
     currNode = myQueue.dequeue();
@@ -60,17 +71,20 @@ function BFS(pathFound, nodesToAnimate) {
   return pathFound;
 }
 
-async function animateCells() {
+async function animateCells(inProgress, nodesToAnimate) {
   inProgress = true;
+  var specialNodes = getSpecialNodes();
+  var startNode = specialNodes[0];
+  var endNode = specialNodes[1];
   var cells = document.getElementsByTagName("td");
-  var startNodeIndex = _script.gridArray[startNode.row] * totalCols + _script.gridArray[startNode.col];
-  var endNodeIndex = _script.gridArray[endNode.row] * totalCols + _script.gridArray[endNode.col];
+  var startNodeIndex = _script.gridArray[startNode.row] * _script.totalCols + _script.gridArray[startNode.col];
+  var endNodeIndex = _script.gridArray[endNode.row] * _script.totalCols + _script.gridArray[endNode.col];
 
   for (var i = 0; i < nodesToAnimate.length; i++) {
     var nodeCoordinates = nodesToAnimate[i][0];
     var x = nodeCoordinates.row;
     var y = nodeCoordinates.col;
-    var num = x * totalCols + y;
+    var num = x * _script.totalCols + y;
     if (num == startNodeIndex || num == endNodeIndex) {
       continue;
     }
@@ -102,10 +116,10 @@ function getNeighbours(i, j) {
   if (j > 0) {
     neighbors.push([i, j - 1]);
   }
-  if (i < totalRows - 1) {
+  if (i < _script.totalRows - 1) {
     neighbors.push([i + 1, j]);
   }
-  if (j < totalCols - 1) {
+  if (j < _script.totalCols - 1) {
     neighbors.push([i, j + 1]);
   }
   return neighbors;

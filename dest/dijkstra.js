@@ -85,22 +85,20 @@ function getNeighbours(currNode) {
   var neighbours = [];
   if (r - 1 >= 0) {
     neighbours.push(_script.gridArray[r - 1][c]);
-    // if (c - 1 >= 0) {
-    //   neighbours.push(gridArray[r - 1][c - 1]);
-    // }
-    // if (c + 1 <= totalCols - 1) {
-    //   neighbours.push(gridArray[r - 1][c + 1]);
-    // }
+    if (c - 1 >= 0) {
+      neighbours.push(_script.gridArray[r - 1][c - 1]);
+    }
+    if (c + 1 <= _script.totalCols - 1) {
+      neighbours.push(_script.gridArray[r - 1][c + 1]);
+    }
   }
   if (r + 1 <= _script.totalRows - 1) {
     neighbours.push(_script.gridArray[r + 1][c]);
     if (c - 1 >= 0) {
-      //gridArray[r + 1][c - 1],
-      neighbours.push(_script.gridArray[r][c - 1]);
+      neighbours.push(_script.gridArray[r + 1][c - 1], _script.gridArray[r][c - 1]);
     }
     if (c + 1 <= _script.totalCols - 1) {
-      //gridArray[r + 1][c + 1]
-      neighbours.push(_script.gridArray[r][c + 1]);
+      neighbours.push(_script.gridArray[r + 1][c + 1], _script.gridArray[r][c + 1]);
     }
   }
   neighbours.forEach(function (neighbour) {
@@ -112,11 +110,21 @@ function getNeighbours(currNode) {
 }
 
 function updateNeighbours(neighbours, currNode, algo) {
+  var row = currNode.row;
+  var col = currNode.col;
+  var DiagonalId = [row - 1 + "-" + (col - 1), row - 1 + "-" + (col + 1), row + 1 + "-" + (col - 1), row + 1 + "-" + (col + 1)];
   if (algo === "dijkstra") {
     neighbours.forEach(function (neighbour) {
-      if (1 + currNode.distance < neighbour.distance) {
-        neighbour.distance = 1 + currNode.distance;
-        neighbour.parent = currNode;
+      if (!DiagonalId.includes(neighbour.id)) {
+        if (1 + neighbour.weight + currNode.distance < neighbour.distance) {
+          neighbour.distance = 1 + neighbour.weight + currNode.distance;
+          neighbour.parent = currNode;
+        }
+      } else {
+        if (1.4 + neighbour.weight + currNode.distance < neighbour.distance) {
+          neighbour.distance = 1.4 + neighbour.weight + currNode.distance;
+          neighbour.parent = currNode;
+        }
       }
     });
   } else if (algo === "aStar") {

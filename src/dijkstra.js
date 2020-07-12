@@ -84,19 +84,39 @@ function getNeighbours(currNode) {
   if (r - 1 >= 0) {
     neighbours.push(gridArray[r - 1][c]);
     if (c - 1 >= 0) {
-      neighbours.push(gridArray[r - 1][c - 1]);
+      if (
+        gridArray[r - 1][c].status !== "wall" &&
+        gridArray[r][c - 1].status !== "wall"
+      )
+        neighbours.push(gridArray[r - 1][c - 1]);
     }
     if (c + 1 <= totalCols - 1) {
-      neighbours.push(gridArray[r - 1][c + 1]);
+      if (
+        gridArray[r - 1][c].status !== "wall" &&
+        gridArray[r][c + 1].status !== "wall"
+      )
+        neighbours.push(gridArray[r - 1][c + 1]);
     }
   }
   if (r + 1 <= totalRows - 1) {
     neighbours.push(gridArray[r + 1][c]);
     if (c - 1 >= 0) {
-      neighbours.push(gridArray[r + 1][c - 1], gridArray[r][c - 1]);
+      if (
+        gridArray[r + 1][c - 1].status !== "wall" &&
+        gridArray[r + 1][c].status !== "wall"
+      ) {
+        neighbours.push(gridArray[r + 1][c - 1]);
+      }
+      neighbours.push(gridArray[r][c - 1]);
     }
     if (c + 1 <= totalCols - 1) {
-      neighbours.push(gridArray[r + 1][c + 1], gridArray[r][c + 1]);
+      if (
+        gridArray[r][c + 1].status !== "wall" &&
+        gridArray[r + 1][c].status !== "wall"
+      ) {
+        neighbours.push(gridArray[r + 1][c + 1]);
+      }
+      neighbours.push(gridArray[r][c + 1]);
     }
   }
   neighbours.forEach((neighbour) => {
@@ -108,11 +128,26 @@ function getNeighbours(currNode) {
 }
 
 function updateNeighbours(neighbours, currNode, algo) {
+  let row = currNode.row;
+  let col = currNode.col;
+  let DiagonalId = [
+    `${row - 1}-${col - 1}`,
+    `${row - 1}-${col + 1}`,
+    `${row + 1}-${col - 1}`,
+    `${row + 1}-${col + 1}`,
+  ];
   if (algo === "dijkstra") {
     neighbours.forEach((neighbour) => {
-      if (neighbour.weight + currNode.distance < neighbour.distance) {
-        neighbour.distance = neighbour.weight + currNode.distance;
-        neighbour.parent = currNode;
+      if (!DiagonalId.includes(neighbour.id)) {
+        if (1 + neighbour.weight + currNode.distance < neighbour.distance) {
+          neighbour.distance = 1 + neighbour.weight + currNode.distance;
+          neighbour.parent = currNode;
+        }
+      } else {
+        if (1.4 + neighbour.weight + currNode.distance < neighbour.distance) {
+          neighbour.distance = 1.4 + neighbour.weight + currNode.distance;
+          neighbour.parent = currNode;
+        }
       }
     });
   } else if (algo === "aStar") {
