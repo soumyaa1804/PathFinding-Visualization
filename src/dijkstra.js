@@ -1,6 +1,8 @@
-//Invoked when start visualizing is 'CLICKED'
+//Invoked when Start Dijkstra is 'CLICKED'
 //Get the start and end node
-import { Node, totalRows, totalCols, gridArray } from "./script.js";
+
+import { Node, totalRows, totalCols, gridArray, nodesToAnimate } from "./script.js";
+
 const getSpecialNodes = () => {
   let copy_end = null,
     copy_start = null;
@@ -22,10 +24,11 @@ const getSpecialNodes = () => {
   let valid_buttons = [copy_start, copy_end];
   return valid_buttons;
 };
-function dijkstra(nodesToAnimate) {
+
+function dijkstra() {
   let specialNodes = getSpecialNodes();
-  var startNode = specialNodes[0];
-  var endNode = specialNodes[1];
+  let startNode = specialNodes[0];
+  let endNode = specialNodes[1];
   let visitedNodesInOrder = [startNode];
   //Assign distance as 0 for startNode
   startNode.distance = 0;
@@ -63,6 +66,7 @@ function dijkstra(nodesToAnimate) {
     currNode = closestNode;
   }
 }
+
 function getUnvisitedNodes() {
   let nodes = [];
   let relevantStatuses = ["start", "wall", "visited"];
@@ -75,6 +79,7 @@ function getUnvisitedNodes() {
   }
   return nodes;
 }
+
 function getNeighbours(currNode) {
   let r = currNode.row;
   let c = currNode.col;

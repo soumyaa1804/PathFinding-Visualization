@@ -244,7 +244,7 @@ function clearPath() {
         break;
       }
       case "Start Dijkstra": {
-        dijkstra(nodesToAnimate, gridArray);
+        dijkstra(nodesToAnimate);
         break;
       }
       case "Start Breadth First Search": {
