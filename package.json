@@ -4,9 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d dest"
-  },
-  "scripts": {
     "build": "babel --presets es2015 src -d dest"
   },
   "repository": {

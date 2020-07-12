@@ -1,5 +1,6 @@
 import { Queue } from "./utility.js";
 import { Node, gridArray, totalCols, totalRows } from "./script.js";
+
 const getSpecialNodes = () => {
   let copy_end = null,
     copy_start = null;
@@ -21,6 +22,7 @@ const getSpecialNodes = () => {
   let valid_buttons = [copy_start, copy_end];
   return valid_buttons;
 };
+
 export function BFS(pathFound, nodesToAnimate) {
   let myQueue = new Queue();
   let specialNodes = getSpecialNodes();

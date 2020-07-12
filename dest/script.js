@@ -164,7 +164,7 @@ for (var r = 0; r < totalRows; r += 1) {
 }
 function updateStatus(currNode) {
   var element = document.getElementById(currNode.id);
-  relevantStatuses = ["start", "end"];
+  let relevantStatuses = ["start", "end"];
   if (!keyDown) {
     if (!relevantStatuses.includes(currNode.status)) {
       element.className = currNode.status !== "wall" ? "wall" : "unvisited";
