@@ -1,70 +1,48 @@
 //Invoked when Start Dijkstra is 'CLICKED'
 //Get the start and end node
 
-import { Node, totalRows, totalCols, gridArray, nodesToAnimate } from "./script.js";
+import { Node, totalRows, totalCols, gridArray } from "./script.js";
+import { getNeighbours, getSpecialNodes } from "./utility.js";
 
-const getSpecialNodes = () => {
-  let copy_end = null,
-    copy_start = null;
-  for (let r = 0; r < totalRows; r++) {
-    for (let c = 0; c < totalCols; c++) {
-      if (
-        gridArray[r][c].status === "start" &&
-        gridArray[r][c].isClass === "start"
-      ) {
-        copy_start = gridArray[r][c];
-      } else if (
-        gridArray[r][c].status === "end" &&
-        gridArray[r][c].isClass === "end"
-      ) {
-        copy_end = gridArray[r][c];
-      }
-    }
-  }
-  let valid_buttons = [copy_start, copy_end];
-  return valid_buttons;
-};
-
-function dijkstra() {
+function dijkstra(nodesToAnimate, pathFound) {
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
   let endNode = specialNodes[1];
-  let visitedNodesInOrder = [startNode];
   //Assign distance as 0 for startNode
   startNode.distance = 0;
   let currNode = new Node();
   currNode = startNode;
+  nodesToAnimate.push([startNode, "searching"]);
+  startNode.isVisited = true;
   //Get the unvisited nodes
   let unvisitedNodes = getUnvisitedNodes();
   while (unvisitedNodes.length) {
     //Get the neighbours
+    //nodesToAnimate.push([currNode, "visited"]);
     let neighbours = getNeighbours(currNode);
     updateNeighbours(neighbours, currNode, "dijkstra");
     unvisitedNodes.sort((a, b) => {
       return a.distance - b.distance;
     });
-    // if (unvisitedNodes[0].distance === 1) {
-    //   unvisitedNodes[0].parent = startNode;
-    // }
     let closestNode = unvisitedNodes.shift();
     //Check if distnace is infintiy---no path exists
     if (closestNode.distance === Infinity) {
+      pathFound = false;
       break;
     }
-    visitedNodesInOrder.push(closestNode);
+    nodesToAnimate.push([closestNode, "searching"]);
     //Update the status of the closest node as visited
     if (closestNode.status === "end") {
-      backtrack(startNode, endNode, nodesToAnimate);
+      pathFound = true;
+      backtrack(endNode, nodesToAnimate);
       break;
     }
+    nodesToAnimate.push([closestNode, "visited"]);
     closestNode.status = "visited";
-    //closestNode.isClass = "visited";
-    let element = document.getElementById(closestNode.id);
-    element.className = "visited";
-    //Check if the end point
     unvisitedNodes = getUnvisitedNodes();
     currNode = closestNode;
   }
+  return pathFound;
 }
 
 function getUnvisitedNodes() {
@@ -79,59 +57,6 @@ function getUnvisitedNodes() {
   }
   return nodes;
 }
-
-function getNeighbours(currNode) {
-  let r = currNode.row;
-  let c = currNode.col;
-  let relevantStatuses = ["start", "wall", "visited"];
-  let actual_neighbours = [];
-  let neighbours = [];
-  if (r - 1 >= 0) {
-    neighbours.push(gridArray[r - 1][c]);
-    if (c - 1 >= 0) {
-      if (
-        gridArray[r - 1][c].status !== "wall" &&
-        gridArray[r][c - 1].status !== "wall"
-      )
-        neighbours.push(gridArray[r - 1][c - 1]);
-    }
-    if (c + 1 <= totalCols - 1) {
-      if (
-        gridArray[r - 1][c].status !== "wall" &&
-        gridArray[r][c + 1].status !== "wall"
-      )
-        neighbours.push(gridArray[r - 1][c + 1]);
-    }
-  }
-  if (r + 1 <= totalRows - 1) {
-    neighbours.push(gridArray[r + 1][c]);
-    if (c - 1 >= 0) {
-      if (
-        gridArray[r + 1][c - 1].status !== "wall" &&
-        gridArray[r + 1][c].status !== "wall"
-      ) {
-        neighbours.push(gridArray[r + 1][c - 1]);
-      }
-      neighbours.push(gridArray[r][c - 1]);
-    }
-    if (c + 1 <= totalCols - 1) {
-      if (
-        gridArray[r][c + 1].status !== "wall" &&
-        gridArray[r + 1][c].status !== "wall"
-      ) {
-        neighbours.push(gridArray[r + 1][c + 1]);
-      }
-      neighbours.push(gridArray[r][c + 1]);
-    }
-  }
-  neighbours.forEach((neighbour) => {
-    if (!relevantStatuses.includes(neighbour.status)) {
-      actual_neighbours.push(neighbour);
-    }
-  });
-  return actual_neighbours;
-}
-
 function updateNeighbours(neighbours, currNode, algo) {
   let row = currNode.row;
   let col = currNode.col;
@@ -173,19 +98,13 @@ function updateNeighbours(neighbours, currNode, algo) {
     });
   }
 }
-function backtrack(startNode, endNode, nodesToAnimate) {
-  nodesToAnimate.push(endNode);
+function backtrack(endNode, nodesToAnimate) {
+  nodesToAnimate.push([endNode, "shortest"]);
   let currNode = new Node();
   currNode = endNode.parent;
-  while (currNode !== startNode) {
-    nodesToAnimate.push(currNode);
-    currNode.status = "shortest";
-    let element = document.getElementById(currNode.id);
-    element.className = "shortest";
+  while (currNode !== null) {
+    nodesToAnimate.push([currNode, "shortest"]);
     currNode = currNode.parent;
   }
-  nodesToAnimate.push(startNode);
-  nodesToAnimate.reverse();
-  return nodesToAnimate;
 }
 export { dijkstra };

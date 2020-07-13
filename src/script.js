@@ -337,7 +337,11 @@ const startAlgo = () => {
       break;
     }
     case "Start Dijkstra": {
-      dijkstra(nodesToAnimate, gridArray);
+      if (dijkstra(nodesToAnimate, pathFound)) {
+        animateCells(inProgress, nodesToAnimate);
+      } else {
+        alert("Path does not exist!");
+      }
       break;
     }
     case "Start Breadth First Search": {
