@@ -1,6 +1,7 @@
 import { dijkstra } from "./dijkstra.js";
 import { aStar } from "./aStar.js";
 import { BFS, animateCells } from "./BFS.js";
+
 //GLOBAL VARIABLES
 var height = window.innerHeight * 0.8;
 var width = window.innerWidth * 0.9;
@@ -232,36 +233,6 @@ function clearPath() {
       }
     }
   }
-  const startAlgo = () => {
-    let startBtnText = startBtn.innerText;
-    switch (startBtnText) {
-      case "Start Visualization": {
-        startBtn.innerText = "Pick an Algorithm!";
-        break;
-      }
-      case "Start A*": {
-        aStar(nodesToAnimate, gridArray);
-        break;
-      }
-      case "Start Dijkstra": {
-        dijkstra(nodesToAnimate);
-        break;
-      }
-      case "Start Breadth First Search": {
-        if (BFS(pathFound, nodesToAnimate)) {
-          animateCells(inProgress, nodesToAnimate);
-        } else {
-          alert("Path does not exist!");
-        }
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  };
-
-  startBtn.addEventListener("click", startAlgo);
 }
 clearPathBtn.addEventListener("click", clearPath);
 //Handling Algo buttons + start button
@@ -366,7 +337,9 @@ const startAlgo = () => {
     }
     case "Start Breadth First Search": {
       if (BFS(pathFound, nodesToAnimate)) {
+        // start();
         animateCells(inProgress, nodesToAnimate);
+        // start();
       } else {
         alert("Path does not exist!");
       }

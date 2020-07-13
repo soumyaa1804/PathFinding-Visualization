@@ -1,5 +1,6 @@
 import { Queue } from "./utility.js";
 import { Node, gridArray, totalCols, totalRows } from "./script.js";
+import { start } from "./timer.js"
 
 const getSpecialNodes = () => {
   let copy_end = null,
@@ -70,6 +71,7 @@ export function BFS(pathFound, nodesToAnimate) {
 }
 
 export async function animateCells(inProgress, nodesToAnimate) {
+  start();
   inProgress = true;
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
@@ -93,13 +95,15 @@ export async function animateCells(inProgress, nodesToAnimate) {
     // Wait until its time to animate
     await new Promise((resolve) => setTimeout(resolve, 5));
     if (cell.className == "start" || cell.className == "end") {
+      if(cell.className == "end"){
+        start();
+      }
       continue;
     } else cell.className = colorClass;
   }
-
   nodesToAnimate = [];
   inProgress = false;
-  justFinished = true;
+  // justFinished = true;
 
   return new Promise((resolve) => resolve(true));
 }
