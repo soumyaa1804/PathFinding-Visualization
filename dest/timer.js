@@ -14,7 +14,7 @@ var startTime = new Date();
 function timer() {
   var now = new Date();
   var milisecond = now - startTime;
-  minutes = Math.floor(milisecond / (1000 * 60) % 60);
+  minutes = Math.floor(milisecond / (1000 * 60));
   seconds = Math.floor(milisecond / 1000 % 60);
   milisec = Math.floor(milisecond % 100);
   minutes = minutes < 10 ? "0" + minutes : minutes;

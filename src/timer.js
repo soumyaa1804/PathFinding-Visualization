@@ -9,7 +9,7 @@ function timer() {
   const now = new Date();
 
   const milisecond = now - startTime;
-  minutes = Math.floor(milisecond / (1000 * 60) % 60);
+  minutes = Math.floor(milisecond / (1000 * 60));
   seconds = Math.floor(milisecond / (1000) % 60);
   milisec = Math.floor(milisecond%100);
 
