@@ -40,7 +40,7 @@ export function BFS(pathFound, nodesToAnimate) {
     // console.log(currNode);
     var r = currNode.row;
     var c = currNode.col;
-    nodesToAnimate.push([gridArray[currNode.row][currNode.col], "visited"]);
+    nodesToAnimate.push([gridArray[r][c], "visited"]);
     if (r == endNode.row && c == endNode.col) {
       pathFound = true;
       break;
