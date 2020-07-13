@@ -267,48 +267,6 @@ function clearPath() {
       }
     }
   }
-
-  var startAlgo = function startAlgo() {
-    var startBtnText = startBtn.innerText;
-
-    switch (startBtnText) {
-      case "Start Visualization":
-        {
-          startBtn.innerText = "Pick an Algorithm!";
-          break;
-        }
-
-      case "Start A*":
-        {
-          (0, _aStar.aStar)(nodesToAnimate, gridArray);
-          break;
-        }
-
-      case "Start Dijkstra":
-        {
-          (0, _dijkstra.dijkstra)(nodesToAnimate);
-          break;
-        }
-
-      case "Start Breadth First Search":
-        {
-          if ((0, _BFS.BFS)(pathFound, nodesToAnimate)) {
-            (0, _BFS.animateCells)(inProgress, nodesToAnimate);
-          } else {
-            alert("Path does not exist!");
-          }
-
-          break;
-        }
-
-      default:
-        {
-          break;
-        }
-    }
-  };
-
-  startBtn.addEventListener("click", startAlgo);
 }
 
 clearPathBtn.addEventListener("click", clearPath); //Handling Algo buttons + start button
@@ -418,7 +376,8 @@ var startAlgo = function startAlgo() {
     case "Start Breadth First Search":
       {
         if ((0, _BFS.BFS)(pathFound, nodesToAnimate)) {
-          (0, _BFS.animateCells)(inProgress, nodesToAnimate);
+          // start();
+          (0, _BFS.animateCells)(inProgress, nodesToAnimate); // start();
         } else {
           alert("Path does not exist!");
         }

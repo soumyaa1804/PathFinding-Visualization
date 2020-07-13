@@ -10,6 +10,8 @@ var _utility = require("./utility.js");
 
 var _script = require("./script.js");
 
+var _timer = require("./timer.js");
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -96,6 +98,7 @@ function _animateCells() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            (0, _timer.start)();
             inProgress = true;
             specialNodes = getSpecialNodes();
             startNode = specialNodes[0];
@@ -105,9 +108,9 @@ function _animateCells() {
             endNodeIndex = _script.gridArray[endNode.row] * _script.totalCols + _script.gridArray[endNode.col];
             i = 0;
 
-          case 8:
+          case 9:
             if (!(i < nodesToAnimate.length)) {
-              _context.next = 27;
+              _context.next = 29;
               break;
             }
 
@@ -117,47 +120,51 @@ function _animateCells() {
             num = x * _script.totalCols + y;
 
             if (!(num == startNodeIndex || num == endNodeIndex)) {
-              _context.next = 15;
+              _context.next = 16;
               break;
             }
 
-            return _context.abrupt("continue", 24);
+            return _context.abrupt("continue", 26);
 
-          case 15:
+          case 16:
             cell = cells[num];
             colorClass = nodesToAnimate[i][1]; // success, visited or searching
             // Wait until its time to animate
 
-            _context.next = 19;
+            _context.next = 20;
             return new Promise(function (resolve) {
               return setTimeout(resolve, 5);
             });
 
-          case 19:
+          case 20:
             if (!(cell.className == "start" || cell.className == "end")) {
-              _context.next = 23;
+              _context.next = 25;
               break;
             }
 
-            return _context.abrupt("continue", 24);
+            if (cell.className == "end") {
+              (0, _timer.start)();
+            }
 
-          case 23:
+            return _context.abrupt("continue", 26);
+
+          case 25:
             cell.className = colorClass;
 
-          case 24:
+          case 26:
             i++;
-            _context.next = 8;
+            _context.next = 9;
             break;
 
-          case 27:
+          case 29:
             nodesToAnimate = [];
-            inProgress = false;
-            justFinished = true;
+            inProgress = false; // justFinished = true;
+
             return _context.abrupt("return", new Promise(function (resolve) {
               return resolve(true);
             }));
 
-          case 31:
+          case 32:
           case "end":
             return _context.stop();
         }
