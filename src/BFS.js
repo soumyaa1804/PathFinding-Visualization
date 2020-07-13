@@ -1,30 +1,7 @@
-import { Queue } from "./utility.js";
+import { getSpecialNodes, Queue } from "./utility.js";
 import { Node, gridArray, totalCols, totalRows } from "./script.js";
-import { start } from "./timer.js"
 
-const getSpecialNodes = () => {
-  let copy_end = null,
-    copy_start = null;
-  for (let r = 0; r < totalRows; r++) {
-    for (let c = 0; c < totalCols; c++) {
-      if (
-        gridArray[r][c].status === "start" &&
-        gridArray[r][c].isClass === "start"
-      ) {
-        copy_start = gridArray[r][c];
-      } else if (
-        gridArray[r][c].status === "end" &&
-        gridArray[r][c].isClass === "end"
-      ) {
-        copy_end = gridArray[r][c];
-      }
-    }
-  }
-  let valid_buttons = [copy_start, copy_end];
-  return valid_buttons;
-};
-
-export function BFS(pathFound, nodesToAnimate) {
+export function BFS(nodesToAnimate, pathFound) {
   let myQueue = new Queue();
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
@@ -68,33 +45,6 @@ export function BFS(pathFound, nodesToAnimate) {
     }
   }
   return pathFound;
-}
-
-export async function animateCells(inProgress, nodesToAnimate) {
-  start();
-  inProgress = true;
-  var cells = document.getElementsByTagName("td");
-  for (var i = 0; i < nodesToAnimate.length; i++) {
-    var nodeCoordinates = nodesToAnimate[i][0];
-    var x = nodeCoordinates.row;
-    var y = nodeCoordinates.col;
-    var num = x * totalCols + y;
-    var cell = cells[num];
-    var colorClass = nodesToAnimate[i][1]; // success, visited or searching
-    // Wait until its time to animate
-    await new Promise((resolve) => setTimeout(resolve, 5));
-    if (cell.className == "start" || cell.className == "end") {
-      if(cell.className == "end"){
-        start();
-      }
-      continue;
-    } else cell.className = colorClass;
-  }
-  nodesToAnimate = [];
-  inProgress = false;
-  // justFinished = true;
-
-  return new Promise((resolve) => resolve(true));
 }
 
 function getNeighbours(i, j) {

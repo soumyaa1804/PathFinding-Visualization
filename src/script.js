@@ -1,7 +1,7 @@
 import { dijkstra } from "./dijkstra.js";
 import { aStar } from "./aStar.js";
-import { BFS, animateCells } from "./BFS.js";
-
+import { BFS } from "./BFS.js";
+import { animateCells } from "./utility.js";
 //GLOBAL VARIABLES
 var height = window.innerHeight * 0.8;
 var width = window.innerWidth * 0.9;
@@ -33,6 +33,7 @@ export class Node {
     this.distance = Infinity;
     this.parent = null;
     this.weight = 1;
+    this.isVisited = false;
     //For heuristics
     this.f = Infinity;
     this.g = Infinity;
@@ -328,7 +329,11 @@ const startAlgo = () => {
       break;
     }
     case "Start A*": {
-      aStar(nodesToAnimate, gridArray);
+      if (aStar(nodesToAnimate, pathFound)) {
+        animateCells(inProgress, nodesToAnimate);
+      } else {
+        alert("Path does not exist!");
+      }
       break;
     }
     case "Start Dijkstra": {
@@ -336,7 +341,7 @@ const startAlgo = () => {
       break;
     }
     case "Start Breadth First Search": {
-      if (BFS(pathFound, nodesToAnimate)) {
+      if (BFS(nodesToAnimate, pathFound)) {
         // start();
         animateCells(inProgress, nodesToAnimate);
         // start();

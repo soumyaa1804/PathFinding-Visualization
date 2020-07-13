@@ -1,81 +1,8 @@
-import { minHeap } from "/src/utility.js";
+import { getSpecialNodes, minHeap, getNeighbours } from "/src/utility.js";
 import { Node, totalRows, totalCols, gridArray } from "./script.js";
 //Invoked when start visualizing is 'CLICKED'
 //Get the start and end node
-const getSpecialNodes = () => {
-  let copy_start = null;
-  let copy_end = null;
-  for (let r = 0; r < totalRows; r++) {
-    for (let c = 0; c < totalCols; c++) {
-      if (
-        gridArray[r][c].status === "start" &&
-        gridArray[r][c].isClass === "start"
-      ) {
-        copy_start = gridArray[r][c];
-      } else if (
-        gridArray[r][c].status === "end" &&
-        gridArray[r][c].isClass === "end"
-      ) {
-        copy_end = gridArray[r][c];
-      }
-    }
-  }
-  let valid_buttons = [copy_start, copy_end];
-  return valid_buttons;
-};
-function getNeighbours(currNode) {
-  let r = currNode.row;
-  let c = currNode.col;
-  let relevantStatuses = ["start", "wall", "visited"];
-  let actual_neighbours = [];
-  let neighbours = [];
-  if (r - 1 >= 0) {
-    neighbours.push(gridArray[r - 1][c]);
-    if (c - 1 >= 0) {
-      if (
-        gridArray[r - 1][c].status !== "wall" &&
-        gridArray[r][c - 1].status !== "wall"
-      )
-        neighbours.push(gridArray[r - 1][c - 1]);
-    }
-    if (c + 1 <= totalCols - 1) {
-      if (
-        gridArray[r - 1][c].status !== "wall" &&
-        gridArray[r][c + 1].status !== "wall"
-      )
-        neighbours.push(gridArray[r - 1][c + 1]);
-    }
-  }
-  if (r + 1 <= totalRows - 1) {
-    neighbours.push(gridArray[r + 1][c]);
-    if (c - 1 >= 0) {
-      if (
-        gridArray[r + 1][c - 1].status !== "wall" &&
-        gridArray[r + 1][c].status !== "wall"
-      ) {
-        neighbours.push(gridArray[r + 1][c - 1]);
-      }
-      neighbours.push(gridArray[r][c - 1]);
-    }
-    if (c + 1 <= totalCols - 1) {
-      if (
-        gridArray[r][c + 1].status !== "wall" &&
-        gridArray[r + 1][c].status !== "wall"
-      ) {
-        neighbours.push(gridArray[r + 1][c + 1]);
-      }
-      neighbours.push(gridArray[r][c + 1]);
-    }
-  }
-  neighbours.forEach((neighbour) => {
-    if (!relevantStatuses.includes(neighbour.status)) {
-      actual_neighbours.push(neighbour);
-    }
-  });
-  return actual_neighbours;
-}
-
-function updateNeighbours(neighbours, currNode, algo, startNode, endNode) {
+function updateNeighbours(neighbours, currNode, algo, endNode) {
   if (algo === "aStar") {
     neighbours.forEach((neighbour) => {
       var newGCost = neighbour.weight + currNode.g;
@@ -105,22 +32,16 @@ function getDistance(nodeA, nodeB) {
   return 14 * dx + 10 * (dy - dx);
   //return dx + dy;
 }
-function backtrack(startNode, endNode, nodesToAnimate) {
-  nodesToAnimate.push(endNode);
+function backtrack(endNode, nodesToAnimate) {
+  nodesToAnimate.push([endNode, "shortest"]);
   let currNode = new Node();
   currNode = endNode.parent;
-  while (currNode !== startNode) {
-    nodesToAnimate.push(currNode);
-    currNode.status = "shortest";
-    let element = document.getElementById(currNode.id);
-    element.className = "shortest";
+  while (currNode !== null) {
+    nodesToAnimate.push([currNode, "shortest"]);
     currNode = currNode.parent;
   }
-  nodesToAnimate.push(startNode);
-  nodesToAnimate.reverse();
-  return nodesToAnimate;
 }
-const aStar = (nodesToAnimate) => {
+const aStar = (nodesToAnimate, pathFound) => {
   //Get the startNode and the endNode
   let specialNodes = getSpecialNodes();
   var startNode = specialNodes[0];
@@ -128,7 +49,6 @@ const aStar = (nodesToAnimate) => {
   //Make a min heap to keep track of nodes with lowest f
   //UnvisitedNodes array
   let openList = new minHeap();
-  let visitedNodesInOrder = [];
   //Update the distances of startNode
   //Distance of startNode from startNode
   startNode.g = 0;
@@ -136,6 +56,8 @@ const aStar = (nodesToAnimate) => {
   //Considering directions as only four
   startNode.f = startNode.g + startNode.h;
   //Push start node in the open List
+  startNode.isVisited = true;
+  nodesToAnimate.push([startNode, "searching"]);
   openList.push([startNode.f, startNode]);
   //nodesToAnimate.push([startNode, "searching"]);
   while (!openList.isEmpty()) {
@@ -144,30 +66,23 @@ const aStar = (nodesToAnimate) => {
     let currArr = openList.getMin();
     currNode = currArr[1];
     //nodesToAnimate.push([currNode, "searching"]);
-    visitedNodesInOrder.push(currNode);
     //Check if the endNode
     if (currNode === endNode) {
-      return backtrack(startNode, endNode, nodesToAnimate);
+      pathFound = true;
+      backtrack(endNode, nodesToAnimate);
+      break;
     }
-    if (currNode !== startNode) {
-      currNode.status = "visited";
-    }
-    //get element
-    let element = document.getElementById(currNode.id);
-    if (element.className !== "start" && element.className !== "end") {
-      element.className = "visited";
-    }
-    //nodesToAnimate.push([currNode, "visited"]);
-    var neighbours = getNeighbours(currNode, gridArray);
-    updateNeighbours(neighbours, currNode, "aStar", startNode, endNode);
+    currNode.isVisited = true;
+    nodesToAnimate.push([currNode, "visited"]);
+    var neighbours = getNeighbours(currNode);
+    updateNeighbours(neighbours, currNode, "aStar", endNode);
     for (let i = 0; i < neighbours.length; i++) {
       var neighbour = neighbours[i];
-      // if (!openList.includes(neighbour)) {
+      nodesToAnimate.push([neighbour, "searching"]);
       openList.push([neighbour.f, neighbour]);
-      // }
     }
   }
-  alert("No Path Exists");
-  return;
+  //alert("No Path Exists");
+  return pathFound;
 };
 export { aStar };
