@@ -1,36 +1,15 @@
 let minutes;
 let seconds;   
-let milisec;
-// let ms=0;   
+let milisec; 
 let started=false;  
 let interval;
-// let min = "";
-// let sec = "";
-// let milisec = "";
 let startTime = new Date();
 
 function timer() {
   const now = new Date();
-  
-  // if(m < 10) {
-  //   min = `0${m}`;
-  // }
-  // else min = m;
-
-  // if(s < 10) {
-  //   sec = `0${s}`;
-  // }
-  // else sec = s;
-
-  // if((ms/10) < 10) {
-  //   milisec = `0${ms/10}`;
-  // }
-  // else milisec = ms/10;
-
-
 
   const milisecond = now - startTime;
-  minutes = Math.floor(milisecond / (1000 * 60) % 60); // minutes
+  minutes = Math.floor(milisecond / (1000 * 60) % 60);
   seconds = Math.floor(milisecond / (1000) % 60);
   milisec = Math.floor(milisecond%100);
 

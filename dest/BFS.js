@@ -50,7 +50,7 @@ function BFS(pathFound, nodesToAnimate) {
 
     var r = currNode.row;
     var c = currNode.col;
-    nodesToAnimate.push([_script.gridArray[currNode.row][currNode.col], "visited"]);
+    nodesToAnimate.push([_script.gridArray[r][c], "visited"]);
 
     if (r == endNode.row && c == endNode.col) {
       pathFound = true;
