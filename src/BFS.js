@@ -32,7 +32,7 @@ export function BFS(pathFound, nodesToAnimate) {
   // console.log(startNode, endNode);
   myQueue.enqueue(gridArray[startNode.row][startNode.col]);
   gridArray[startNode.row][startNode.col].isVisited = true;
-  nodesToAnimate.push([startNode, "searching"]);
+  nodesToAnimate.push([gridArray[startNode.row][startNode.col], "searching"]);
   var currNode = new Node();
   // console.log(myQueue.items.length);
   while (!myQueue.empty()) {
@@ -73,23 +73,12 @@ export function BFS(pathFound, nodesToAnimate) {
 export async function animateCells(inProgress, nodesToAnimate) {
   start();
   inProgress = true;
-  let specialNodes = getSpecialNodes();
-  let startNode = specialNodes[0];
-  let endNode = specialNodes[1];
   var cells = document.getElementsByTagName("td");
-  var startNodeIndex =
-    gridArray[startNode.row] * totalCols + gridArray[startNode.col];
-  var endNodeIndex =
-    gridArray[endNode.row] * totalCols + gridArray[endNode.col];
-
   for (var i = 0; i < nodesToAnimate.length; i++) {
     var nodeCoordinates = nodesToAnimate[i][0];
     var x = nodeCoordinates.row;
     var y = nodeCoordinates.col;
     var num = x * totalCols + y;
-    if (num == startNodeIndex || num == endNodeIndex) {
-      continue;
-    }
     var cell = cells[num];
     var colorClass = nodesToAnimate[i][1]; // success, visited or searching
     // Wait until its time to animate
