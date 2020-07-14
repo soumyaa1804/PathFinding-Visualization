@@ -7,69 +7,53 @@ exports.dijkstra = dijkstra;
 
 var _script = require("./script.js");
 
+var _utility = require("./utility.js");
+
 //Invoked when Start Dijkstra is 'CLICKED'
 //Get the start and end node
-var getSpecialNodes = function getSpecialNodes() {
-  var copy_end = null,
-      copy_start = null;
-
-  for (var r = 0; r < _script.totalRows; r++) {
-    for (var c = 0; c < _script.totalCols; c++) {
-      if (_script.gridArray[r][c].status === "start" && _script.gridArray[r][c].isClass === "start") {
-        copy_start = _script.gridArray[r][c];
-      } else if (_script.gridArray[r][c].status === "end" && _script.gridArray[r][c].isClass === "end") {
-        copy_end = _script.gridArray[r][c];
-      }
-    }
-  }
-
-  var valid_buttons = [copy_start, copy_end];
-  return valid_buttons;
-};
-
-function dijkstra() {
-  var specialNodes = getSpecialNodes();
+function dijkstra(nodesToAnimate, pathFound) {
+  var specialNodes = (0, _utility.getSpecialNodes)();
   var startNode = specialNodes[0];
-  var endNode = specialNodes[1];
-  var visitedNodesInOrder = [startNode]; //Assign distance as 0 for startNode
+  var endNode = specialNodes[1]; //Assign distance as 0 for startNode
 
   startNode.distance = 0;
   var currNode = new _script.Node();
-  currNode = startNode; //Get the unvisited nodes
+  currNode = startNode;
+  nodesToAnimate.push([startNode, "searching"]);
+  startNode.isVisited = true; //Get the unvisited nodes
 
   var unvisitedNodes = getUnvisitedNodes();
 
   while (unvisitedNodes.length) {
     //Get the neighbours
-    var neighbours = getNeighbours(currNode);
+    //nodesToAnimate.push([currNode, "visited"]);
+    var neighbours = (0, _utility.getNeighbours)(currNode);
     updateNeighbours(neighbours, currNode, "dijkstra");
     unvisitedNodes.sort(function (a, b) {
       return a.distance - b.distance;
-    }); // if (unvisitedNodes[0].distance === 1) {
-    //   unvisitedNodes[0].parent = startNode;
-    // }
-
+    });
     var closestNode = unvisitedNodes.shift(); //Check if distnace is infintiy---no path exists
 
     if (closestNode.distance === Infinity) {
+      pathFound = false;
       break;
     }
 
-    visitedNodesInOrder.push(closestNode); //Update the status of the closest node as visited
+    nodesToAnimate.push([closestNode, "searching"]); //Update the status of the closest node as visited
 
     if (closestNode.status === "end") {
-      backtrack(startNode, endNode, _script.nodesToAnimate);
+      pathFound = true;
+      backtrack(endNode, nodesToAnimate);
       break;
     }
 
-    closestNode.status = "visited"; //closestNode.isClass = "visited";
-
-    var element = document.getElementById(closestNode.id);
-    element.className = "visited"; //Check if the end point
-
+    nodesToAnimate.push([closestNode, "visited"]);
+    closestNode.status = "visited";
     unvisitedNodes = getUnvisitedNodes();
     currNode = closestNode;
   }
+
+  return pathFound;
 }
 
 function getUnvisitedNodes() {
@@ -85,53 +69,6 @@ function getUnvisitedNodes() {
   }
 
   return nodes;
-}
-
-function getNeighbours(currNode) {
-  var r = currNode.row;
-  var c = currNode.col;
-  var relevantStatuses = ["start", "wall", "visited"];
-  var actual_neighbours = [];
-  var neighbours = [];
-
-  if (r - 1 >= 0) {
-    neighbours.push(_script.gridArray[r - 1][c]);
-
-    if (c - 1 >= 0) {
-      if (_script.gridArray[r - 1][c].status !== "wall" && _script.gridArray[r][c - 1].status !== "wall") neighbours.push(_script.gridArray[r - 1][c - 1]);
-    }
-
-    if (c + 1 <= _script.totalCols - 1) {
-      if (_script.gridArray[r - 1][c].status !== "wall" && _script.gridArray[r][c + 1].status !== "wall") neighbours.push(_script.gridArray[r - 1][c + 1]);
-    }
-  }
-
-  if (r + 1 <= _script.totalRows - 1) {
-    neighbours.push(_script.gridArray[r + 1][c]);
-
-    if (c - 1 >= 0) {
-      if (_script.gridArray[r + 1][c - 1].status !== "wall" && _script.gridArray[r + 1][c].status !== "wall") {
-        neighbours.push(_script.gridArray[r + 1][c - 1]);
-      }
-
-      neighbours.push(_script.gridArray[r][c - 1]);
-    }
-
-    if (c + 1 <= _script.totalCols - 1) {
-      if (_script.gridArray[r][c + 1].status !== "wall" && _script.gridArray[r + 1][c].status !== "wall") {
-        neighbours.push(_script.gridArray[r + 1][c + 1]);
-      }
-
-      neighbours.push(_script.gridArray[r][c + 1]);
-    }
-  }
-
-  neighbours.forEach(function (neighbour) {
-    if (!relevantStatuses.includes(neighbour.status)) {
-      actual_neighbours.push(neighbour);
-    }
-  });
-  return actual_neighbours;
 }
 
 function updateNeighbours(neighbours, currNode, algo) {
@@ -173,20 +110,13 @@ function updateNeighbours(neighbours, currNode, algo) {
   }
 }
 
-function backtrack(startNode, endNode, nodesToAnimate) {
-  nodesToAnimate.push(endNode);
+function backtrack(endNode, nodesToAnimate) {
+  // nodesToAnimate.push([endNode, "shortest"]);
   var currNode = new _script.Node();
   currNode = endNode.parent;
 
-  while (currNode !== startNode) {
-    nodesToAnimate.push(currNode);
-    currNode.status = "shortest";
-    var element = document.getElementById(currNode.id);
-    element.className = "shortest";
+  while (currNode !== null) {
+    nodesToAnimate.push([currNode, "shortest"]);
     currNode = currNode.parent;
   }
-
-  nodesToAnimate.push(startNode);
-  nodesToAnimate.reverse();
-  return nodesToAnimate;
 }

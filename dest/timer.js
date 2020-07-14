@@ -10,8 +10,14 @@ var milisec;
 var started = false;
 var interval;
 var startTime = new Date();
+var btnText;
+var btnTextTimerId = {
+  "Start A*": "aStarTimer",
+  "Start Dijkstra": "dijkstraTimer",
+  "Start Breadth First Search": "BFSTimer"
+};
 
-function timer() {
+function timer(startBtnText) {
   var now = new Date();
   var milisecond = now - startTime;
   minutes = Math.floor(milisecond / (1000 * 60));
@@ -20,10 +26,11 @@ function timer() {
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
   milisec = milisec < 10 ? "0" + milisec : milisec;
-  document.getElementById("timer").innerText = minutes + " min " + seconds + " sec " + milisec + " ms ";
+  document.getElementById(btnTextTimerId[btnText]).innerText = minutes + " min " + seconds + " sec " + milisec + " ms ";
 }
 
-function start() {
+function start(startBtnText) {
+  btnText = startBtnText;
   startTime = new Date();
 
   if (started == false) {

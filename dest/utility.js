@@ -3,7 +3,17 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.minHeap = exports.Queue = void 0;
+exports.getNeighbours = getNeighbours;
+exports.animateCells = animateCells;
+exports.getSpecialNodes = exports.minHeap = exports.Queue = void 0;
+
+var _script = require("./script.js");
+
+var _timer = require("./timer.js");
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -152,5 +162,153 @@ var minHeap = /*#__PURE__*/function () {
 
   return minHeap;
 }();
+/*-------getSpecialNodes------*/
+
 
 exports.minHeap = minHeap;
+
+var getSpecialNodes = function getSpecialNodes() {
+  var copy_start = null;
+  var copy_end = null;
+
+  for (var r = 0; r < _script.totalRows; r++) {
+    for (var c = 0; c < _script.totalCols; c++) {
+      if (_script.gridArray[r][c].status === "start" && _script.gridArray[r][c].isClass === "start") {
+        copy_start = _script.gridArray[r][c];
+      } else if (_script.gridArray[r][c].status === "end" && _script.gridArray[r][c].isClass === "end") {
+        copy_end = _script.gridArray[r][c];
+      }
+    }
+  }
+
+  var valid_buttons = [copy_start, copy_end];
+  return valid_buttons;
+};
+/*------------getNeighbours------------*/
+
+
+exports.getSpecialNodes = getSpecialNodes;
+
+function getNeighbours(currNode) {
+  var r = currNode.row;
+  var c = currNode.col;
+  var relevantStatuses = ["start", "wall"];
+  var actual_neighbours = [];
+  var neighbours = [];
+
+  if (r - 1 >= 0) {
+    neighbours.push(_script.gridArray[r - 1][c]);
+
+    if (c - 1 >= 0) {
+      if (_script.gridArray[r - 1][c].status !== "wall" && _script.gridArray[r][c - 1].status !== "wall") neighbours.push(_script.gridArray[r - 1][c - 1]);
+    }
+
+    if (c + 1 <= _script.totalCols - 1) {
+      if (_script.gridArray[r - 1][c].status !== "wall" && _script.gridArray[r][c + 1].status !== "wall") neighbours.push(_script.gridArray[r - 1][c + 1]);
+    }
+  }
+
+  if (r + 1 <= _script.totalRows - 1) {
+    neighbours.push(_script.gridArray[r + 1][c]);
+
+    if (c - 1 >= 0) {
+      if (_script.gridArray[r + 1][c - 1].status !== "wall" && _script.gridArray[r + 1][c].status !== "wall") {
+        neighbours.push(_script.gridArray[r + 1][c - 1]);
+      }
+
+      neighbours.push(_script.gridArray[r][c - 1]);
+    }
+
+    if (c + 1 <= _script.totalCols - 1) {
+      if (_script.gridArray[r][c + 1].status !== "wall" && _script.gridArray[r + 1][c].status !== "wall") {
+        neighbours.push(_script.gridArray[r + 1][c + 1]);
+      }
+
+      neighbours.push(_script.gridArray[r][c + 1]);
+    }
+  }
+
+  neighbours.forEach(function (neighbour) {
+    if (!relevantStatuses.includes(neighbour.status) && !neighbour.isVisited) {
+      actual_neighbours.push(neighbour);
+    }
+  });
+  return actual_neighbours;
+}
+/*---------Animation-------*/
+
+
+function animateCells(_x, _x2, _x3) {
+  return _animateCells.apply(this, arguments);
+}
+
+function _animateCells() {
+  _animateCells = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(inProgress, nodesToAnimate, startbtnText) {
+    var cells, i, nodeCoordinates, x, y, num, cell, colorClass;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            (0, _timer.start)(startbtnText);
+            console.log("animation started");
+            inProgress = true;
+            cells = document.getElementsByTagName("td");
+            i = 0;
+
+          case 5:
+            if (!(i < nodesToAnimate.length)) {
+              _context.next = 23;
+              break;
+            }
+
+            nodeCoordinates = nodesToAnimate[i][0];
+            x = nodeCoordinates.row;
+            y = nodeCoordinates.col;
+            num = x * _script.totalCols + y;
+            cell = cells[num];
+            colorClass = nodesToAnimate[i][1]; // success, visited or searching
+            // Wait until its time to animate
+
+            _context.next = 14;
+            return new Promise(function (resolve) {
+              return setTimeout(resolve, 5);
+            });
+
+          case 14:
+            if (!(cell.className == "start" || cell.className == "end")) {
+              _context.next = 19;
+              break;
+            }
+
+            if (cell.className == "end") {
+              (0, _timer.start)(startbtnText);
+              console.log("End reached!");
+            }
+
+            return _context.abrupt("continue", 20);
+
+          case 19:
+            cell.className = colorClass;
+
+          case 20:
+            i++;
+            _context.next = 5;
+            break;
+
+          case 23:
+            nodesToAnimate = [];
+            inProgress = false; // justFinished = true;
+
+            return _context.abrupt("return", new Promise(function (resolve) {
+              return resolve(true);
+            }));
+
+          case 26:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _animateCells.apply(this, arguments);
+}

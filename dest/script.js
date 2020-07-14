@@ -11,6 +11,8 @@ var _aStar = require("./aStar.js");
 
 var _BFS = require("./BFS.js");
 
+var _utility = require("./utility.js");
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
@@ -52,7 +54,8 @@ var Node = function Node(row, col, nodeClass, nodeId) {
 
   this.distance = Infinity;
   this.parent = null;
-  this.weight = 1; //For heuristics
+  this.weight = 1;
+  this.isVisited = false; //For heuristics
 
   this.f = Infinity;
   this.g = Infinity;
@@ -363,21 +366,30 @@ var startAlgo = function startAlgo() {
 
     case "Start A*":
       {
-        (0, _aStar.aStar)(nodesToAnimate, gridArray);
+        if ((0, _aStar.aStar)(nodesToAnimate, pathFound)) {
+          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
+        } else {
+          alert("Path does not exist!");
+        }
+
         break;
       }
 
     case "Start Dijkstra":
       {
-        (0, _dijkstra.dijkstra)(nodesToAnimate, gridArray);
+        if ((0, _dijkstra.dijkstra)(nodesToAnimate, pathFound)) {
+          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
+        } else {
+          alert("Path does not exist!");
+        }
+
         break;
       }
 
     case "Start Breadth First Search":
       {
-        if ((0, _BFS.BFS)(pathFound, nodesToAnimate)) {
-          // start();
-          (0, _BFS.animateCells)(inProgress, nodesToAnimate); // start();
+        if ((0, _BFS.BFS)(nodesToAnimate, pathFound)) {
+          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
         } else {
           alert("Path does not exist!");
         }
