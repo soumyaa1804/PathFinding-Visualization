@@ -9,7 +9,8 @@ var _utility = require("./utility.js");
 
 var _script = require("./script.js");
 
-function BFS(nodesToAnimate, pathFound) {
+function BFS(nodesToAnimate) {
+  var pathFound = false;
   var myQueue = new _utility.Queue();
   var specialNodes = (0, _utility.getSpecialNodes)();
   var startNode = specialNodes[0];

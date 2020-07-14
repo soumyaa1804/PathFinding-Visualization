@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.clearGrid = clearGrid;
 exports.Node = exports.nodesToAnimate = exports.gridArray = exports.totalCols = exports.totalRows = void 0;
 
 var _dijkstra = require("./dijkstra.js");
@@ -12,6 +13,8 @@ var _aStar = require("./aStar.js");
 var _BFS = require("./BFS.js");
 
 var _utility = require("./utility.js");
+
+var _timer = require("./timer.js");
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
@@ -240,6 +243,9 @@ var node = new Node(); //console.log(node);
 var clearBtn = document.getElementById("clearBtn");
 
 function clearGrid() {
+  exports.nodesToAnimate = nodesToAnimate = [];
+  (0, _timer.resetTimer)();
+
   for (var _r = 0; _r < totalRows; _r++) {
     for (var _c = 0; _c < totalCols; _c++) {
       node = gridArray[_r][_c]; //console.log(node);
@@ -249,6 +255,13 @@ function clearGrid() {
         element.className = "unvisited";
         node.status = "unvisited";
         node.isClass = "unvisited";
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
       }
     }
   }
@@ -259,6 +272,8 @@ clearBtn.addEventListener("click", clearGrid); //CLEAR PATH
 var clearPathBtn = document.getElementById("clearPathBtn");
 
 function clearPath() {
+  (0, _timer.resetTimer)();
+
   for (var _r2 = 0; _r2 < totalRows; _r2++) {
     for (var _c2 = 0; _c2 < totalCols; _c2++) {
       var element = document.getElementById(gridArray[_r2][_c2].id);
@@ -388,7 +403,7 @@ var startAlgo = function startAlgo() {
 
     case "Start Breadth First Search":
       {
-        if ((0, _BFS.BFS)(nodesToAnimate, pathFound)) {
+        if ((0, _BFS.BFS)(nodesToAnimate)) {
           (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
         } else {
           alert("Path does not exist!");

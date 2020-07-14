@@ -1,5 +1,5 @@
 import { getSpecialNodes, minHeap, getNeighbours } from "/src/utility.js";
-import { Node, totalRows, totalCols, gridArray } from "./script.js";
+import { Node } from "./script.js";
 //Invoked when start visualizing is 'CLICKED'
 //Get the start and end node
 function updateNeighbours(neighbours, currNode, algo, endNode) {

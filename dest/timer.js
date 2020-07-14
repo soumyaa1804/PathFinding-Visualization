@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.start = start;
+exports.resetTimer = resetTimer;
 var minutes;
 var seconds;
 var milisec;
@@ -39,5 +40,14 @@ function start(startBtnText) {
   } else {
     clearInterval(interval);
     started = false;
+  }
+}
+
+function resetTimer() {
+  console.log("clear grid!");
+  var timerElement = document.getElementsByClassName("timer");
+
+  for (var i = 0; i < timerElement.length; i++) {
+    timerElement[i].innerText = "00 min 00 sec 00 ms";
   }
 }
