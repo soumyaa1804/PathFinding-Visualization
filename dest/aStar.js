@@ -11,72 +11,7 @@ var _script = require("./script.js");
 
 //Invoked when start visualizing is 'CLICKED'
 //Get the start and end node
-var getSpecialNodes = function getSpecialNodes() {
-  var copy_start = null;
-  var copy_end = null;
-
-  for (var r = 0; r < _script.totalRows; r++) {
-    for (var c = 0; c < _script.totalCols; c++) {
-      if (_script.gridArray[r][c].status === "start" && _script.gridArray[r][c].isClass === "start") {
-        copy_start = _script.gridArray[r][c];
-      } else if (_script.gridArray[r][c].status === "end" && _script.gridArray[r][c].isClass === "end") {
-        copy_end = _script.gridArray[r][c];
-      }
-    }
-  }
-
-  var valid_buttons = [copy_start, copy_end];
-  return valid_buttons;
-};
-
-function getNeighbours(currNode) {
-  var r = currNode.row;
-  var c = currNode.col;
-  var relevantStatuses = ["start", "wall", "visited"];
-  var actual_neighbours = [];
-  var neighbours = [];
-
-  if (r - 1 >= 0) {
-    neighbours.push(_script.gridArray[r - 1][c]);
-
-    if (c - 1 >= 0) {
-      if (_script.gridArray[r - 1][c].status !== "wall" && _script.gridArray[r][c - 1].status !== "wall") neighbours.push(_script.gridArray[r - 1][c - 1]);
-    }
-
-    if (c + 1 <= _script.totalCols - 1) {
-      if (_script.gridArray[r - 1][c].status !== "wall" && _script.gridArray[r][c + 1].status !== "wall") neighbours.push(_script.gridArray[r - 1][c + 1]);
-    }
-  }
-
-  if (r + 1 <= _script.totalRows - 1) {
-    neighbours.push(_script.gridArray[r + 1][c]);
-
-    if (c - 1 >= 0) {
-      if (_script.gridArray[r + 1][c - 1].status !== "wall" && _script.gridArray[r + 1][c].status !== "wall") {
-        neighbours.push(_script.gridArray[r + 1][c - 1]);
-      }
-
-      neighbours.push(_script.gridArray[r][c - 1]);
-    }
-
-    if (c + 1 <= _script.totalCols - 1) {
-      if (_script.gridArray[r][c + 1].status !== "wall" && _script.gridArray[r + 1][c].status !== "wall") {
-        neighbours.push(_script.gridArray[r + 1][c + 1]);
-      }
-
-      neighbours.push(_script.gridArray[r][c + 1]);
-    }
-  }
-
-  neighbours.forEach(function (neighbour) {
-    if (!relevantStatuses.includes(neighbour.status)) {
-      actual_neighbours.push(neighbour);
-    }
-  });
-  return actual_neighbours;
-}
-
-function updateNeighbours(neighbours, currNode, algo, startNode, endNode) {
+function updateNeighbours(neighbours, currNode, algo, endNode) {
   if (algo === "aStar") {
     neighbours.forEach(function (neighbour) {
       var newGCost = neighbour.weight + currNode.g; // if (newGCost < neighbour.g) {
@@ -110,33 +45,25 @@ function getDistance(nodeA, nodeB) {
   return 14 * dx + 10 * (dy - dx); //return dx + dy;
 }
 
-function backtrack(startNode, endNode, nodesToAnimate) {
-  nodesToAnimate.push(endNode);
+function backtrack(endNode, nodesToAnimate) {
+  // nodesToAnimate.push([endNode, "shortest"]);
   var currNode = new _script.Node();
   currNode = endNode.parent;
 
-  while (currNode !== startNode) {
-    nodesToAnimate.push(currNode);
-    currNode.status = "shortest";
-    var element = document.getElementById(currNode.id);
-    element.className = "shortest";
+  while (currNode !== null) {
+    nodesToAnimate.push([currNode, "shortest"]);
     currNode = currNode.parent;
   }
-
-  nodesToAnimate.push(startNode);
-  nodesToAnimate.reverse();
-  return nodesToAnimate;
 }
 
-var aStar = function aStar(nodesToAnimate) {
+var aStar = function aStar(nodesToAnimate, pathFound) {
   //Get the startNode and the endNode
-  var specialNodes = getSpecialNodes();
+  var specialNodes = (0, _utility.getSpecialNodes)();
   var startNode = specialNodes[0];
   var endNode = specialNodes[1]; //Make a min heap to keep track of nodes with lowest f
   //UnvisitedNodes array
 
-  var openList = new _utility.minHeap();
-  var visitedNodesInOrder = []; //Update the distances of startNode
+  var openList = new _utility.minHeap(); //Update the distances of startNode
   //Distance of startNode from startNode
 
   startNode.g = 0;
@@ -144,6 +71,8 @@ var aStar = function aStar(nodesToAnimate) {
 
   startNode.f = startNode.g + startNode.h; //Push start node in the open List
 
+  startNode.isVisited = true;
+  nodesToAnimate.push([startNode, "searching"]);
   openList.push([startNode.f, startNode]); //nodesToAnimate.push([startNode, "searching"]);
 
   while (!openList.isEmpty()) {
@@ -151,37 +80,28 @@ var aStar = function aStar(nodesToAnimate) {
     var currNode = new _script.Node();
     var currArr = openList.getMin();
     currNode = currArr[1]; //nodesToAnimate.push([currNode, "searching"]);
-
-    visitedNodesInOrder.push(currNode); //Check if the endNode
+    //Check if the endNode
 
     if (currNode === endNode) {
-      return backtrack(startNode, endNode, nodesToAnimate);
+      pathFound = true;
+      backtrack(endNode, nodesToAnimate);
+      break;
     }
 
-    if (currNode !== startNode) {
-      currNode.status = "visited";
-    } //get element
-
-
-    var element = document.getElementById(currNode.id);
-
-    if (element.className !== "start" && element.className !== "end") {
-      element.className = "visited";
-    } //nodesToAnimate.push([currNode, "visited"]);
-
-
-    var neighbours = getNeighbours(currNode, _script.gridArray);
-    updateNeighbours(neighbours, currNode, "aStar", startNode, endNode);
+    currNode.isVisited = true;
+    nodesToAnimate.push([currNode, "visited"]);
+    var neighbours = (0, _utility.getNeighbours)(currNode);
+    updateNeighbours(neighbours, currNode, "aStar", endNode);
 
     for (var i = 0; i < neighbours.length; i++) {
-      var neighbour = neighbours[i]; // if (!openList.includes(neighbour)) {
-
-      openList.push([neighbour.f, neighbour]); // }
+      var neighbour = neighbours[i];
+      nodesToAnimate.push([neighbour, "searching"]);
+      openList.push([neighbour.f, neighbour]);
     }
-  }
+  } //alert("No Path Exists");
 
-  alert("No Path Exists");
-  return;
+
+  return pathFound;
 };
 
 exports.aStar = aStar;

@@ -2,6 +2,8 @@ import { dijkstra } from "./dijkstra.js";
 import { aStar } from "./aStar.js";
 import { BFS } from "./BFS.js";
 import { animateCells } from "./utility.js";
+import { resetTimer } from "./timer.js";
+
 //GLOBAL VARIABLES
 var height = window.innerHeight * 0.8;
 var width = window.innerWidth * 0.9;
@@ -301,7 +303,9 @@ let node = new Node();
 //console.log(node);
 let clearBtn = document.getElementById("clearBtn");
 
-function clearGrid() {
+export function clearGrid() {
+  nodesToAnimate = [];
+  resetTimer();
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
@@ -311,6 +315,13 @@ function clearGrid() {
         element.className = "unvisited";
         node.status = "unvisited";
         node.isClass = "unvisited";
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
       }
     }
   }
@@ -318,7 +329,9 @@ function clearGrid() {
 clearBtn.addEventListener("click", clearGrid);
 //CLEAR PATH
 let clearPathBtn = document.getElementById("clearPathBtn");
-export function clearPath() {
+
+function clearPath() {
+  resetTimer();
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       let element = document.getElementById(gridArray[r][c].id);
@@ -453,7 +466,7 @@ const startAlgo = () => {
       nodesToAnimate = [];
       if (aStar(nodesToAnimate, pathFound)) {
         //animateCells is returning a Promise that means we have to use .then
-        animateCells(inProgress, nodesToAnimate);
+        animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
         alert("Path does not exist!");
       }
@@ -463,19 +476,21 @@ const startAlgo = () => {
       clearPath();
       nodesToAnimate = [];
       if (dijkstra(nodesToAnimate, pathFound)) {
-        animateCells(inProgress, nodesToAnimate);
+        animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
         alert("Path does not exist!");
       }
       break;
     }
     case "Start Breadth First Search": {
-      clearPath();
-      nodesToAnimate = [];
-      if (BFS(nodesToAnimate, pathFound)) {
-        // start();
-        animateCells(inProgress, nodesToAnimate);
-        // start();
+      // clearPath();
+      // nodesToAnimate = [];
+      // if (BFS(nodesToAnimate, pathFound)) {
+      //   // start();
+      //   animateCells(inProgress, nodesToAnimate);
+      //   // start();
+      if (BFS(nodesToAnimate)) {
+        animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
         alert("Path does not exist!");
       }

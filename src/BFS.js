@@ -1,7 +1,8 @@
 import { getSpecialNodes, Queue } from "./utility.js";
 import { Node, gridArray, totalCols, totalRows } from "./script.js";
 
-export function BFS(nodesToAnimate, pathFound) {
+export function BFS(nodesToAnimate) {
+  let pathFound = false;
   let myQueue = new Queue();
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
