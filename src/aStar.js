@@ -33,7 +33,7 @@ function getDistance(nodeA, nodeB) {
   //return dx + dy;
 }
 function backtrack(endNode, nodesToAnimate) {
-  nodesToAnimate.push([endNode, "shortest"]);
+  // nodesToAnimate.push([endNode, "shortest"]);
   let currNode = new Node();
   currNode = endNode.parent;
   while (currNode !== null) {

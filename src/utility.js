@@ -171,8 +171,9 @@ export function getNeighbours(currNode) {
   return actual_neighbours;
 }
 /*---------Animation-------*/
-export async function animateCells(inProgress, nodesToAnimate) {
-  start();
+export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
+  start(startbtnText);
+  console.log("animation started");
   inProgress = true;
   var cells = document.getElementsByTagName("td");
   for (var i = 0; i < nodesToAnimate.length; i++) {
@@ -186,7 +187,8 @@ export async function animateCells(inProgress, nodesToAnimate) {
     await new Promise((resolve) => setTimeout(resolve, 5));
     if (cell.className == "start" || cell.className == "end") {
       if (cell.className == "end") {
-        start();
+        start(startbtnText);
+        console.log("End reached!")
       }
       continue;
     } else cell.className = colorClass;

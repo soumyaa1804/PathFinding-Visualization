@@ -330,7 +330,7 @@ const startAlgo = () => {
     }
     case "Start A*": {
       if (aStar(nodesToAnimate, pathFound)) {
-        animateCells(inProgress, nodesToAnimate);
+        animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
         alert("Path does not exist!");
       }
@@ -338,7 +338,7 @@ const startAlgo = () => {
     }
     case "Start Dijkstra": {
       if (dijkstra(nodesToAnimate, pathFound)) {
-        animateCells(inProgress, nodesToAnimate);
+        animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
         alert("Path does not exist!");
       }
@@ -346,9 +346,7 @@ const startAlgo = () => {
     }
     case "Start Breadth First Search": {
       if (BFS(nodesToAnimate, pathFound)) {
-        // start();
-        animateCells(inProgress, nodesToAnimate);
-        // start();
+        animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
         alert("Path does not exist!");
       }
