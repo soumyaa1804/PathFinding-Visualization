@@ -1,4 +1,4 @@
-import { gridArray, totalRows, totalCols } from "./script.js";
+import { gridArray, totalRows, totalCols, clearPath } from "./script.js";
 import { start } from "./timer.js";
 /* -------- Queue ------- */
 export class Queue {
@@ -174,6 +174,7 @@ export function getNeighbours(currNode) {
 export async function animateCells(inProgress, nodesToAnimate) {
   start();
   inProgress = true;
+  toggleScreen(inProgress);
   var cells = document.getElementsByTagName("td");
   for (var i = 0; i < nodesToAnimate.length; i++) {
     var nodeCoordinates = nodesToAnimate[i][0];
@@ -193,7 +194,28 @@ export async function animateCells(inProgress, nodesToAnimate) {
   }
   nodesToAnimate = [];
   inProgress = false;
-  // justFinished = true;
-
+  toggleScreen(inProgress);
   return new Promise((resolve) => resolve(true));
+}
+function toggleScreen(inProgress) {
+  if (inProgress) {
+    //Get the elements
+    //Start Button disable
+    document.getElementById("startBtn").disabled = true; //clear Path disable
+    document.getElementById("clearPathBtn").disabled = true;
+    //clear grid disable
+    document.getElementById("clearBtn").disabled = true;
+  } else {
+    //Get the elements
+    //Start Button enable
+    document.getElementById("startBtn").disabled = false;
+    //clear Path enable
+    document.getElementById("clearPathBtn").disabled = false;
+    //clear grid enable
+    document.getElementById("clearBtn").disabled = false;
+    //Clear the board
+    document
+      .getElementById("tableContainer")
+      .addEventListener("mousedown", clearPath);
+  }
 }

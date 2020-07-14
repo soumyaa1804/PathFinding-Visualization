@@ -79,12 +79,63 @@ class Grid {
     }
     this.grid = gridArray;
     mygrid += `</table>`;
-    return mygrid;
+    document.getElementById("tableContainer").innerHTML = mygrid;
+  }
+  eventListener() {
+    for (let r = 0; r < totalRows; r += 1) {
+      for (let c = 0; c < totalCols; c += 1) {
+        let currNode = gridObject.grid[r][c];
+        let currId = currNode.id;
+        //Current Element in the grid
+        let currElement = document.getElementById(currId);
+
+        //  # Event Listeners --mousedown
+        //                      --mouseenter
+        //                      --mouseup
+        //             helper  --mousePressed
+
+        currElement.addEventListener("mousedown", (e) => {
+          mousePressed = true;
+          if (currNode.status === "start" || currNode.status === "end") {
+            pressedNodeStatus = currNode.status;
+            prevNode = new Node();
+            prevNode = currNode;
+          } else {
+            pressedNodeStatus = "normal";
+            //Manipulate the normal node - convert to "WALL" or "A normal node" or to a weight
+            updateStatus(currNode);
+          }
+          e.preventDefault();
+        });
+        currElement.addEventListener("mouseenter", (e) => {
+          if (mousePressed && pressedNodeStatus !== "normal") {
+            //Means that the pressed node is a "Start" or "end"
+            //User wants to move the start or end button
+            prevNode = moveSpecialNode(currNode);
+
+            //set to default position
+          } else if (mousePressed && pressedNodeStatus === "normal") {
+            updateStatus(currNode);
+          }
+        });
+        currElement.addEventListener("mouseup", (e) => {
+          mousePressed = false;
+        });
+      }
+    }
+    /*---------WEIGHTS----------*/
+    window.addEventListener("keydown", (e) => {
+      //Return the key that is pressed
+      keyDown = e.code;
+    });
+    window.addEventListener("keyup", () => {
+      keyDown = false;
+    });
   }
 }
-let gridObject = new Grid();
-let newGrid = gridObject.generateGrid();
-document.getElementById("tableContainer").innerHTML = newGrid;
+// let gridObject = new Grid();
+// gridObject.generateGrid();
+//document.getElementById("tableContainer").innerHTML = newGrid;
 
 //Create Walls
 /* 1) If the click is on the Start Node and it is being dragged then move the startNode
@@ -92,56 +143,109 @@ document.getElementById("tableContainer").innerHTML = newGrid;
    3) If the click is on a "unvisited" node then update "wall" and if dragged then createWalls
    4) If the click is on a "visited" node then update and make it a unvisted node.*/
 //console.log(document.getElementById("1-1"));
+// eventListener(){
+//   for (let r = 0; r < totalRows; r += 1) {
+//     for (let c = 0; c < totalCols; c += 1) {
+//       let currNode = gridObject.grid[r][c];
+//       let currId = currNode.id;
+//       //Current Element in the grid
+//       let currElement = document.getElementById(currId);
 
-for (let r = 0; r < totalRows; r += 1) {
-  for (let c = 0; c < totalCols; c += 1) {
-    let currNode = gridObject.grid[r][c];
-    let currId = currNode.id;
-    //Current Element in the grid
-    let currElement = document.getElementById(currId);
+//       //  # Event Listeners --mousedown
+//       //                      --mouseenter
+//       //                      --mouseup
+//       //             helper  --mousePressed
 
-    //  # Event Listeners --mousedown
-    //                      --mouseenter
-    //                      --mouseup
-    //             helper  --mousePressed
+//       currElement.addEventListener("mousedown", (e) => {
+//         mousePressed = true;
+//         if (currNode.status === "start" || currNode.status === "end") {
+//           pressedNodeStatus = currNode.status;
+//           prevNode = new Node();
+//           prevNode = currNode;
+//         } else {
+//           pressedNodeStatus = "normal";
+//           //Manipulate the normal node - convert to "WALL" or "A normal node" or to a weight
+//           updateStatus(currNode);
+//         }
+//         e.preventDefault();
+//       });
+//       currElement.addEventListener("mouseenter", (e) => {
+//         if (mousePressed && pressedNodeStatus !== "normal") {
+//           //Means that the pressed node is a "Start" or "end"
+//           //User wants to move the start or end button
+//           prevNode = moveSpecialNode(currNode);
 
-    currElement.addEventListener("mousedown", (e) => {
-      mousePressed = true;
-      if (currNode.status === "start" || currNode.status === "end") {
-        pressedNodeStatus = currNode.status;
-        prevNode = new Node();
-        prevNode = currNode;
-      } else {
-        pressedNodeStatus = "normal";
-        //Manipulate the normal node - convert to "WALL" or "A normal node" or to a weight
-        updateStatus(currNode);
-      }
-      e.preventDefault();
-    });
-    currElement.addEventListener("mouseenter", (e) => {
-      if (mousePressed && pressedNodeStatus !== "normal") {
-        //Means that the pressed node is a "Start" or "end"
-        //User wants to move the start or end button
-        prevNode = moveSpecialNode(currNode);
+//           //set to default position
+//         } else if (mousePressed && pressedNodeStatus === "normal") {
+//           updateStatus(currNode);
+//         }
+//       });
+//       currElement.addEventListener("mouseup", (e) => {
+//         mousePressed = false;
+//       });
+//     }
+//   }
+//   /*---------WEIGHTS----------*/
+//   window.addEventListener("keydown", (e) => {
+//     //Return the key that is pressed
+//     keyDown = e.code;
+//   });
+//   window.addEventListener("keyup", () => {
+//     keyDown = false;
+//   });
+// };
+let gridObject = new Grid();
+gridObject.generateGrid();
+gridObject.eventListener();
+// for (let r = 0; r < totalRows; r += 1) {
+//   for (let c = 0; c < totalCols; c += 1) {
+//     let currNode = gridObject.grid[r][c];
+//     let currId = currNode.id;
+//     //Current Element in the grid
+//     let currElement = document.getElementById(currId);
 
-        //set to default position
-      } else if (mousePressed && pressedNodeStatus === "normal") {
-        updateStatus(currNode);
-      }
-    });
-    currElement.addEventListener("mouseup", (e) => {
-      mousePressed = false;
-    });
-  }
-}
-/*---------WEIGHTS----------*/
-window.addEventListener("keydown", (e) => {
-  //Return the key that is pressed
-  keyDown = e.code;
-});
-window.addEventListener("keyup", () => {
-  keyDown = false;
-});
+//     //  # Event Listeners --mousedown
+//     //                      --mouseenter
+//     //                      --mouseup
+//     //             helper  --mousePressed
+
+//     currElement.addEventListener("mousedown", (e) => {
+//       mousePressed = true;
+//       if (currNode.status === "start" || currNode.status === "end") {
+//         pressedNodeStatus = currNode.status;
+//         prevNode = new Node();
+//         prevNode = currNode;
+//       } else {
+//         pressedNodeStatus = "normal";
+//         //Manipulate the normal node - convert to "WALL" or "A normal node" or to a weight
+//         updateStatus(currNode);
+//       }
+//       e.preventDefault();
+//     });
+//     currElement.addEventListener("mouseenter", (e) => {
+//       if (mousePressed && pressedNodeStatus !== "normal") {
+//         //Means that the pressed node is a "Start" or "end"
+//         //User wants to move the start or end button
+//         prevNode = moveSpecialNode(currNode);
+
+//         //set to default position
+//       } else if (mousePressed && pressedNodeStatus === "normal") {
+//         updateStatus(currNode);
+//       }
+//     });
+//     currElement.addEventListener("mouseup", (e) => {
+//       mousePressed = false;
+//     });
+//   }
+// }
+// /*---------WEIGHTS----------*/
+// window.addEventListener("keydown", (e) => {
+//   //Return the key that is pressed
+//   keyDown = e.code;
+// });
+// window.addEventListener("keyup", () => {
+//   keyDown = false;
+// });
 function updateStatus(currNode) {
   let element = document.getElementById(currNode.id);
   let relevantStatuses = ["start", "end"];
@@ -214,7 +318,7 @@ function clearGrid() {
 clearBtn.addEventListener("click", clearGrid);
 //CLEAR PATH
 let clearPathBtn = document.getElementById("clearPathBtn");
-function clearPath() {
+export function clearPath() {
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       let element = document.getElementById(gridArray[r][c].id);
@@ -225,12 +329,12 @@ function clearPath() {
       ) {
         element.className = "unvisited";
         gridArray[r][c].status = "unvisited";
-        gridArray[r][c] = new Node(
-          r,
-          c,
-          gridArray[r][c].status,
-          gridArray[r][c].id
-        );
+        // gridArray[r][c] = new Node(
+        //   r,
+        //   c,
+        //   gridArray[r][c].status,
+        //   gridArray[r][c].id
+        // );
       }
     }
   }
@@ -238,19 +342,34 @@ function clearPath() {
 clearPathBtn.addEventListener("click", clearPath);
 //Handling Algo buttons + start button
 //algorithms Object Literal
+// function updateBtn() {
+//   const algorithms = new Map([
+//     ["aStar", "A*"],
+//     ["dijkstra", "Dijkstra"],
+//     ["BFS", "Breadth First Search"],
+//   ]);
+
+//   const algoID = document.getElementById("accordion");
+
+//   algoID.addEventListener("click", (e) => {
+//     const validID = ["aStar", "dijkstra", "BFS"];
+//     let target_id = e.target.id;
+//     if (validID.includes(target_id)) {
+//       updateStartBtn(target_id);
+//     }
+//     e.preventDefault();
+//   });
+// }
 const algorithms = new Map([
   ["aStar", "A*"],
   ["dijkstra", "Dijkstra"],
-  ["GBFS", "Greedy Best First Search"],
   ["BFS", "Breadth First Search"],
-  ["DFS", "Depth First Search"],
-  ["JPS", "Jump Point Search"],
 ]);
 
 const algoID = document.getElementById("accordion");
 
 algoID.addEventListener("click", (e) => {
-  const validID = ["aStar", "dijkstra", "GBFS", "BFS", "DFS", "JPS"];
+  const validID = ["aStar", "dijkstra", "BFS"];
   let target_id = e.target.id;
   if (validID.includes(target_id)) {
     updateStartBtn(target_id);
@@ -266,6 +385,7 @@ function updateStartBtn(id) {
   //console.log(name);
   let updated_string = "Start " + name;
   startBtn.innerHTML = updated_string;
+  clearPath();
 }
 
 /* ---------------------- */
@@ -324,12 +444,15 @@ function dragElement(elmnt) {
 const startAlgo = () => {
   let startBtnText = startBtn.innerText;
   switch (startBtnText) {
-    case "Start Visualization": {
+    case "Select an Algorithm": {
       startBtn.innerText = "Pick an Algorithm!";
       break;
     }
     case "Start A*": {
+      clearPath();
+      nodesToAnimate = [];
       if (aStar(nodesToAnimate, pathFound)) {
+        //animateCells is returning a Promise that means we have to use .then
         animateCells(inProgress, nodesToAnimate);
       } else {
         alert("Path does not exist!");
@@ -337,6 +460,8 @@ const startAlgo = () => {
       break;
     }
     case "Start Dijkstra": {
+      clearPath();
+      nodesToAnimate = [];
       if (dijkstra(nodesToAnimate, pathFound)) {
         animateCells(inProgress, nodesToAnimate);
       } else {
@@ -345,6 +470,8 @@ const startAlgo = () => {
       break;
     }
     case "Start Breadth First Search": {
+      clearPath();
+      nodesToAnimate = [];
       if (BFS(nodesToAnimate, pathFound)) {
         // start();
         animateCells(inProgress, nodesToAnimate);
@@ -359,5 +486,4 @@ const startAlgo = () => {
     }
   }
 };
-
 startBtn.addEventListener("click", startAlgo);
