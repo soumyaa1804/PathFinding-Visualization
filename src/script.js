@@ -330,7 +330,7 @@ clearBtn.addEventListener("click", clearGrid);
 //CLEAR PATH
 let clearPathBtn = document.getElementById("clearPathBtn");
 
-function clearPath() {
+export function clearPath() {
   resetTimer();
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
@@ -483,13 +483,9 @@ const startAlgo = () => {
       break;
     }
     case "Start Breadth First Search": {
-      // clearPath();
-      // nodesToAnimate = [];
-      // if (BFS(nodesToAnimate, pathFound)) {
-      //   // start();
-      //   animateCells(inProgress, nodesToAnimate);
-      //   // start();
-      if (BFS(nodesToAnimate)) {
+      clearPath();
+      nodesToAnimate = [];
+      if (BFS(nodesToAnimate, pathFound)) {
         animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
         alert("Path does not exist!");
