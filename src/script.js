@@ -342,12 +342,14 @@ export function clearPath() {
       ) {
         element.className = "unvisited";
         gridArray[r][c].status = "unvisited";
-        // gridArray[r][c] = new Node(
-        //   r,
-        //   c,
-        //   gridArray[r][c].status,
-        //   gridArray[r][c].id
-        // );
+        gridArray[r][c] = new Node(
+          r,
+          c,
+          gridArray[r][c].status,
+          gridArray[r][c].id
+        );
+      } else if (element.className === "wall") {
+        gridArray[r][c].status = "wall";
       }
     }
   }
