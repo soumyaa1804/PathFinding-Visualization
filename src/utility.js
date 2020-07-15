@@ -175,8 +175,8 @@ export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
   start(startbtnText);
   console.log("animation started");
   inProgress = true;
-  toggleScreen(inProgress);
   var cells = document.getElementsByTagName("td");
+  toggleScreen(inProgress);
   for (var i = 0; i < nodesToAnimate.length; i++) {
     var nodeCoordinates = nodesToAnimate[i][0];
     var x = nodeCoordinates.row;
@@ -189,7 +189,7 @@ export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
     if (cell.className == "start" || cell.className == "end") {
       if (cell.className == "end") {
         start(startbtnText);
-        console.log("End reached!")
+        console.log("End reached!");
       }
       continue;
     } else cell.className = colorClass;
@@ -207,6 +207,8 @@ function toggleScreen(inProgress) {
     document.getElementById("clearPathBtn").disabled = true;
     //clear grid disable
     document.getElementById("clearBtn").disabled = true;
+    const tds = document.querySelectorAll("td");
+    tds.forEach((td) => (td.style.pointerEvents = "none"));
   } else {
     //Get the elements
     //Start Button enable
@@ -215,9 +217,11 @@ function toggleScreen(inProgress) {
     document.getElementById("clearPathBtn").disabled = false;
     //clear grid enable
     document.getElementById("clearBtn").disabled = false;
-    //Clear the board
-    document
-      .getElementById("tableContainer")
-      .addEventListener("mousedown", clearPath);
+    const tds = document.querySelectorAll("td");
+    tds.forEach((td) => (td.style.pointerEvents = "all"));
+    // //Clear the board
+    // document
+    //   .getElementById("tableContainer")
+    //   .addEventListener("mousedown", clearPath);
   }
 }
