@@ -71,6 +71,7 @@ var aStar = function aStar(nodesToAnimate, pathFound) {
   //nodesToAnimate.push([startNode, "searching"]);
   while (!openList.isEmpty()) {
     //The node having the lowest f value
+    //console.log("loop", openList);
     var currNode = new _script.Node();
     var currArr = openList.getMin();
     currNode = currArr[1];

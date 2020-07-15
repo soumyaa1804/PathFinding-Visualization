@@ -205,8 +205,8 @@ async function animateCells(inProgress, nodesToAnimate, startbtnText) {
   (0, _timer.start)(startbtnText);
   console.log("animation started");
   inProgress = true;
-  toggleScreen(inProgress);
   var cells = document.getElementsByTagName("td");
+  toggleScreen(inProgress);
   for (var i = 0; i < nodesToAnimate.length; i++) {
     var nodeCoordinates = nodesToAnimate[i][0];
     var x = nodeCoordinates.row;
@@ -241,6 +241,10 @@ function toggleScreen(inProgress) {
     document.getElementById("clearPathBtn").disabled = true;
     //clear grid disable
     document.getElementById("clearBtn").disabled = true;
+    var tds = document.querySelectorAll("td");
+    tds.forEach(function (td) {
+      return td.style.pointerEvents = "none";
+    });
   } else {
     //Get the elements
     //Start Button enable
@@ -249,7 +253,13 @@ function toggleScreen(inProgress) {
     document.getElementById("clearPathBtn").disabled = false;
     //clear grid enable
     document.getElementById("clearBtn").disabled = false;
-    //Clear the board
-    document.getElementById("tableContainer").addEventListener("mousedown", _script.clearPath);
+    var _tds = document.querySelectorAll("td");
+    _tds.forEach(function (td) {
+      return td.style.pointerEvents = "all";
+    });
+    // //Clear the board
+    // document
+    //   .getElementById("tableContainer")
+    //   .addEventListener("mousedown", clearPath);
   }
 }
