@@ -175,8 +175,8 @@ export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
   start(startbtnText);
   console.log("animation started");
   inProgress = true;
-  var cells = document.getElementsByTagName("td");
   toggleScreen(inProgress);
+  var cells = document.getElementsByTagName("td");
   for (var i = 0; i < nodesToAnimate.length; i++) {
     var nodeCoordinates = nodesToAnimate[i][0];
     var x = nodeCoordinates.row;
@@ -220,8 +220,8 @@ function toggleScreen(inProgress) {
     const tds = document.querySelectorAll("td");
     tds.forEach((td) => (td.style.pointerEvents = "all"));
     // //Clear the board
-    document
-      .getElementById("tableContainer")
-      .addEventListener("mousedown", clearPath);
+    // document
+    //   .getElementById("tableContainer")
+    //   .addEventListener("mousedown", clearPath);
   }
 }

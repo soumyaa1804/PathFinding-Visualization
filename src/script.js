@@ -419,6 +419,7 @@ const startAlgo = () => {
       clearPath();
       nodesToAnimate = [];
       pathFound = false;
+      inProgress = false;
       if (aStar(nodesToAnimate, pathFound)) {
         //animateCells is returning a Promise that means we have to use .then
         animateCells(inProgress, nodesToAnimate, startBtnText);
@@ -431,6 +432,7 @@ const startAlgo = () => {
       clearPath();
       nodesToAnimate = [];
       pathFound = false;
+      inProgress = false;
       if (dijkstra(nodesToAnimate, pathFound)) {
         animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
@@ -442,6 +444,7 @@ const startAlgo = () => {
       clearPath();
       nodesToAnimate = [];
       pathFound = false;
+      inProgress = false;
       if (BFS(nodesToAnimate, pathFound)) {
         animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
@@ -450,10 +453,6 @@ const startAlgo = () => {
       break;
     }
     default: {
-      console.log("default");
-      clearPath();
-      nodesToAnimate = [];
-      pathFound = false;
       break;
     }
   }

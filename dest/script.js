@@ -446,6 +446,7 @@ var startAlgo = function startAlgo() {
         clearPath();
         exports.nodesToAnimate = nodesToAnimate = [];
         pathFound = false;
+        inProgress = false;
         if ((0, _aStar.aStar)(nodesToAnimate, pathFound)) {
           //animateCells is returning a Promise that means we have to use .then
           (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
@@ -459,6 +460,7 @@ var startAlgo = function startAlgo() {
         clearPath();
         exports.nodesToAnimate = nodesToAnimate = [];
         pathFound = false;
+        inProgress = false;
         if ((0, _dijkstra.dijkstra)(nodesToAnimate, pathFound)) {
           (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
         } else {
@@ -471,6 +473,7 @@ var startAlgo = function startAlgo() {
         clearPath();
         exports.nodesToAnimate = nodesToAnimate = [];
         pathFound = false;
+        inProgress = false;
         if ((0, _BFS.BFS)(nodesToAnimate, pathFound)) {
           (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
         } else {
@@ -480,10 +483,6 @@ var startAlgo = function startAlgo() {
       }
     default:
       {
-        console.log("default");
-        clearPath();
-        exports.nodesToAnimate = nodesToAnimate = [];
-        pathFound = false;
         break;
       }
   }
