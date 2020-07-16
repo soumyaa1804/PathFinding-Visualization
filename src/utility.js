@@ -187,7 +187,7 @@ export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
     // Wait until its time to animate
     await new Promise((resolve) => setTimeout(resolve, 5));
     if (cell.className == "start" || cell.className == "end") {
-      if (cell.className == "end") {
+      if (cell.className == "end" && colorClass === "shortest") {
         start(startbtnText);
         console.log("End reached!");
       }

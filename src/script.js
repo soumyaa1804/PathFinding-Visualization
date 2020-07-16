@@ -407,6 +407,7 @@ const startAlgo = () => {
     case "Start A*": {
       clearPath();
       nodesToAnimate = [];
+      pathFound = false;
       if (aStar(nodesToAnimate, pathFound)) {
         //animateCells is returning a Promise that means we have to use .then
         animateCells(inProgress, nodesToAnimate, startBtnText);
@@ -418,6 +419,7 @@ const startAlgo = () => {
     case "Start Dijkstra": {
       clearPath();
       nodesToAnimate = [];
+      pathFound = false;
       if (dijkstra(nodesToAnimate, pathFound)) {
         animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
@@ -428,7 +430,8 @@ const startAlgo = () => {
     case "Start Breadth First Search": {
       clearPath();
       nodesToAnimate = [];
-      if (BFS(nodesToAnimate)) {
+      pathFound = false;
+      if (BFS(nodesToAnimate, pathFound)) {
         animateCells(inProgress, nodesToAnimate, startBtnText);
       } else {
         alert("Path does not exist!");

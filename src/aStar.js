@@ -33,7 +33,7 @@ function getDistance(nodeA, nodeB) {
   //return dx + dy;
 }
 function backtrack(endNode, nodesToAnimate) {
-  // nodesToAnimate.push([endNode, "shortest"]);
+  nodesToAnimate.push([endNode, "shortest"]);
   let currNode = new Node();
   currNode = endNode.parent;
   while (currNode !== null) {
@@ -46,6 +46,9 @@ const aStar = (nodesToAnimate, pathFound) => {
   let specialNodes = getSpecialNodes();
   var startNode = specialNodes[0];
   var endNode = specialNodes[1];
+
+  //nodesToAnimate = [];
+
   //Make a min heap to keep track of nodes with lowest f
   //UnvisitedNodes array
   let openList = new minHeap();
@@ -56,8 +59,8 @@ const aStar = (nodesToAnimate, pathFound) => {
   //Considering directions as only four
   startNode.f = startNode.g + startNode.h;
   //Push start node in the open List
-  startNode.isVisited = true;
-  nodesToAnimate.push([startNode, "searching"]);
+  //startNode.isVisited = true;
+  //nodesToAnimate.push([startNode, "searching"]);
   openList.push([startNode.f, startNode]);
   //nodesToAnimate.push([startNode, "searching"]);
   while (!openList.isEmpty()) {
@@ -66,6 +69,11 @@ const aStar = (nodesToAnimate, pathFound) => {
     var currNode = new Node();
     let currArr = openList.getMin();
     currNode = currArr[1];
+    console.log("72", currNode);
+    if (currNode.isVisited) {
+      continue;
+    }
+
     //nodesToAnimate.push([currNode, "searching"]);
     //Check if the endNode
     if (currNode === endNode) {
@@ -77,6 +85,7 @@ const aStar = (nodesToAnimate, pathFound) => {
     nodesToAnimate.push([currNode, "visited"]);
     var neighbours = getNeighbours(currNode);
     updateNeighbours(neighbours, currNode, "aStar", endNode);
+    console.log("astar neigh", neighbours);
     for (let i = 0; i < neighbours.length; i++) {
       var neighbour = neighbours[i];
       nodesToAnimate.push([neighbour, "searching"]);
@@ -84,6 +93,7 @@ const aStar = (nodesToAnimate, pathFound) => {
     }
   }
   //alert("No Path Exists");
+  console.log("inside a*", pathFound);
   return pathFound;
 };
 export { aStar };

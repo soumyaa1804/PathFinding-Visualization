@@ -1,8 +1,8 @@
 import { getSpecialNodes, Queue } from "./utility.js";
 import { Node, gridArray, totalCols, totalRows } from "./script.js";
 
-export function BFS(nodesToAnimate) {
-  let pathFound = false;
+export function BFS(nodesToAnimate, pathFound) {
+  //let pathFound = false;
   let myQueue = new Queue();
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
@@ -38,6 +38,7 @@ export function BFS(nodesToAnimate) {
   }
 
   if (pathFound) {
+    endNode.isVisited = true;
     nodesToAnimate.push([gridArray[endNode.row][endNode.col], "shortest"]);
     while (currNode.parent != null) {
       var prevNode = currNode.parent;
