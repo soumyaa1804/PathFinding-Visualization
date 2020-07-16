@@ -8,9 +8,12 @@ export function BFS(nodesToAnimate, pathFound) {
   let startNode = specialNodes[0];
   let endNode = specialNodes[1];
   // console.log(startNode, endNode);
-  myQueue.enqueue(gridArray[startNode.row][startNode.col]);
-  gridArray[startNode.row][startNode.col].isVisited = true;
-  nodesToAnimate.push([gridArray[startNode.row][startNode.col], "searching"]);
+  myQueue.enqueue(startNode);
+  startNode.isVisited = true;
+  nodesToAnimate.push([startNode, "searching"]);
+  //myQueue.enqueue(gridArray[startNode.row][startNode.col]);
+  //gridArray[startNode.row][startNode.col].isVisited = true;
+  //nodesToAnimate.push([gridArray[startNode.row][startNode.col], "searching"]);
   var currNode = new Node();
   // console.log(myQueue.items.length);
   while (!myQueue.empty()) {
@@ -18,32 +21,55 @@ export function BFS(nodesToAnimate, pathFound) {
     // console.log(currNode);
     var r = currNode.row;
     var c = currNode.col;
-    nodesToAnimate.push([gridArray[r][c], "visited"]);
-    if (r == endNode.row && c == endNode.col) {
+    nodesToAnimate.push([currNode, "visited"]);
+    //nodesToAnimate.push([gridArray[r][c], "visited"]);
+    if (currNode.status === endNode.status) {
       pathFound = true;
       break;
     }
+    currNode.isVisited = true;
+    // if (r == endNode.row && c == endNode.col) {
+    //   pathFound = true;
+    //   break;
+    // }
     var neighbours = getNeighbours(r, c);
     for (var k = 0; k < neighbours.length; k++) {
       var m = neighbours[k][0];
       var n = neighbours[k][1];
-      if (gridArray[m][n].isVisited || gridArray[m][n].status == "wall") {
+      let node = new Node();
+      node = gridArray[m][n];
+      if (node.isVisited || node.status === "wall") {
         continue;
       }
-      gridArray[m][n].isVisited = true;
-      gridArray[m][n].parent = currNode;
-      nodesToAnimate.push([gridArray[m][n], "searching"]);
-      myQueue.enqueue(gridArray[m][n]);
+      // if (gridArray[m][n].isVisited || gridArray[m][n].status == "wall") {
+      //   continue;
+      // }
+      //node.isVisited = true;
+      node.parent = currNode;
+      // gridArray[m][n].isVisited = true;
+      // gridArray[m][n].parent = currNode;
+      nodesToAnimate.push([node, "searching"]);
+      //nodesToAnimate.push([gridArray[m][n], "searching"]);
+      //myQueue.enqueue(gridArray[m][n]);
+      myQueue.enqueue(node);
     }
   }
 
   if (pathFound) {
-    endNode.isVisited = true;
-    nodesToAnimate.push([gridArray[endNode.row][endNode.col], "shortest"]);
-    while (currNode.parent != null) {
-      var prevNode = currNode.parent;
-      nodesToAnimate.push([gridArray[prevNode.row][prevNode.col], "shortest"]);
-      currNode = prevNode;
+    // endNode.isVisited = true;
+    // nodesToAnimate.push([endNode, "shortest"]);
+    // //nodesToAnimate.push([gridArray[endNode.row][endNode.col], "shortest"]);
+    // while (currNode.parent != null) {
+    //   let prevNode = new Node();
+    //   prevNode = currNode.parent;
+    //   nodesToAnimate.push([currNode.parent, "shortest"]);
+    // }
+    nodesToAnimate.push([endNode, "shortest"]);
+    let currNode = new Node();
+    currNode = endNode.parent;
+    while (currNode !== null) {
+      nodesToAnimate.push([currNode, "shortest"]);
+      currNode = currNode.parent;
     }
   }
   return pathFound;

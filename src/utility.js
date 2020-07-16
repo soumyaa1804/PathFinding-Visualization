@@ -220,8 +220,8 @@ function toggleScreen(inProgress) {
     const tds = document.querySelectorAll("td");
     tds.forEach((td) => (td.style.pointerEvents = "all"));
     // //Clear the board
-    // document
-    //   .getElementById("tableContainer")
-    //   .addEventListener("mousedown", clearPath);
+    document
+      .getElementById("tableContainer")
+      .addEventListener("mousedown", clearPath);
   }
 }

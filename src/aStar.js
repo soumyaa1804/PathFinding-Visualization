@@ -70,16 +70,17 @@ const aStar = (nodesToAnimate, pathFound) => {
     let currArr = openList.getMin();
     currNode = currArr[1];
     console.log("72", currNode);
-    if (currNode.isVisited) {
-      continue;
-    }
 
     //nodesToAnimate.push([currNode, "searching"]);
     //Check if the endNode
-    if (currNode === endNode) {
+    if (currNode.status == endNode.status) {
       pathFound = true;
       backtrack(endNode, nodesToAnimate);
       break;
+    }
+    if (currNode.isVisited) {
+      console.log(74, currNode.isVisited);
+      continue;
     }
     currNode.isVisited = true;
     nodesToAnimate.push([currNode, "visited"]);
@@ -92,8 +93,20 @@ const aStar = (nodesToAnimate, pathFound) => {
       openList.push([neighbour.f, neighbour]);
     }
   }
+  while (!openList.isEmpty()) {
+    let cell = new Node();
+    let arr = openList.getMin();
+    cell = arr[1];
+    if (cell.isVisited) {
+      continue;
+    }
+    cell.isVisited = true;
+    nodesToAnimate.push([cell, "visited"]);
+  }
   //alert("No Path Exists");
+  console.log(endNode);
   console.log("inside a*", pathFound);
+  openList.clear();
   return pathFound;
 };
 export { aStar };
