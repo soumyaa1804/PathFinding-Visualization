@@ -102,7 +102,7 @@ function updateNeighbours(neighbours, currNode, algo) {
   }
 }
 function backtrack(endNode, nodesToAnimate) {
-  // nodesToAnimate.push([endNode, "shortest"]);
+  nodesToAnimate.push([endNode, "shortest"]);
   var currNode = new _script.Node();
   currNode = endNode.parent;
   while (currNode !== null) {

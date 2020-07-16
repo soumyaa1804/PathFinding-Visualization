@@ -219,7 +219,7 @@ async function animateCells(inProgress, nodesToAnimate, startbtnText) {
       return setTimeout(resolve, 5);
     });
     if (cell.className == "start" || cell.className == "end") {
-      if (cell.className == "end") {
+      if (cell.className == "end" && colorClass === "shortest") {
         (0, _timer.start)(startbtnText);
         console.log("End reached!");
       }
@@ -258,8 +258,6 @@ function toggleScreen(inProgress) {
       return td.style.pointerEvents = "all";
     });
     // //Clear the board
-    // document
-    //   .getElementById("tableContainer")
-    //   .addEventListener("mousedown", clearPath);
+    document.getElementById("tableContainer").addEventListener("mousedown", _script.clearPath);
   }
 }

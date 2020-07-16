@@ -42,7 +42,7 @@ function getDistance(nodeA, nodeB) {
   //return dx + dy;
 }
 function backtrack(endNode, nodesToAnimate) {
-  // nodesToAnimate.push([endNode, "shortest"]);
+  nodesToAnimate.push([endNode, "shortest"]);
   var currNode = new _script.Node();
   currNode = endNode.parent;
   while (currNode !== null) {
@@ -55,6 +55,9 @@ var aStar = function aStar(nodesToAnimate, pathFound) {
   var specialNodes = (0, _utility.getSpecialNodes)();
   var startNode = specialNodes[0];
   var endNode = specialNodes[1];
+
+  //nodesToAnimate = [];
+
   //Make a min heap to keep track of nodes with lowest f
   //UnvisitedNodes array
   var openList = new _utility.minHeap();
@@ -65,8 +68,8 @@ var aStar = function aStar(nodesToAnimate, pathFound) {
   //Considering directions as only four
   startNode.f = startNode.g + startNode.h;
   //Push start node in the open List
-  startNode.isVisited = true;
-  nodesToAnimate.push([startNode, "searching"]);
+  //startNode.isVisited = true;
+  //nodesToAnimate.push([startNode, "searching"]);
   openList.push([startNode.f, startNode]);
   //nodesToAnimate.push([startNode, "searching"]);
   while (!openList.isEmpty()) {
@@ -75,24 +78,44 @@ var aStar = function aStar(nodesToAnimate, pathFound) {
     var currNode = new _script.Node();
     var currArr = openList.getMin();
     currNode = currArr[1];
+    console.log("72", currNode);
+
     //nodesToAnimate.push([currNode, "searching"]);
     //Check if the endNode
-    if (currNode === endNode) {
+    if (currNode.status == endNode.status) {
       pathFound = true;
       backtrack(endNode, nodesToAnimate);
       break;
+    }
+    if (currNode.isVisited) {
+      console.log(74, currNode.isVisited);
+      continue;
     }
     currNode.isVisited = true;
     nodesToAnimate.push([currNode, "visited"]);
     var neighbours = (0, _utility.getNeighbours)(currNode);
     updateNeighbours(neighbours, currNode, "aStar", endNode);
+    console.log("astar neigh", neighbours);
     for (var i = 0; i < neighbours.length; i++) {
       var neighbour = neighbours[i];
       nodesToAnimate.push([neighbour, "searching"]);
       openList.push([neighbour.f, neighbour]);
     }
   }
+  while (!openList.isEmpty()) {
+    var cell = new _script.Node();
+    var arr = openList.getMin();
+    cell = arr[1];
+    if (cell.isVisited) {
+      continue;
+    }
+    cell.isVisited = true;
+    nodesToAnimate.push([cell, "visited"]);
+  }
   //alert("No Path Exists");
+  console.log(endNode);
+  console.log("inside a*", pathFound);
+  openList.clear();
   return pathFound;
 };
 exports.aStar = aStar;
