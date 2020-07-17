@@ -230,7 +230,9 @@ function moveSpecialNode(currNode) {
     if (
       currNode.status !== "start" &&
       currNode.status !== "end" &&
-      currNode.status !== "wall"
+      currNode.status !== "wall" &&
+      (prevNode.status == "start" || 
+      prevNode.status == "end")
     ) {
       currElement.className = prevNode.status;
       currNode.status = prevNode.status;

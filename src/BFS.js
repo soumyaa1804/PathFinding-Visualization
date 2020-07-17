@@ -24,6 +24,7 @@ export function BFS(nodesToAnimate, pathFound) {
     nodesToAnimate.push([currNode, "visited"]);
     //nodesToAnimate.push([gridArray[r][c], "visited"]);
     if (currNode.status === endNode.status) {
+      // alert("Endfound");
       pathFound = true;
       break;
     }
@@ -38,13 +39,14 @@ export function BFS(nodesToAnimate, pathFound) {
       var n = neighbours[k][1];
       let node = new Node();
       node = gridArray[m][n];
-      if (node.isVisited || node.status === "wall") {
+      if (node.isVisited || node.status == "wall") {
+        // console.log(node);
         continue;
       }
       // if (gridArray[m][n].isVisited || gridArray[m][n].status == "wall") {
       //   continue;
       // }
-      //node.isVisited = true;
+      node.isVisited = true;
       node.parent = currNode;
       // gridArray[m][n].isVisited = true;
       // gridArray[m][n].parent = currNode;
@@ -65,11 +67,12 @@ export function BFS(nodesToAnimate, pathFound) {
     //   nodesToAnimate.push([currNode.parent, "shortest"]);
     // }
     nodesToAnimate.push([endNode, "shortest"]);
-    let currNode = new Node();
-    currNode = endNode.parent;
-    while (currNode !== null) {
-      nodesToAnimate.push([currNode, "shortest"]);
-      currNode = currNode.parent;
+    let prevNode = new Node();
+    console.log("current node should be endnode", currNode);
+    prevNode = endNode.parent;
+    while (prevNode !== null) {
+      nodesToAnimate.push([prevNode, "shortest"]);
+      prevNode = prevNode.parent;
     }
   }
   return pathFound;
