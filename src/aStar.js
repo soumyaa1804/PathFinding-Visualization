@@ -1,5 +1,5 @@
 import { getSpecialNodes, minHeap, getNeighbours } from "/src/utility.js";
-import { Node } from "./script.js";
+import { Node, gridArray } from "./script.js";
 //Invoked when start visualizing is 'CLICKED'
 //Get the start and end node
 function updateNeighbours(neighbours, currNode, algo, endNode) {
@@ -84,11 +84,20 @@ const aStar = (nodesToAnimate, pathFound) => {
     }
     currNode.isVisited = true;
     nodesToAnimate.push([currNode, "visited"]);
-    var neighbours = getNeighbours(currNode);
+
+    var neighboursIndex = getNeighbours(currNode.row, currNode.col);
+    let neighbours = [];
+    neighboursIndex.forEach((indices) => {
+      let m = indices[0];
+      let n = indices[1];
+      let neighbour = new Node();
+      neighbour = gridArray[m][n];
+      neighbours.push(neighbour);
+    });
     updateNeighbours(neighbours, currNode, "aStar", endNode);
     console.log("astar neigh", neighbours);
     for (let i = 0; i < neighbours.length; i++) {
-      var neighbour = neighbours[i];
+      let neighbour = neighbours[i];
       nodesToAnimate.push([neighbour, "searching"]);
       openList.push([neighbour.f, neighbour]);
     }

@@ -119,56 +119,51 @@ export const getSpecialNodes = () => {
   return valid_buttons;
 };
 /*------------getNeighbours------------*/
-export function getNeighbours(currNode) {
-  let r = currNode.row;
-  let c = currNode.col;
-  let relevantStatuses = ["start", "wall"];
-  let actual_neighbours = [];
-  let neighbours = [];
-  if (r - 1 >= 0) {
-    neighbours.push(gridArray[r - 1][c]);
-    if (c - 1 >= 0) {
-      if (
-        gridArray[r - 1][c].status !== "wall" &&
-        gridArray[r][c - 1].status !== "wall"
-      )
-        neighbours.push(gridArray[r - 1][c - 1]);
-    }
-    if (c + 1 <= totalCols - 1) {
-      if (
-        gridArray[r - 1][c].status !== "wall" &&
-        gridArray[r][c + 1].status !== "wall"
-      )
-        neighbours.push(gridArray[r - 1][c + 1]);
+export function getNeighbours(i, j) {
+  var neighbors = [];
+  // direction vectors
+  // 0-3: East, South, West, North
+  // 4-7: South-East, North-East, South-West, North-West
+  const dx = [1, 0, -1, 0, 1, 1, -1, -1];
+  const dy = [0, 1, 0, -1, 1, -1, 1, -1];
+
+  for (let d = 0; d < dx.length; d++) {
+    let rr = i + dx[d];
+    let cc = j + dy[d];
+    if (rr >= 0 && rr < totalRows && cc >= 0 && cc < totalCols) {
+      if (gridArray[rr][cc].isVisited || gridArray[rr][cc].status === "wall") {
+        continue;
+      } // if d < 4, push elements else if d >= 4, check for diagonal walls
+      else if (d < 4) {
+        neighbors.push([rr, cc]);
+      } else if (
+        d === 4 &&
+        gridArray[i][j + 1].status !== "wall" &&
+        gridArray[i + 1][j].status !== "wall"
+      ) {
+        neighbors.push([rr, cc]);
+      } else if (
+        d === 5 &&
+        gridArray[i][j - 1].status !== "wall" &&
+        gridArray[i + 1][j].status !== "wall"
+      ) {
+        neighbors.push([rr, cc]);
+      } else if (
+        d === 6 &&
+        gridArray[i - 1][j].status !== "wall" &&
+        gridArray[i][j + 1].status !== "wall"
+      ) {
+        neighbors.push([rr, cc]);
+      } else if (
+        d === 7 &&
+        gridArray[i - 1][j].status !== "wall" &&
+        gridArray[i][j - 1].status !== "wall"
+      ) {
+        neighbors.push([rr, cc]);
+      }
     }
   }
-  if (r + 1 <= totalRows - 1) {
-    neighbours.push(gridArray[r + 1][c]);
-    if (c - 1 >= 0) {
-      if (
-        gridArray[r + 1][c - 1].status !== "wall" &&
-        gridArray[r + 1][c].status !== "wall"
-      ) {
-        neighbours.push(gridArray[r + 1][c - 1]);
-      }
-      neighbours.push(gridArray[r][c - 1]);
-    }
-    if (c + 1 <= totalCols - 1) {
-      if (
-        gridArray[r][c + 1].status !== "wall" &&
-        gridArray[r + 1][c].status !== "wall"
-      ) {
-        neighbours.push(gridArray[r + 1][c + 1]);
-      }
-      neighbours.push(gridArray[r][c + 1]);
-    }
-  }
-  neighbours.forEach((neighbour) => {
-    if (!relevantStatuses.includes(neighbour.status) && !neighbour.isVisited) {
-      actual_neighbours.push(neighbour);
-    }
-  });
-  return actual_neighbours;
+  return neighbors;
 }
 /*---------Animation-------*/
 export async function animateCells(inProgress, nodesToAnimate, startbtnText) {

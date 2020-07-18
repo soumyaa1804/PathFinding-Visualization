@@ -19,7 +19,15 @@ function dijkstra(nodesToAnimate, pathFound) {
   while (unvisitedNodes.length) {
     //Get the neighbours
     //nodesToAnimate.push([currNode, "visited"]);
-    let neighbours = getNeighbours(currNode);
+    var neighboursIndex = getNeighbours(currNode.row, currNode.col);
+    let neighbours = [];
+    neighboursIndex.forEach((indices) => {
+      let m = indices[0];
+      let n = indices[1];
+      let neighbour = new Node();
+      neighbour = gridArray[m][n];
+      neighbours.push(neighbour);
+    });
     updateNeighbours(neighbours, currNode, "dijkstra");
     unvisitedNodes.sort((a, b) => {
       return a.distance - b.distance;
