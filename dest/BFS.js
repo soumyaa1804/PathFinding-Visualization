@@ -42,6 +42,8 @@ function BFS(nodesToAnimate, pathFound) {
       var n = neighbours[k][1];
       var node = new _script.Node();
       node = _script.gridArray[m][n];
+      _script.gridArray[m][n].isVisited = true;
+      _script.gridArray[m][n].parent = currNode;
       nodesToAnimate.push([node, "searching"]);
       myQueue.enqueue(node);
     }
@@ -64,6 +66,8 @@ function BFS(nodesToAnimate, pathFound) {
 
 function getNeighbours(i, j) {
   var neighbors = []; // direction vectors
+  // 0-3: East, South, West, North
+  // 4-7: South-East, North-East, South-West, North-West
 
   var dx = [1, 0, -1, 0, 1, 1, -1, -1];
   var dy = [0, 1, 0, -1, 1, -1, 1, -1];
@@ -73,13 +77,20 @@ function getNeighbours(i, j) {
     var cc = j + dy[d];
 
     if (rr >= 0 && rr < _script.totalRows && cc >= 0 && cc < _script.totalCols) {
-      if (_script.gridArray[rr][cc].isVisited || _script.gridArray[rr][cc].status == "wall") {
+      if (_script.gridArray[rr][cc].isVisited || _script.gridArray[rr][cc].status === "wall") {
         continue;
-      } else {
-        _script.gridArray[rr][cc].isVisited = true;
-        _script.gridArray[rr][cc].parent = _script.gridArray[i][j];
-        neighbors.push([rr, cc]);
-      }
+      } // if d < 4, push elements else if d >= 4, check for diagonal walls  
+      else if (d < 4) {
+          neighbors.push([rr, cc]);
+        } else if (d === 4 && _script.gridArray[i][j + 1].status !== "wall" && _script.gridArray[i + 1][j].status !== "wall") {
+          neighbors.push([rr, cc]);
+        } else if (d === 5 && _script.gridArray[i][j - 1].status !== "wall" && _script.gridArray[i + 1][j].status !== "wall") {
+          neighbors.push([rr, cc]);
+        } else if (d === 6 && _script.gridArray[i - 1][j].status !== "wall" && _script.gridArray[i][j + 1].status !== "wall") {
+          neighbors.push([rr, cc]);
+        } else if (d === 7 && _script.gridArray[i - 1][j].status !== "wall" && _script.gridArray[i][j - 1].status !== "wall") {
+          neighbors.push([rr, cc]);
+        }
     }
   }
 
