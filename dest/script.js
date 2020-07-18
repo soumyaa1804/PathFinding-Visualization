@@ -44,8 +44,7 @@ var pressedNodeStatus = "normal";
 var pathFound = false;
 var inProgress = false; //To add the weights
 
-var keyDown = false;
-var startExecution = false; //Instantiate the grid
+var keyDown = false; //Instantiate the grid
 
 var Node = function Node(row, col, nodeClass, nodeId) {
   _classCallCheck(this, Node);
@@ -253,9 +252,11 @@ function updateStatus(currNode) {
     }
   } else {
     if (!relevantStatuses.includes(currNode.status) && keyDown === "KeyW") {
-      element.className = currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
-      currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
-      currNode.status = "unvisited";
+      if (startBtn.innerText !== "Start Breadth First Search") {
+        element.className = currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
+        currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
+        currNode.status = "unvisited";
+      }
     }
   }
 } //Pressed down on the start node....update the next node that is traversed
@@ -340,7 +341,7 @@ function clearPath() {
 
       var element = document.getElementById(node.id);
 
-      if (node.status !== "start" && node.status !== "end" && node.status !== "wall") {
+      if (node.status !== "start" && node.status !== "end" && node.status !== "wall" && element.className !== "unvisited-weight") {
         element.className = "unvisited";
         node.status = "unvisited";
         node.isClass = "unvisited";
@@ -387,8 +388,9 @@ function updateStartBtn(id) {
   var name = algorithms.get(id); //console.log(name);
 
   var updated_string = "Start " + name;
-  startBtn.innerHTML = updated_string; //clearPath();
-}
+  startBtn.innerHTML = updated_string;
+} //clearPath();
+
 /* ---------------------- */
 
 /*-- Draggable Feature -- */
@@ -442,12 +444,21 @@ function dragElement(elmnt) {
     document.onmousemove = null;
   }
 }
+
+var removeWeights = function removeWeights() {
+  for (var i = 0; i < totalRows; i++) {
+    for (var j = 0; j < totalCols; j++) {
+      //Get element
+      var element = document.getElementById(gridArray[i][j].id);
+      element.className = element.className !== "unvisited-weight" ? element.className : "unvisited";
+    }
+  }
+};
 /* ------ Draggable Feature ends
 /* ------------------------ */
 
 
 var startAlgo = function startAlgo() {
-  startExecution = true;
   var startBtnText = startBtn.innerText;
 
   switch (startBtnText) {
@@ -493,6 +504,7 @@ var startAlgo = function startAlgo() {
     case "Start Breadth First Search":
       {
         clearPath();
+        removeWeights();
         nodesToAnimate = [];
         pathFound = false;
         inProgress = false;
@@ -511,8 +523,6 @@ var startAlgo = function startAlgo() {
         break;
       }
   }
-
-  startExecution = false;
 };
 
 startBtn.addEventListener("click", startAlgo);

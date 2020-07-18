@@ -76,10 +76,10 @@ var aStar = function aStar(nodesToAnimate, pathFound) {
 
   openList.push([startNode.f, startNode]); //nodesToAnimate.push([startNode, "searching"]);
 
-  while (!openList.isEmpty()) {
+  var _loop2 = function _loop2() {
     //The node having the lowest f value
     //console.log("loop", openList);
-    var currNode = new _script.Node();
+    currNode = new _script.Node();
     var currArr = openList.getMin();
     currNode = currArr[1];
     console.log("72", currNode); //nodesToAnimate.push([currNode, "searching"]);
@@ -88,17 +88,25 @@ var aStar = function aStar(nodesToAnimate, pathFound) {
     if (currNode.status == endNode.status) {
       pathFound = true;
       backtrack(endNode, nodesToAnimate);
-      break;
+      return "break";
     }
 
     if (currNode.isVisited) {
       console.log(74, currNode.isVisited);
-      continue;
+      return "continue";
     }
 
     currNode.isVisited = true;
     nodesToAnimate.push([currNode, "visited"]);
-    var neighbours = (0, _utility.getNeighbours)(currNode);
+    neighboursIndex = (0, _utility.getNeighbours)(currNode.row, currNode.col);
+    var neighbours = [];
+    neighboursIndex.forEach(function (indices) {
+      var m = indices[0];
+      var n = indices[1];
+      var neighbour = new _script.Node();
+      neighbour = _script.gridArray[m][n];
+      neighbours.push(neighbour);
+    });
     updateNeighbours(neighbours, currNode, "aStar", endNode);
     console.log("astar neigh", neighbours);
 
@@ -106,6 +114,21 @@ var aStar = function aStar(nodesToAnimate, pathFound) {
       var neighbour = neighbours[i];
       nodesToAnimate.push([neighbour, "searching"]);
       openList.push([neighbour.f, neighbour]);
+    }
+  };
+
+  _loop: while (!openList.isEmpty()) {
+    var currNode;
+    var neighboursIndex;
+
+    var _ret = _loop2();
+
+    switch (_ret) {
+      case "break":
+        break _loop;
+
+      case "continue":
+        continue;
     }
   }
 

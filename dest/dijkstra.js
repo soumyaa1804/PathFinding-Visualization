@@ -24,10 +24,18 @@ function dijkstra(nodesToAnimate, pathFound) {
 
   var unvisitedNodes = getUnvisitedNodes();
 
-  while (unvisitedNodes.length) {
+  var _loop = function _loop() {
     //Get the neighbours
     //nodesToAnimate.push([currNode, "visited"]);
-    var neighbours = (0, _utility.getNeighbours)(currNode);
+    neighboursIndex = (0, _utility.getNeighbours)(currNode.row, currNode.col);
+    var neighbours = [];
+    neighboursIndex.forEach(function (indices) {
+      var m = indices[0];
+      var n = indices[1];
+      var neighbour = new _script.Node();
+      neighbour = _script.gridArray[m][n];
+      neighbours.push(neighbour);
+    });
     updateNeighbours(neighbours, currNode, "dijkstra");
     unvisitedNodes.sort(function (a, b) {
       return a.distance - b.distance;
@@ -36,7 +44,7 @@ function dijkstra(nodesToAnimate, pathFound) {
 
     if (closestNode.distance === Infinity) {
       pathFound = false;
-      break;
+      return "break";
     }
 
     nodesToAnimate.push([closestNode, "searching"]); //Update the status of the closest node as visited
@@ -44,13 +52,21 @@ function dijkstra(nodesToAnimate, pathFound) {
     if (closestNode.status === "end") {
       pathFound = true;
       backtrack(endNode, nodesToAnimate);
-      break;
+      return "break";
     }
 
     nodesToAnimate.push([closestNode, "visited"]);
     closestNode.status = "visited";
     unvisitedNodes = getUnvisitedNodes();
     currNode = closestNode;
+  };
+
+  while (unvisitedNodes.length) {
+    var neighboursIndex;
+
+    var _ret = _loop();
+
+    if (_ret === "break") break;
   }
 
   return pathFound;
