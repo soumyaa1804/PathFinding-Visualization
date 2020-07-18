@@ -210,10 +210,12 @@ function updateStatus(currNode) {
     }
   } else {
     if (!relevantStatuses.includes(currNode.status) && keyDown === "KeyW") {
-      element.className =
-        currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
-      currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
-      currNode.status = "unvisited";
+      if (startBtn.innerText !== "Start Breadth First Search") {
+        element.className =
+          currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
+        currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
+        currNode.status = "unvisited";
+      }
     }
   }
 }
@@ -352,8 +354,8 @@ function updateStartBtn(id) {
   //console.log(name);
   let updated_string = "Start " + name;
   startBtn.innerHTML = updated_string;
-  //clearPath();
 }
+//clearPath();
 
 /* ---------------------- */
 /*-- Draggable Feature -- */
@@ -404,6 +406,18 @@ function dragElement(elmnt) {
     document.onmousemove = null;
   }
 }
+const removeWeights = () => {
+  for (let i = 0; i < totalRows; i++) {
+    for (let j = 0; j < totalCols; j++) {
+      //Get element
+      let element = document.getElementById(gridArray[i][j].id);
+      element.className =
+        element.className !== "unvisited-weight"
+          ? element.className
+          : "unvisited";
+    }
+  }
+};
 
 /* ------ Draggable Feature ends
 /* ------------------------ */
@@ -442,6 +456,7 @@ const startAlgo = () => {
     }
     case "Start Breadth First Search": {
       clearPath();
+      removeWeights();
       nodesToAnimate = [];
       pathFound = false;
       inProgress = false;
