@@ -299,7 +299,8 @@ export function clearPath() {
       if (
         node.status !== "start" &&
         node.status !== "end" &&
-        node.status !== "wall"
+        node.status !== "wall" &&
+        element.className !== "unvisited-weight"
       ) {
         element.className = "unvisited";
         node.status = "unvisited";
