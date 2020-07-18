@@ -12,7 +12,7 @@ const btnTextTimerId = {
   "Start Breadth First Search": "BFSTimer"
 };
 
-function timer(startBtnText) {
+function timer() {
   const now = new Date();
 
   const milisecond = now - startTime;

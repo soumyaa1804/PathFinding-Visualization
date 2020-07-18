@@ -5,11 +5,11 @@ import { animateCells } from "./utility.js";
 import { resetTimer } from "./timer.js";
 
 //GLOBAL VARIABLES
-var height = window.innerHeight * 0.8;
-var width = window.innerWidth * 0.9;
-var cellSize = 25;
-export var totalRows = Math.floor(height / cellSize) - 1;
-export var totalCols = Math.floor(width / cellSize) - 1;
+const height = window.innerHeight * 0.8;
+const width = window.innerWidth * 0.9;
+const cellSize = 25;
+export const totalRows = Math.floor(height / cellSize) - 1;
+export const totalCols = Math.floor(width / cellSize) - 1;
 let mousePressed = false;
 export let gridArray = [];
 let startRow = Math.floor(totalRows / 4);
@@ -17,7 +17,7 @@ let startCol = Math.floor(totalCols / 4);
 let endRow = Math.floor((3 * totalRows) / 4);
 let endCol = Math.floor((3 * totalCols) / 4);
 let prevNode = null;
-export let nodesToAnimate = [];
+let nodesToAnimate = [];
 let pressedNodeStatus = "normal";
 let pathFound = false;
 let inProgress = false;
@@ -44,8 +44,9 @@ export class Node {
   }
 }
 //Generate the grid
-let startNode = new Node();
-let endNode = new Node();
+// let startNode = new Node();
+// let endNode = new Node();
+
 class Grid {
   constructor() {
     this.grid = [];
@@ -68,11 +69,11 @@ class Grid {
         //Instantiate a new Node object
         let node = new Node(row, col, new_nodeClass, new_nodeId);
 
-        if (node.isClass === "start" && node.status === "start") {
-          startNode = node;
-        } else if (node.isClass === "end" && node.status === "end") {
-          endNode = node;
-        }
+        // if (node.isClass === "start" && node.status === "start") {
+        //   startNode = node;
+        // } else if (node.isClass === "end" && node.status === "end") {
+        //   endNode = node;
+        // }
 
         mygrid += `<td class = ${new_nodeClass} id = ${new_nodeId}></td>`;
         currRow.push(node);
@@ -249,19 +250,18 @@ function moveSpecialNode(currNode) {
 /* Parameters will be startNode,endNode,gridArray and the grid*/
 
 //CEAR GRID
-let node = new Node();
-//console.log(node);
 let clearBtn = document.getElementById("clearBtn");
 
 export function clearGrid() {
+  let node = new Node();
   nodesToAnimate = [];
   resetTimer();
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
+      let element = document.getElementById(node.id);
       //console.log(node);
-      if (node.isClass !== "start" && node.isClass !== "end") {
-        let element = document.getElementById(node.id);
+      if (node.status !== "start" && node.status !== "end") {
         element.className = "unvisited";
         node.status = "unvisited";
         node.isClass = "unvisited";
@@ -272,6 +272,15 @@ export function clearGrid() {
         node.f = Infinity;
         node.g = Infinity;
         node.h = Infinity;
+      } else {
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
+        console.log(node, gridArray[r][c]);
       }
     }
   }
@@ -281,49 +290,37 @@ clearBtn.addEventListener("click", clearGrid);
 let clearPathBtn = document.getElementById("clearPathBtn");
 
 export function clearPath() {
-  resetTimer();
-  //undefined node
   let node = new Node();
+  resetTimer();
+  nodesToAnimate = [];
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
-      nodesToAnimate = [];
       //console.log(node);
-      let element = document.getElementById(gridArray[r][c].id);
+      let element = document.getElementById(node.id);
       if (
-        element.className === "shortest" ||
-        element.className === "visited" ||
-        element.className === "searching"
+        node.status !== "start" && node.status !== "end" && node.status !== "wall"
       ) {
         element.className = "unvisited";
-        gridArray[r][c].status = "unvisited";
-        gridArray[r][c].isClass = "unvisited";
-        gridArray[r][c].distance = Infinity;
-        gridArray[r][c].parent = null;
-        gridArray[r][c].weight = 1;
-        gridArray[r][c].isVisited = false;
-        gridArray[r][c].f = Infinity;
-        gridArray[r][c].g = Infinity;
-        gridArray[r][c].h = Infinity;
-        // gridArray[r][c] = new Node(
-        //   r,
-        //   c,
-        //   gridArray[r][c].status,
-        //   gridArray[r][c].id
-        // );
-      } else if (element.className === "start") {
-        element.className = "start";
-        gridArray[r][c].status = "start";
-        gridArray[r][c].isClass = "start";
-        gridArray[r][c].distance = Infinity;
-        gridArray[r][c].parent = null;
-        gridArray[r][c].weight = 1;
-        gridArray[r][c].isVisited = false;
-        gridArray[r][c].f = Infinity;
-        gridArray[r][c].g = Infinity;
-        gridArray[r][c].h = Infinity;
-      } else if (element.className === "wall") {
-        gridArray[r][c].status = "wall";
+        node.status = "unvisited";
+        node.isClass = "unvisited";
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
+      } else if (node.status === "start" || node.status == "end") {
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
+      } else if (node.status === "wall") {
+        continue;
       }
     }
   }
