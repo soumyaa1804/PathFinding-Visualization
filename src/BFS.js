@@ -2,20 +2,16 @@ import { getSpecialNodes, Queue } from "./utility.js";
 import { Node, gridArray, totalCols, totalRows } from "./script.js";
 
 export function BFS(nodesToAnimate, pathFound) {
-  //let pathFound = false;
   let myQueue = new Queue();
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
   let endNode = specialNodes[1];
-  // console.log(startNode, endNode);
+  console.log(startNode, endNode);
   myQueue.enqueue(startNode);
-  startNode.isVisited = true;
+  //startNode.isVisited = true;
   nodesToAnimate.push([startNode, "searching"]);
-  //myQueue.enqueue(gridArray[startNode.row][startNode.col]);
-  //gridArray[startNode.row][startNode.col].isVisited = true;
-  //nodesToAnimate.push([gridArray[startNode.row][startNode.col], "searching"]);
   var currNode = new Node();
-  // console.log(myQueue.items.length);
+  //console.log(myQueue.items.length);
   while (!myQueue.empty()) {
     currNode = myQueue.dequeue();
     // console.log(currNode);
@@ -39,14 +35,14 @@ export function BFS(nodesToAnimate, pathFound) {
       var n = neighbours[k][1];
       let node = new Node();
       node = gridArray[m][n];
-      if (node.isVisited || node.status == "wall") {
+      if (node.isVisited || node.status === "wall") {
         // console.log(node);
         continue;
       }
       // if (gridArray[m][n].isVisited || gridArray[m][n].status == "wall") {
       //   continue;
       // }
-      node.isVisited = true;
+      //node.isVisited = true;
       node.parent = currNode;
       // gridArray[m][n].isVisited = true;
       // gridArray[m][n].parent = currNode;
@@ -66,6 +62,7 @@ export function BFS(nodesToAnimate, pathFound) {
     //   prevNode = currNode.parent;
     //   nodesToAnimate.push([currNode.parent, "shortest"]);
     // }
+    endNode.isVisited = true;
     nodesToAnimate.push([endNode, "shortest"]);
     let prevNode = new Node();
     console.log("current node should be endnode", currNode);

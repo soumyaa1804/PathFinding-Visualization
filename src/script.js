@@ -23,7 +23,6 @@ let pathFound = false;
 let inProgress = false;
 //To add the weights
 let keyDown = false;
-let startExecution = false;
 //Instantiate the grid
 export class Node {
   constructor(row, col, nodeClass, nodeId) {
@@ -231,8 +230,7 @@ function moveSpecialNode(currNode) {
       currNode.status !== "start" &&
       currNode.status !== "end" &&
       currNode.status !== "wall" &&
-      (prevNode.status == "start" || 
-      prevNode.status == "end")
+      (prevNode.status == "start" || prevNode.status == "end")
     ) {
       currElement.className = prevNode.status;
       currNode.status = prevNode.status;
@@ -288,22 +286,22 @@ export function clearPath() {
     for (let c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
       //console.log(node);
-      let element = document.getElementById(gridArray[r][c].id);
+      let element = document.getElementById(node.id);
       if (
         element.className === "shortest" ||
         element.className === "visited" ||
         element.className === "searching"
       ) {
         element.className = "unvisited";
-        gridArray[r][c].status = "unvisited";
-        gridArray[r][c].isClass = "unvisited";
-        gridArray[r][c].distance = Infinity;
-        gridArray[r][c].parent = null;
-        gridArray[r][c].weight = 1;
-        gridArray[r][c].isVisited = false;
-        gridArray[r][c].f = Infinity;
-        gridArray[r][c].g = Infinity;
-        gridArray[r][c].h = Infinity;
+        node.status = "unvisited";
+        node.isClass = "unvisited";
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
         // gridArray[r][c] = new Node(
         //   r,
         //   c,
@@ -312,15 +310,15 @@ export function clearPath() {
         // );
       } else if (element.className === "start") {
         element.className = "start";
-        gridArray[r][c].status = "start";
-        gridArray[r][c].isClass = "start";
-        gridArray[r][c].distance = Infinity;
-        gridArray[r][c].parent = null;
-        gridArray[r][c].weight = 1;
-        gridArray[r][c].isVisited = false;
-        gridArray[r][c].f = Infinity;
-        gridArray[r][c].g = Infinity;
-        gridArray[r][c].h = Infinity;
+        node.status = "start";
+        node.isClass = "start";
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
       } else if (element.className === "wall") {
         gridArray[r][c].status = "wall";
       }
@@ -410,7 +408,6 @@ function dragElement(elmnt) {
 /* ------------------------ */
 
 const startAlgo = () => {
-  startExecution = true;
   let startBtnText = startBtn.innerText;
   switch (startBtnText) {
     case "Select an Algorithm": {
@@ -458,6 +455,5 @@ const startAlgo = () => {
       break;
     }
   }
-  startExecution = false;
 };
 startBtn.addEventListener("click", startAlgo);
