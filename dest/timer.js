@@ -18,7 +18,7 @@ var btnTextTimerId = {
   "Start Breadth First Search": "BFSTimer"
 };
 
-function timer(startBtnText) {
+function timer() {
   var now = new Date();
   var milisecond = now - startTime;
   minutes = Math.floor(milisecond / (1000 * 60));

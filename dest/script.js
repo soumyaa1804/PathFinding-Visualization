@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clearGrid = clearGrid;
 exports.clearPath = clearPath;
-exports.Node = exports.nodesToAnimate = exports.gridArray = exports.totalCols = exports.totalRows = void 0;
+exports.Node = exports.gridArray = exports.totalCols = exports.totalRows = void 0;
 
 var _dijkstra = require("./dijkstra.js");
 
@@ -40,7 +40,6 @@ var endRow = Math.floor(3 * totalRows / 4);
 var endCol = Math.floor(3 * totalCols / 4);
 var prevNode = null;
 var nodesToAnimate = [];
-exports.nodesToAnimate = nodesToAnimate;
 var pressedNodeStatus = "normal";
 var pathFound = false;
 var inProgress = false; //To add the weights
@@ -66,11 +65,11 @@ var Node = function Node(row, col, nodeClass, nodeId) {
   this.g = Infinity;
   this.h = Infinity;
 }; //Generate the grid
+// let startNode = new Node();
+// let endNode = new Node();
 
 
 exports.Node = Node;
-var startNode = new Node();
-var endNode = new Node();
 
 var Grid = /*#__PURE__*/function () {
   function Grid() {
@@ -101,16 +100,14 @@ var Grid = /*#__PURE__*/function () {
           } //Instantiate a new Node object
 
 
-          var _node = new Node(row, col, new_nodeClass, new_nodeId);
-
-          if (_node.isClass === "start" && _node.status === "start") {
-            startNode = _node;
-          } else if (_node.isClass === "end" && _node.status === "end") {
-            endNode = _node;
-          }
+          var node = new Node(row, col, new_nodeClass, new_nodeId); // if (node.isClass === "start" && node.status === "start") {
+          //   startNode = node;
+          // } else if (node.isClass === "end" && node.status === "end") {
+          //   endNode = node;
+          // }
 
           mygrid += "<td class = ".concat(new_nodeClass, " id = ").concat(new_nodeId, "></td>");
-          currRow.push(_node);
+          currRow.push(node);
         }
 
         mygrid += "</tr>";
@@ -291,20 +288,19 @@ function moveSpecialNode(currNode) {
 //CEAR GRID
 
 
-var node = new Node(); //console.log(node);
-
 var clearBtn = document.getElementById("clearBtn");
 
 function clearGrid() {
-  exports.nodesToAnimate = nodesToAnimate = [];
+  var node = new Node();
+  nodesToAnimate = [];
   (0, _timer.resetTimer)();
 
   for (var r = 0; r < totalRows; r++) {
     for (var c = 0; c < totalCols; c++) {
-      node = gridArray[r][c]; //console.log(node);
+      node = gridArray[r][c];
+      var element = document.getElementById(node.id); //console.log(node);
 
-      if (node.isClass !== "start" && node.isClass !== "end") {
-        var element = document.getElementById(node.id);
+      if (node.status !== "start" && node.status !== "end") {
         element.className = "unvisited";
         node.status = "unvisited";
         node.isClass = "unvisited";
@@ -315,6 +311,15 @@ function clearGrid() {
         node.f = Infinity;
         node.g = Infinity;
         node.h = Infinity;
+      } else {
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
+        console.log(node, gridArray[r][c]);
       }
     }
   }
@@ -325,46 +330,37 @@ clearBtn.addEventListener("click", clearGrid); //CLEAR PATH
 var clearPathBtn = document.getElementById("clearPathBtn");
 
 function clearPath() {
-  (0, _timer.resetTimer)(); //undefined node
-
   var node = new Node();
+  (0, _timer.resetTimer)();
+  nodesToAnimate = [];
 
   for (var r = 0; r < totalRows; r++) {
     for (var c = 0; c < totalCols; c++) {
-      node = gridArray[r][c];
-      exports.nodesToAnimate = nodesToAnimate = []; //console.log(node);
+      node = gridArray[r][c]; //console.log(node);
 
-      var element = document.getElementById(gridArray[r][c].id);
+      var element = document.getElementById(node.id);
 
-      if (element.className === "shortest" || element.className === "visited" || element.className === "searching") {
+      if (node.status !== "start" && node.status !== "end" && node.status !== "wall") {
         element.className = "unvisited";
-        gridArray[r][c].status = "unvisited";
-        gridArray[r][c].isClass = "unvisited";
-        gridArray[r][c].distance = Infinity;
-        gridArray[r][c].parent = null;
-        gridArray[r][c].weight = 1;
-        gridArray[r][c].isVisited = false;
-        gridArray[r][c].f = Infinity;
-        gridArray[r][c].g = Infinity;
-        gridArray[r][c].h = Infinity; // gridArray[r][c] = new Node(
-        //   r,
-        //   c,
-        //   gridArray[r][c].status,
-        //   gridArray[r][c].id
-        // );
-      } else if (element.className === "start") {
-        element.className = "start";
-        gridArray[r][c].status = "start";
-        gridArray[r][c].isClass = "start";
-        gridArray[r][c].distance = Infinity;
-        gridArray[r][c].parent = null;
-        gridArray[r][c].weight = 1;
-        gridArray[r][c].isVisited = false;
-        gridArray[r][c].f = Infinity;
-        gridArray[r][c].g = Infinity;
-        gridArray[r][c].h = Infinity;
-      } else if (element.className === "wall") {
-        gridArray[r][c].status = "wall";
+        node.status = "unvisited";
+        node.isClass = "unvisited";
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
+      } else if (node.status === "start" || node.status == "end") {
+        node.distance = Infinity;
+        node.parent = null;
+        node.weight = 1;
+        node.isVisited = false;
+        node.f = Infinity;
+        node.g = Infinity;
+        node.h = Infinity;
+      } else if (node.status === "wall") {
+        continue;
       }
     }
   }
@@ -464,7 +460,7 @@ var startAlgo = function startAlgo() {
     case "Start A*":
       {
         clearPath();
-        exports.nodesToAnimate = nodesToAnimate = [];
+        nodesToAnimate = [];
         pathFound = false;
         inProgress = false;
 
@@ -481,7 +477,7 @@ var startAlgo = function startAlgo() {
     case "Start Dijkstra":
       {
         clearPath();
-        exports.nodesToAnimate = nodesToAnimate = [];
+        nodesToAnimate = [];
         pathFound = false;
         inProgress = false;
 
@@ -497,7 +493,7 @@ var startAlgo = function startAlgo() {
     case "Start Breadth First Search":
       {
         clearPath();
-        exports.nodesToAnimate = nodesToAnimate = [];
+        nodesToAnimate = [];
         pathFound = false;
         inProgress = false;
 
