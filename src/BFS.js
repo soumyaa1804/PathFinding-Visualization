@@ -6,10 +6,7 @@ export function BFS(nodesToAnimate, pathFound) {
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
   let endNode = specialNodes[1];
-  // console.log(startNode, endNode);
   startNode.isVisited = true;
-  //console.log("start node", startNode);
-  //console.log("Grid node", gridArray[startNode.row][startNode.col]);
   myQueue.enqueue(startNode);
   nodesToAnimate.push([startNode, "searching"]);
   let currNode = new Node();
@@ -29,19 +26,6 @@ export function BFS(nodesToAnimate, pathFound) {
       var n = neighbours[k][1];
       let node = new Node();
       node = gridArray[m][n];
-      // <<<<<<< HEAD
-      //       if (node.isVisited || node.status === "wall") {
-      //         // console.log(node);
-      //         continue;
-      //       }
-      //       // if (gridArray[m][n].isVisited || gridArray[m][n].status == "wall") {
-      //       //   continue;
-      //       // }
-      //       //node.isVisited = true;
-      //       node.parent = currNode;
-      //       // gridArray[m][n].isVisited = true;
-      //       // gridArray[m][n].parent = currNode;
-      // =======
       gridArray[m][n].isVisited = true;
       gridArray[m][n].parent = currNode;
       nodesToAnimate.push([node, "searching"]);
