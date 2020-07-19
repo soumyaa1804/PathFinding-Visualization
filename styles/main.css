@@ -118,13 +118,13 @@ td:hover {
 .start {
   background-color: rgb(218, 32, 110);
   opacity: 0.8;
-  color: white;
+  color: rgb(218, 32, 110);
 }
 
 .end {
   background-color: rgb(214, 202, 96);
   opacity: 0.8;
-  color: black;
+  color: rgb(214, 202, 96);
 }
 
 .wall {
