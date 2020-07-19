@@ -248,6 +248,7 @@ function updateStatus(currNode) {
       if (startBtn.innerText !== "Start Breadth First Search") {
         element.className = currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
         currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
+        currNode.status = "unvisited";
       }
     }
   }

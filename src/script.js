@@ -214,6 +214,7 @@ function updateStatus(currNode) {
         element.className =
           currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
         currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
+        currNode.status = "unvisited";
       }
     }
   }
