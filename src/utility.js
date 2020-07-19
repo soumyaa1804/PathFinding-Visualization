@@ -118,6 +118,7 @@ export const getSpecialNodes = () => {
   let valid_buttons = [copy_start, copy_end];
   return valid_buttons;
 };
+
 /*------------getNeighbours------------*/
 export function getNeighbours(i, j) {
   var neighbors = [];

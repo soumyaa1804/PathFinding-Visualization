@@ -362,6 +362,8 @@ function updateStartBtn(id) {
 /*----------------------- */
 
 dragElement(document.getElementById("side-bar"));
+dragElement(document.getElementById("info-bar"));
+
 
 function dragElement(elmnt) {
   var pos1 = 0,

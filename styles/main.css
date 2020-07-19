@@ -99,14 +99,32 @@ td:hover {
   margin-right: 5px;
 }
 
+.info-bar {
+  position: absolute;
+  z-index: 100;
+  width: 30%;
+  background: transparent;
+  left: 2%;
+  top: 5%;
+  border-radius: 5px;
+  max-width: 300px;
+}
+
+.color-code {
+  height: 25px;
+  width: 25px;
+}
+
 .start {
   background-color: rgb(218, 32, 110);
   opacity: 0.8;
+  color: white;
 }
 
 .end {
   background-color: rgb(214, 202, 96);
   opacity: 0.8;
+  color: black;
 }
 
 .wall {
@@ -115,10 +133,6 @@ td:hover {
 
 .searching {
   background-color: lawngreen;
-}
-
-.success {
-  background-color: red;
 }
 
 .visited {
