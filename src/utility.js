@@ -121,14 +121,20 @@ export const getSpecialNodes = () => {
 
 /*------------getNeighbours------------*/
 export function getNeighbours(i, j) {
-  var neighbors = [];
+  let neighbors = [];
   // direction vectors
   // 0-3: East, South, West, North
   // 4-7: South-East, North-East, South-West, North-West
   const dx = [1, 0, -1, 0, 1, 1, -1, -1];
   const dy = [0, 1, 0, -1, 1, -1, 1, -1];
+  const diagonal = document.getElementById("diagonal-flag").checked;
 
-  for (let d = 0; d < dx.length; d++) {
+  let length; // length of direction vector
+  if(diagonal === false) {
+    length = 4;
+  } else length = 8;
+
+  for (let d = 0; d < length; d++) {
     let rr = i + dx[d];
     let cc = j + dy[d];
     if (rr >= 0 && rr < totalRows && cc >= 0 && cc < totalCols) {
@@ -203,6 +209,7 @@ function toggleScreen(inProgress) {
     document.getElementById("clearPathBtn").disabled = true;
     //clear grid disable
     document.getElementById("clearBtn").disabled = true;
+    document.getElementById("diagonal-flag").disabled = true;
     const tds = document.querySelectorAll("td");
     tds.forEach((td) => (td.style.pointerEvents = "none"));
   } else {
@@ -213,6 +220,7 @@ function toggleScreen(inProgress) {
     document.getElementById("clearPathBtn").disabled = false;
     //clear grid enable
     document.getElementById("clearBtn").disabled = false;
+    document.getElementById("diagonal-flag").disabled = false;
     const tds = document.querySelectorAll("td");
     tds.forEach((td) => (td.style.pointerEvents = "all"));
     // //Clear the board
