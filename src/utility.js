@@ -1,5 +1,6 @@
 import { gridArray, totalRows, totalCols, clearPath } from "./script.js";
 import { start } from "./timer.js";
+
 /* -------- Queue ------- */
 export class Queue {
   constructor() {
@@ -24,8 +25,8 @@ export class Queue {
     return;
   }
 }
-/*------ Min Heap ----- */
 
+/*------ Min Heap ----- */
 export class minHeap {
   constructor() {
     this.heap = [];
@@ -96,6 +97,7 @@ export class minHeap {
     return;
   }
 }
+
 /*-------getSpecialNodes------*/
 export const getSpecialNodes = () => {
   let copy_start = null;
@@ -172,6 +174,7 @@ export function getNeighbours(i, j) {
   }
   return neighbors;
 }
+
 /*---------Animation-------*/
 export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
   start(startbtnText);
@@ -201,6 +204,7 @@ export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
   toggleScreen(inProgress);
   return new Promise((resolve) => resolve(true));
 }
+
 function toggleScreen(inProgress) {
   if (inProgress) {
     //Get the elements
@@ -228,4 +232,17 @@ function toggleScreen(inProgress) {
     //   .getElementById("tableContainer")
     //   .addEventListener("mousedown", clearPath);
   }
+}
+
+/* Animate instruction icon on click */
+let icon = document.getElementById("info-icon");
+icon.addEventListener("click", rotateIcon);
+let i = true;
+function rotateIcon(){
+  if(i == true) {
+    icon.className = "fa fa-chevron-up rotate down";
+  } else {
+    icon.className = "fa fa-chevron-up rotate";
+  }
+  i = !i;
 }
