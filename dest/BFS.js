@@ -18,21 +18,17 @@ function BFS(nodesToAnimate, pathFound) {
   myQueue.enqueue(startNode);
   nodesToAnimate.push([startNode, "searching"]);
   var currNode = new _script.Node();
-
   while (!myQueue.empty()) {
     currNode = myQueue.dequeue();
     var r = currNode.row;
     var c = currNode.col;
     nodesToAnimate.push([currNode, "visited"]);
-
     if (currNode === endNode) {
       pathFound = true;
       break;
     }
-
     currNode.isVisited = true;
     var neighbours = (0, _utility.getNeighbours)(r, c);
-
     for (var k = 0; k < neighbours.length; k++) {
       var m = neighbours[k][0];
       var n = neighbours[k][1];
@@ -50,12 +46,10 @@ function BFS(nodesToAnimate, pathFound) {
     var prevNode = new _script.Node();
     console.log("current node should be endnode", currNode);
     prevNode = endNode.parent;
-
     while (prevNode !== null) {
       nodesToAnimate.push([prevNode, "shortest"]);
       prevNode = prevNode.parent;
     }
   }
-
   return pathFound;
 }

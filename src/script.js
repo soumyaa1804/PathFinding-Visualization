@@ -214,7 +214,6 @@ function updateStatus(currNode) {
         element.className =
           currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
         currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
-        currNode.status = "unvisited";
       }
     }
   }
@@ -363,7 +362,6 @@ function updateStartBtn(id) {
 
 dragElement(document.getElementById("side-bar"));
 dragElement(document.getElementById("info-bar"));
-
 
 function dragElement(elmnt) {
   var pos1 = 0,
