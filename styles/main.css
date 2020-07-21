@@ -116,14 +116,14 @@ td:hover {
 }
 
 .rotate {
-  -moz-transition: all .2s linear;
-  -webkit-transition: all .2s linear;
-  transition: all .2s linear;
+  -moz-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 .rotate.down {
-  -moz-transform:rotate(180deg);
-  -webkit-transform:rotate(180deg);
-  transform:rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .color-code {
@@ -145,18 +145,29 @@ td:hover {
 
 .wall {
   background: transparent;
+  color: transparent;
 }
 
 .searching {
   background-color: lawngreen;
+  color: lawngreen;
 }
 
 .visited {
   background-color: springgreen;
+  color: springgreen;
 }
 .shortest {
   background-color: aqua;
+  color: aqua;
 }
 .unvisited-weight {
   background-color: silver;
+  color: silver;
+}
+ul {
+  list-style-type: square;
+}
+li {
+  margin-bottom: 25px;
 }

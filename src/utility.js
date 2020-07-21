@@ -120,7 +120,22 @@ export const getSpecialNodes = () => {
   let valid_buttons = [copy_start, copy_end];
   return valid_buttons;
 };
-
+/* ---------------------countLength-----------*/
+function countLength(nodesToAnimate, algo) {
+  let count = 0;
+  nodesToAnimate.forEach((node) => {
+    if (node[1] === "shortest") {
+      count++;
+    }
+  });
+  if (algo === "aStar") {
+    document.getElementById("aStarCount").innerHTML = `Count: ${count}`;
+  } else if (algo === "BFS") {
+    document.getElementById("BFSCount").innerHTML = `Count: ${count}`;
+  } else if (algo === "dijkstra") {
+    document.getElementById("dijkstraCount").innerHTML = `Count: ${count}`;
+  }
+}
 /*------------getNeighbours------------*/
 export function getNeighbours(i, j) {
   let neighbors = [];
@@ -132,7 +147,7 @@ export function getNeighbours(i, j) {
   const diagonal = document.getElementById("diagonal-flag").checked;
 
   let length; // length of direction vector
-  if(diagonal === false) {
+  if (diagonal === false) {
     length = 4;
   } else length = 8;
 
@@ -176,7 +191,12 @@ export function getNeighbours(i, j) {
 }
 
 /*---------Animation-------*/
-export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
+export async function animateCells(
+  inProgress,
+  nodesToAnimate,
+  startbtnText,
+  algo
+) {
   start(startbtnText);
   console.log("animation started");
   inProgress = true;
@@ -199,12 +219,12 @@ export async function animateCells(inProgress, nodesToAnimate, startbtnText) {
       continue;
     } else cell.className = colorClass;
   }
+  countLength(nodesToAnimate, algo);
   nodesToAnimate = [];
   inProgress = false;
   toggleScreen(inProgress);
   return new Promise((resolve) => resolve(true));
 }
-
 function toggleScreen(inProgress) {
   if (inProgress) {
     //Get the elements
@@ -238,8 +258,8 @@ function toggleScreen(inProgress) {
 let icon = document.getElementById("info-icon");
 icon.addEventListener("click", rotateIcon);
 let i = true;
-function rotateIcon(){
-  if(i == true) {
+function rotateIcon() {
+  if (i == true) {
     icon.className = "fa fa-chevron-up rotate down";
   } else {
     icon.className = "fa fa-chevron-up rotate";

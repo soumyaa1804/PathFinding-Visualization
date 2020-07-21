@@ -437,7 +437,7 @@ const startAlgo = () => {
       inProgress = false;
       if (aStar(nodesToAnimate, pathFound)) {
         //animateCells is returning a Promise that means we have to use .then
-        animateCells(inProgress, nodesToAnimate, startBtnText);
+        animateCells(inProgress, nodesToAnimate, startBtnText, "aStar");
       } else {
         alert("Path does not exist!");
       }
@@ -449,7 +449,7 @@ const startAlgo = () => {
       pathFound = false;
       inProgress = false;
       if (dijkstra(nodesToAnimate, pathFound)) {
-        animateCells(inProgress, nodesToAnimate, startBtnText);
+        animateCells(inProgress, nodesToAnimate, startBtnText, "dijkstra");
       } else {
         alert("Path does not exist!");
       }
@@ -462,7 +462,7 @@ const startAlgo = () => {
       pathFound = false;
       inProgress = false;
       if (BFS(nodesToAnimate, pathFound)) {
-        animateCells(inProgress, nodesToAnimate, startBtnText);
+        animateCells(inProgress, nodesToAnimate, startBtnText, "BFS");
       } else {
         alert("Path does not exist!");
       }

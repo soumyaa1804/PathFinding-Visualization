@@ -18,7 +18,12 @@
     href="https://fonts.googleapis.com/css2?family=Girassol&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous"
+  >
   <!-- Bootstrap CSS -->
   <link
     rel="stylesheet"
@@ -61,8 +66,14 @@
         >
           Instructions
         </a>
-        <a data-toggle="collapse" href="#collapse">
-          <div id="info-icon" class="fa fa-chevron-up rotate"></div>
+        <a
+          data-toggle="collapse"
+          href="#collapse"
+        >
+          <div
+            id="info-icon"
+            class="fa fa-chevron-up rotate"
+          ></div>
         </a>
       </div>
       <div
@@ -75,13 +86,22 @@
             id="info-description"
             class="info-description"
           >
-            <p>Click within the grid and drag your mouse to draw obstacles.</p>
-            <p>Drag the <span class="color-code start">. . .</span> Start node to set the start position</p>
-            <p>Drag the <span class="color-code end">. . .</span> End node to set the end position</p>
-            <p>Click and press the 'W' key on your keyboard and drag your mouse to add weights for weighted algorithms.
-            </p>
-            <p>Choose an algorithm from the right hand side bar.</p>
-            <p>Click Start button in the lower right corner of the side bar to start the visualization.</p>
+            <ul>
+              <li>Click within the grid and drag your mouse to draw obstacles represented by <span
+                  class="color-code wall"
+                ></span> invisible highlight.</li>
+              <li>Drag the <span class="color-code start">. . .</span> Start node to set the start position</li>
+              <li>Drag the <span class="color-code end">. . .</span> End node to set the end position</li>
+              <li>Click and press the 'W' key on your keyboard and drag your mouse to add <span
+                  class="color-code unvisited-weight"
+                >. . .</span> Weights for weighted algorithms.
+              </li>
+              <li>Choose an algorithm from the right hand side bar.</li>
+              <li>Click Start button in the lower right corner of the side bar to start the visualization.</li>
+              <li>The <span class="color-code visited">. . .</span> Visted nodes will be highlighted along the <span
+                  class="color-code shortest"
+                >. . .</span> Shortest path.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -91,7 +111,8 @@
 
   <!-- Draggable Sidebar -->
   <div
-    class="side-bar"
+    class="
+                side-bar"
     id="side-bar"
   >
     <div class="card mb-3">
@@ -131,6 +152,11 @@
             >
               00 min 00 sec 00 ms
             </div>
+            <div
+              id="aStarCount"
+              class="count"
+            >
+            </div>
           </div>
         </div>
       </div>
@@ -157,6 +183,11 @@
               class="timer"
             >
               00 min 00 sec 00 ms
+            </div>
+            <div
+              id="dijkstraCount"
+              class="count"
+            >
             </div>
           </div>
         </div>
@@ -185,6 +216,11 @@
             >
               00 min 00 sec 00 ms
             </div>
+            <div
+              id="BFSCount"
+              class="count"
+            >
+            </div>
           </div>
         </div>
       </div>
@@ -195,13 +231,21 @@
       <div class="card-header">
         <form>
           <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="diagonal-flag" name="example1">
-            <label class="custom-control-label mb-0" for="diagonal-flag">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="diagonal-flag"
+              name="example1"
+            >
+            <label
+              class="custom-control-label mb-0"
+              for="diagonal-flag"
+            >
               <a
                 class="card-link ml-2"
                 href="#"
               >
-              Allow diagonals
+                Allow diagonals
               </a>
             </label>
           </div>
