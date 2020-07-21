@@ -41,7 +41,6 @@ export function start(startBtnText){
 }
 
 export function resetTimer() {
-  console.log("clear grid!");
   let timerElement = document.getElementsByClassName("timer");
   for(let i=0; i< timerElement.length; i++){
     timerElement[i].innerText = "00 min 00 sec 00 ms";
