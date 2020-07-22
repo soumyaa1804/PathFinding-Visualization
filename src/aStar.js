@@ -29,9 +29,9 @@ function getDistance(nodeA, nodeB) {
   } else {
     if (dx > dy) {
       //Better results than using sqrt(2) and 1
-      return 14 * dy + 10 * (dx - dy);
+      return 1.4 * dy + 1 * (dx - dy);
     }
-    return 14 * dx + 10 * (dy - dx);
+    return 1.4 * dx + 1 * (dy - dx);
   }
 }
 function backtrack(endNode, nodesToAnimate) {
