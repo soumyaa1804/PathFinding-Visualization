@@ -5,7 +5,7 @@ import { Node, gridArray } from "./script.js";
 function updateNeighbours(neighbours, currNode, algo, endNode) {
   if (algo === "aStar") {
     neighbours.forEach((neighbour) => {
-      var newGCost = currNode.g;
+      var newGCost = 1 + currNode.g;
       //Whenever weights are involved f(n) = g(n) + W*h(n)
       let estimation_cost = neighbour.weight * getDistance(neighbour, endNode);
       let newCost = newGCost + estimation_cost;
