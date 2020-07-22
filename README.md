@@ -4,14 +4,11 @@
 
 > Learn the art of Artificial Intelligence Programming by hopping on an academic adventure with Microsoft to establish a permanent human settlement on Mars.
 
-#### Problem statement:
 
-NAVIGATE THE MARS ROVER: Help the Mars Curiosity Rover find the shortest path between two points while avoiding obstacles on the way.
-
-#### Mangalyaan
+## Mangalyaan
 
 Mangalyaan is a web application that helps a Mars rover to find the shortest path between two points on a solid surface while making sure it does not land into the hollow pits (represented by transparent surface) that may take it to the free space and the rover will get lost forever. :rocket: 
 
-##### Demo
+### Demo
 
 [Mangalyaan](https://mangalyaan.netlify.app/)
