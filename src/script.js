@@ -200,7 +200,6 @@ function updateStatus(currNode) {
   }
 }
 
-
 /**
  * 06. moveSpecialNode (To reset start and end node)
  * 
@@ -208,7 +207,6 @@ function updateStatus(currNode) {
  * But once the next node is hovered over with pressed down then the node is not updated---so update the
  * prevNode as the updated node
  */
-
 function moveSpecialNode(currNode) {
   let currElement = document.getElementById(currNode.id);
   let prevElement;

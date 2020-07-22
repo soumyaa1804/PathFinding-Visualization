@@ -1,6 +1,27 @@
+/**
+ * Imports
+ * Queue class
+ * Min Heap class
+ * getSpecialNode()
+ * countLength()
+ * getNeighbour()
+ * animateCells() 
+ * toggleScreen() (Disable items when animation is in progress)
+ */
+
+/**
+ * Imports
+ */
 import { gridArray, totalRows, totalCols } from "./script.js";
 import { start } from "./timer.js";
-/* -------- Queue ------- */
+
+/**
+ * Queue class
+ *  -dequeue() returns first element added
+ *  -enqueue() 
+ *  -empty() @returns true/false
+ *  -clear()
+ */
 export class Queue {
   constructor() {
     this.items = new Array();
@@ -25,7 +46,13 @@ export class Queue {
   }
 }
 
-/*------ Min Heap ----- */
+/**
+ * Min heap class
+ *  -isEmpty()
+ *  -clear()
+ *  -getMin()
+ *  -push() @param item 
+ */
 export class minHeap {
   constructor() {
     this.heap = [];
@@ -97,7 +124,10 @@ export class minHeap {
   }
 }
 
-/*-------getSpecialNodes------*/
+/**
+ * @description get updated start and end node 
+ * @returns array of nodes containing start and end nodes
+ */
 export const getSpecialNodes = () => {
   let copy_start = null;
   let copy_end = null;
@@ -120,21 +150,25 @@ export const getSpecialNodes = () => {
   return valid_buttons;
 };
 
-/* --------- Count distance of path-----------*/
-export function countLength(count, algo) {
-  if (algo === "aStar") {
+/**
+ * @description Count length of distance
+ * @param {number} count Distance count
+ * @param {string} algoId Algo id or else "reset" to reset the count
+ */
+export function countLength(count, algoId) {
+  if (algoId === "aStar") {
     document.getElementById(
       "aStarCount"
     ).innerHTML = `Distance Count: ${count}`;
-  } else if (algo === "greedyBFS") {
+  } else if (algoId === "greedyBFS") {
     document.getElementById(
       "greedyBFSCount"
     ).innerHTML = `Distance Count: ${count}`;
-  } else if (algo === "dijkstra") {
+  } else if (algoId === "dijkstra") {
     document.getElementById(
       "dijkstraCount"
     ).innerHTML = `Distance Count: ${count}`;
-  } else if (algo === "BFS") {
+  } else if (algoId === "BFS") {
     document.getElementById("BFSCount").innerHTML = `Distance Count: ${count}`;
   } else {
     // To reset the count on Clear Path and Clear Grid
@@ -145,9 +179,15 @@ export function countLength(count, algo) {
   }
 }
 
-/*------------getNeighbours------------*/
+/**
+ * @desc Returns neighbours of a node according 
+ *       to if diagonal movement is allowed or not.
+ * 
+ * @param {number} i row index of node
+ * @param {numbet} j column index of node
+ */
 export function getNeighbours(i, j) {
-  let neighbors = [];
+  let neighbours = [];
   // direction vectors
   // 0-3: East, South, West, North
   // 4-7: South-East, North-East, South-West, North-West
@@ -168,38 +208,47 @@ export function getNeighbours(i, j) {
         continue;
       } // if d < 4, push elements else if d >= 4, check for diagonal walls
       else if (d < 4) {
-        neighbors.push([rr, cc]);
+        neighbours.push([rr, cc]);
       } else if (
         d === 4 &&
         gridArray[i][j + 1].status !== "wall" &&
         gridArray[i + 1][j].status !== "wall"
       ) {
-        neighbors.push([rr, cc]);
+        neighbours.push([rr, cc]);
       } else if (
         d === 5 &&
         gridArray[i][j - 1].status !== "wall" &&
         gridArray[i + 1][j].status !== "wall"
       ) {
-        neighbors.push([rr, cc]);
+        neighbours.push([rr, cc]);
       } else if (
         d === 6 &&
         gridArray[i - 1][j].status !== "wall" &&
         gridArray[i][j + 1].status !== "wall"
       ) {
-        neighbors.push([rr, cc]);
+        neighbours.push([rr, cc]);
       } else if (
         d === 7 &&
         gridArray[i - 1][j].status !== "wall" &&
         gridArray[i][j - 1].status !== "wall"
       ) {
-        neighbors.push([rr, cc]);
+        neighbours.push([rr, cc]);
       }
     }
   }
-  return neighbors;
+  return neighbours;
 }
 
-/*---------Animation-------*/
+/**
+ * @desc Animate all the cells that are added to 
+ *       nodesToAnimate array according to their status.
+ * 
+ * @param {boolean} inProgress If animation is in progress
+ * @param {array} nodesToAnimate Array containing nodes along with their status
+ * @param {string} startbtnText Text on start button
+ * @param {string} algo Id of algo selected
+ * @return {Promise} represents the completion of an asynchronous operation
+ */
 export async function animateCells(
   inProgress,
   nodesToAnimate,
@@ -240,6 +289,12 @@ export async function animateCells(
   toggleScreen(inProgress);
   return new Promise((resolve) => resolve(true));
 }
+
+/**
+ * @desc Disable each cell of the grid and all buttons
+ *       if animation is in progress
+ * @param {boolean} inProgress 
+ */
 function toggleScreen(inProgress) {
   if (inProgress) {
     //Get the elements
@@ -262,10 +317,6 @@ function toggleScreen(inProgress) {
     document.getElementById("diagonal-flag").disabled = false;
     const tds = document.querySelectorAll("td");
     tds.forEach((td) => (td.style.pointerEvents = "all"));
-    // //Clear the board
-    // document
-    //   .getElementById("tableContainer")
-    //   .addEventListener("mousedown", clearPath);
   }
 }
 
