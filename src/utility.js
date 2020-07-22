@@ -141,13 +141,6 @@ export function countLength(count, algo) {
     }
   }
 }
-/*------------resetCount -------------*/
-export function resetCount() {
-  var x = document.querySelectorAll(".count");
-  for (let i = 0; i < x.length; i++) {
-    x[i].innerHTML = `Count:`;
-  }
-}
 
 /*------------getNeighbours------------*/
 export function getNeighbours(i, j) {
@@ -210,7 +203,7 @@ export async function animateCells(
   startbtnText,
   algo
 ) {
-  countLength(0, algo);
+  //countLength(0, algo);
   let count = 1;
   start(startbtnText);
   console.log("animation started");

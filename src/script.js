@@ -1,7 +1,7 @@
 import { dijkstra } from "./dijkstra.js";
 import { aStar } from "./aStar.js";
 import { BFS } from "./BFS.js";
-import { animateCells, resetCount } from "./utility.js";
+import { animateCells, countLength } from "./utility.js";
 import { resetTimer } from "./timer.js";
 
 //GLOBAL VARIABLES
@@ -209,7 +209,7 @@ export function clearGrid() {
   let node = new Node();
   nodesToAnimate = [];
   resetTimer();
-  resetCount();
+  countLength(0, "reset");
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
@@ -246,7 +246,7 @@ let clearPathBtn = document.getElementById("clearPathBtn");
 export function clearPath() {
   let node = new Node();
   resetTimer();
-  resetCount();
+  countLength(0, "reset");
   nodesToAnimate = [];
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
