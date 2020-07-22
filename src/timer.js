@@ -8,8 +8,9 @@ let btnText;
 
 const btnTextTimerId = {
   "Start A*": "aStarTimer",
+  "Start Greedy": "Best-First Search",
   "Start Dijkstra": "dijkstraTimer",
-  "Start Breadth First Search": "BFSTimer"
+  "Start Breadth-First Search": "BFSTimer"
 };
 
 function timer() {
