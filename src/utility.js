@@ -1,6 +1,5 @@
 import { gridArray, totalRows, totalCols } from "./script.js";
 import { start } from "./timer.js";
-
 /* -------- Queue ------- */
 export class Queue {
   constructor() {
@@ -128,7 +127,9 @@ export function countLength(count, algo) {
       "aStarCount"
     ).innerHTML = `Distance Count: ${count}`;
   } else if (algo === "greedyBFS") {
-    document.getElementById("greedyBFSCount").innerHTML = `Distance Count: ${count}`;
+    document.getElementById(
+      "greedyBFSCount"
+    ).innerHTML = `Distance Count: ${count}`;
   } else if (algo === "dijkstra") {
     document.getElementById(
       "dijkstraCount"
@@ -205,7 +206,6 @@ export async function animateCells(
   startbtnText,
   algo
 ) {
-  //countLength(0,algo)
   let count = 1;
   start(startbtnText);
   console.log("animation started");

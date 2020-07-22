@@ -15,8 +15,9 @@ var btnText = void 0;
 
 var btnTextTimerId = {
   "Start A*": "aStarTimer",
+  "Start Greedy": "Best-First Search",
   "Start Dijkstra": "dijkstraTimer",
-  "Start Breadth First Search": "BFSTimer"
+  "Start Breadth-First Search": "BFSTimer"
 };
 
 function timer() {
@@ -47,7 +48,6 @@ function start(startBtnText) {
 }
 
 function resetTimer() {
-  console.log("clear grid!");
   var timerElement = document.getElementsByClassName("timer");
   for (var i = 0; i < timerElement.length; i++) {
     timerElement[i].innerText = "00 min 00 sec 00 ms";

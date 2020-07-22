@@ -1,6 +1,7 @@
 import { dijkstra } from "./dijkstra.js";
 import { aStar } from "./aStar.js";
 import { BFS } from "./BFS.js";
+import { greedyBFS } from "./greedyBFS.js";
 import { animateCells, countLength } from "./utility.js";
 import { resetTimer } from "./timer.js";
 
@@ -394,6 +395,18 @@ const startAlgo = () => {
       if (aStar(nodesToAnimate, pathFound)) {
         //animateCells is returning a Promise that means we have to use .then
         animateCells(inProgress, nodesToAnimate, startBtnText, "aStar");
+      } else {
+        alert("Path does not exist!");
+      }
+      break;
+    }
+    case "Start Greedy Best-First Search": {
+      clearPath();
+      nodesToAnimate = [];
+      pathFound = false;
+      inProgress = false;
+      if (greedyBFS(nodesToAnimate, pathFound)) {
+        animateCells(inProgress, nodesToAnimate, startBtnText, "greedyBFS");
       } else {
         alert("Path does not exist!");
       }

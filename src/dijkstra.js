@@ -77,31 +77,15 @@ function updateNeighbours(neighbours, currNode, algo) {
   if (algo === "dijkstra") {
     neighbours.forEach((neighbour) => {
       if (!DiagonalId.includes(neighbour.id)) {
-        if (1 + neighbour.weight + currNode.distance < neighbour.distance) {
+        if (1 * neighbour.weight * currNode.distance < neighbour.distance) {
           neighbour.distance = 1 + neighbour.weight + currNode.distance;
           neighbour.parent = currNode;
         }
       } else {
-        if (1.4 + neighbour.weight + currNode.distance < neighbour.distance) {
+        if (1.4 * neighbour.weight * currNode.distance < neighbour.distance) {
           neighbour.distance = 1.4 + neighbour.weight + currNode.distance;
           neighbour.parent = currNode;
         }
-      }
-    });
-  } else if (algo === "aStar") {
-    neighbours.forEach((neighbour) => {
-      var newGCost = 10 + currNode.g;
-      // if (newGCost < neighbour.g) {
-      //   neighbour.g = newGCost;
-      //   neighbour.parent = currNode;
-      // }
-      let estimation_cost = getDistance(neighbour, endNode);
-      let newCost = newGCost + estimation_cost;
-      if (newCost < neighbour.f) {
-        neighbour.g = newGCost;
-        neighbour.f = newCost;
-        neighbour.h = estimation_cost;
-        neighbour.parent = currNode;
       }
     });
   }

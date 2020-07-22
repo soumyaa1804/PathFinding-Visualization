@@ -7,6 +7,7 @@ exports.getSpecialNodes = exports.minHeap = exports.Queue = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+exports.countLength = countLength;
 exports.getNeighbours = getNeighbours;
 exports.animateCells = animateCells;
 
@@ -50,7 +51,9 @@ var Queue = exports.Queue = function () {
 
   return Queue;
 }();
+
 /*------ Min Heap ----- */
+
 
 var minHeap = exports.minHeap = function () {
   function minHeap() {
@@ -144,6 +147,7 @@ var minHeap = exports.minHeap = function () {
 
   return minHeap;
 }();
+
 /*-------getSpecialNodes------*/
 
 
@@ -163,6 +167,25 @@ var getSpecialNodes = exports.getSpecialNodes = function getSpecialNodes() {
   return valid_buttons;
 };
 
+/* --------- Count distance of path-----------*/
+function countLength(count, algo) {
+  if (algo === "aStar") {
+    document.getElementById("aStarCount").innerHTML = "Distance Count: " + count;
+  } else if (algo === "greedyBFS") {
+    document.getElementById("greedyBFSCount").innerHTML = "Distance Count: " + count;
+  } else if (algo === "dijkstra") {
+    document.getElementById("dijkstraCount").innerHTML = "Distance Count: " + count;
+  } else if (algo === "BFS") {
+    document.getElementById("BFSCount").innerHTML = "Distance Count: " + count;
+  } else {
+    // To reset the count on Clear Path and Clear Grid
+    var countElement = document.getElementsByClassName("count");
+    for (var _i = 0; _i < countElement.length; _i++) {
+      countElement[_i].innerText = "Distance Count: " + count;
+    }
+  }
+}
+
 /*------------getNeighbours------------*/
 function getNeighbours(i, j) {
   var neighbors = [];
@@ -171,8 +194,14 @@ function getNeighbours(i, j) {
   // 4-7: South-East, North-East, South-West, North-West
   var dx = [1, 0, -1, 0, 1, 1, -1, -1];
   var dy = [0, 1, 0, -1, 1, -1, 1, -1];
+  var diagonal = document.getElementById("diagonal-flag").checked;
 
-  for (var d = 0; d < dx.length; d++) {
+  var length = void 0; // length of direction vector
+  if (diagonal === false) {
+    length = 4;
+  } else length = 8;
+
+  for (var d = 0; d < length; d++) {
     var rr = i + dx[d];
     var cc = j + dy[d];
     if (rr >= 0 && rr < _script.totalRows && cc >= 0 && cc < _script.totalCols) {
@@ -194,8 +223,10 @@ function getNeighbours(i, j) {
   }
   return neighbors;
 }
+
 /*---------Animation-------*/
-async function animateCells(inProgress, nodesToAnimate, startbtnText) {
+async function animateCells(inProgress, nodesToAnimate, startbtnText, algo) {
+  var count = 1;
   (0, _timer.start)(startbtnText);
   console.log("animation started");
   inProgress = true;
@@ -219,6 +250,12 @@ async function animateCells(inProgress, nodesToAnimate, startbtnText) {
       }
       continue;
     } else cell.className = colorClass;
+
+    // Update count
+    if (colorClass == "shortest") {
+      count++;
+      countLength(count, algo);
+    }
   }
   nodesToAnimate = [];
   inProgress = false;
@@ -235,6 +272,7 @@ function toggleScreen(inProgress) {
     document.getElementById("clearPathBtn").disabled = true;
     //clear grid disable
     document.getElementById("clearBtn").disabled = true;
+    document.getElementById("diagonal-flag").disabled = true;
     var tds = document.querySelectorAll("td");
     tds.forEach(function (td) {
       return td.style.pointerEvents = "none";
@@ -247,6 +285,7 @@ function toggleScreen(inProgress) {
     document.getElementById("clearPathBtn").disabled = false;
     //clear grid enable
     document.getElementById("clearBtn").disabled = false;
+    document.getElementById("diagonal-flag").disabled = false;
     var _tds = document.querySelectorAll("td");
     _tds.forEach(function (td) {
       return td.style.pointerEvents = "all";
@@ -256,4 +295,17 @@ function toggleScreen(inProgress) {
     //   .getElementById("tableContainer")
     //   .addEventListener("mousedown", clearPath);
   }
+}
+
+/* Animate instruction icon on click */
+var icon = document.getElementById("info-icon");
+icon.addEventListener("click", rotateIcon);
+var i = true;
+function rotateIcon() {
+  if (i == true) {
+    icon.className = "fa fa-chevron-up rotate down";
+  } else {
+    icon.className = "fa fa-chevron-up rotate";
+  }
+  i = !i;
 }

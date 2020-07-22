@@ -1,16 +1,16 @@
 let minutes;
-let seconds;   
-let milisec; 
-let started=false;  
+let seconds;
+let milisec;
+let started = false;
 let interval;
 let startTime = new Date();
 let btnText;
 
 const btnTextTimerId = {
   "Start A*": "aStarTimer",
-  "Start Greedy": "Best-First Search",
+  "Start Greedy Best-First Search": "greedyBFSTimer",
   "Start Dijkstra": "dijkstraTimer",
-  "Start Breadth-First Search": "BFSTimer"
+  "Start Breadth-First Search": "BFSTimer",
 };
 
 function timer() {
@@ -18,32 +18,32 @@ function timer() {
 
   const milisecond = now - startTime;
   minutes = Math.floor(milisecond / (1000 * 60));
-  seconds = Math.floor(milisecond / (1000) % 60);
-  milisec = Math.floor(milisecond%100);
+  seconds = Math.floor((milisecond / 1000) % 60);
+  milisec = Math.floor(milisecond % 100);
 
-  minutes = (minutes < 10) ? "0" + minutes : minutes;
-  seconds = (seconds < 10) ? "0" + seconds : seconds;
-  milisec = (milisec < 10) ? "0" + milisec : milisec;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+  milisec = milisec < 10 ? "0" + milisec : milisec;
 
-  document.getElementById(btnTextTimerId[btnText]).innerText= minutes + " min " + seconds + " sec " + milisec + " ms ";
+  document.getElementById(btnTextTimerId[btnText]).innerText =
+    minutes + " min " + seconds + " sec " + milisec + " ms ";
 }
 
-export function start(startBtnText){
+export function start(startBtnText) {
   btnText = startBtnText;
   startTime = new Date();
-    if(started==false){
-        interval=setInterval(timer,10);
-        started=true;
-    }
-    else{
-        clearInterval(interval);
-        started=false;
-    }
+  if (started == false) {
+    interval = setInterval(timer, 10);
+    started = true;
+  } else {
+    clearInterval(interval);
+    started = false;
+  }
 }
 
 export function resetTimer() {
   let timerElement = document.getElementsByClassName("timer");
-  for(let i=0; i< timerElement.length; i++){
+  for (let i = 0; i < timerElement.length; i++) {
     timerElement[i].innerText = "00 min 00 sec 00 ms";
   }
 }

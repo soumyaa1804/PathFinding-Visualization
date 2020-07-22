@@ -16,6 +16,8 @@ var _aStar = require("./aStar.js");
 
 var _BFS = require("./BFS.js");
 
+var _greedyBFS = require("./greedyBFS");
+
 var _utility = require("./utility.js");
 
 var _timer = require("./timer.js");
@@ -182,55 +184,7 @@ var Grid = function () {
 var gridObject = new Grid();
 gridObject.generateGrid();
 gridObject.eventListener();
-// for (let r = 0; r < totalRows; r += 1) {
-//   for (let c = 0; c < totalCols; c += 1) {
-//     let currNode = gridObject.grid[r][c];
-//     let currId = currNode.id;
-//     //Current Element in the grid
-//     let currElement = document.getElementById(currId);
 
-//     //  # Event Listeners --mousedown
-//     //                      --mouseenter
-//     //                      --mouseup
-//     //             helper  --mousePressed
-
-//     currElement.addEventListener("mousedown", (e) => {
-//       mousePressed = true;
-//       if (currNode.status === "start" || currNode.status === "end") {
-//         pressedNodeStatus = currNode.status;
-//         prevNode = new Node();
-//         prevNode = currNode;
-//       } else {
-//         pressedNodeStatus = "normal";
-//         //Manipulate the normal node - convert to "WALL" or "A normal node" or to a weight
-//         updateStatus(currNode);
-//       }
-//       e.preventDefault();
-//     });
-//     currElement.addEventListener("mouseenter", (e) => {
-//       if (mousePressed && pressedNodeStatus !== "normal") {
-//         //Means that the pressed node is a "Start" or "end"
-//         //User wants to move the start or end button
-//         prevNode = moveSpecialNode(currNode);
-
-//         //set to default position
-//       } else if (mousePressed && pressedNodeStatus === "normal") {
-//         updateStatus(currNode);
-//       }
-//     });
-//     currElement.addEventListener("mouseup", (e) => {
-//       mousePressed = false;
-//     });
-//   }
-// }
-// /*---------WEIGHTS----------*/
-// window.addEventListener("keydown", (e) => {
-//   //Return the key that is pressed
-//   keyDown = e.code;
-// });
-// window.addEventListener("keyup", () => {
-//   keyDown = false;
-// });
 function updateStatus(currNode) {
   var element = document.getElementById(currNode.id);
   var relevantStatuses = ["start", "end"];
@@ -249,6 +203,7 @@ function updateStatus(currNode) {
         element.className = currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
         currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
         currNode.status = "unvisited";
+        currNode.isClass = element.className;
       }
     }
   }
@@ -285,6 +240,7 @@ function clearGrid() {
   var node = new Node();
   nodesToAnimate = [];
   (0, _timer.resetTimer)();
+  (0, _utility.countLength)(0, "reset");
   for (var r = 0; r < totalRows; r++) {
     for (var c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
@@ -321,6 +277,7 @@ var clearPathBtn = document.getElementById("clearPathBtn");
 function clearPath() {
   var node = new Node();
   (0, _timer.resetTimer)();
+  (0, _utility.countLength)(0, "reset");
   nodesToAnimate = [];
   for (var r = 0; r < totalRows; r++) {
     for (var c = 0; c < totalCols; c++) {
@@ -353,12 +310,12 @@ function clearPath() {
   }
 }
 clearPathBtn.addEventListener("click", clearPath);
-var algorithms = new Map([["aStar", "A*"], ["dijkstra", "Dijkstra"], ["BFS", "Breadth First Search"]]);
+var algorithms = new Map([["aStar", "A*"], ["greedyBFS", "Greedy Best-First Search"], ["dijkstra", "Dijkstra"], ["BFS", "Breadth-First Search"]]);
 
 var algoID = document.getElementById("accordion");
 
 algoID.addEventListener("click", function (e) {
-  var validID = ["aStar", "dijkstra", "BFS"];
+  var validID = ["aStar", "greedyBFS", "dijkstra", "BFS"];
   var target_id = e.target.id;
   if (validID.includes(target_id)) {
     updateStartBtn(target_id);
@@ -456,11 +413,23 @@ var startAlgo = function startAlgo() {
         inProgress = false;
         if ((0, _aStar.aStar)(nodesToAnimate, pathFound)) {
           //animateCells is returning a Promise that means we have to use .then
-          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
+          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText, "aStar");
         } else {
           alert("Path does not exist!");
         }
         break;
+      }
+    case "Start Greedy Best-First Search":
+      {
+        clearPath();
+        nodesToAnimate = [];
+        pathFound = false;
+        inProgress = false;
+        if ((0, _greedyBFS.greedyBFS)(nodesToAnimate, pathFound)) {
+          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText, "greedyBFS");
+        } else {
+          alert("Path does not exist!");
+        }
       }
     case "Start Dijkstra":
       {
@@ -469,13 +438,13 @@ var startAlgo = function startAlgo() {
         pathFound = false;
         inProgress = false;
         if ((0, _dijkstra.dijkstra)(nodesToAnimate, pathFound)) {
-          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
+          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText, "dijkstra");
         } else {
           alert("Path does not exist!");
         }
         break;
       }
-    case "Start Breadth First Search":
+    case "Start Breadth-First Search":
       {
         clearPath();
         removeWeights();
@@ -483,7 +452,7 @@ var startAlgo = function startAlgo() {
         pathFound = false;
         inProgress = false;
         if ((0, _BFS.BFS)(nodesToAnimate, pathFound)) {
-          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText);
+          (0, _utility.animateCells)(inProgress, nodesToAnimate, startBtnText, "BFS");
         } else {
           alert("Path does not exist!");
         }

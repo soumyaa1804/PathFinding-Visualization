@@ -11,13 +11,16 @@ var _script = require("./script.js");
 
 function BFS(nodesToAnimate, pathFound) {
   var myQueue = new _utility.Queue();
+  // Get start node and end node
   var specialNodes = (0, _utility.getSpecialNodes)();
   var startNode = specialNodes[0];
   var endNode = specialNodes[1];
+
   startNode.isVisited = true;
   myQueue.enqueue(startNode);
   nodesToAnimate.push([startNode, "searching"]);
   var currNode = new _script.Node();
+
   while (!myQueue.empty()) {
     currNode = myQueue.dequeue();
     var r = currNode.row;
@@ -44,12 +47,12 @@ function BFS(nodesToAnimate, pathFound) {
   if (pathFound) {
     nodesToAnimate.push([endNode, "shortest"]);
     var prevNode = new _script.Node();
-    console.log("current node should be endnode", currNode);
     prevNode = endNode.parent;
     while (prevNode !== null) {
       nodesToAnimate.push([prevNode, "shortest"]);
       prevNode = prevNode.parent;
     }
   }
+
   return pathFound;
 }
