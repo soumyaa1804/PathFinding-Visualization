@@ -1,3 +1,20 @@
+/**
+ * Contents:
+ * 01. Imports
+ * 02. Global Variables
+ * 03. Node class
+ * 04. Grid class
+ * 05. Grid object creation
+ * 06. moveSpecialNode (To reset start and end node)
+ * 07. Clear Grid function
+ * 08. Clear Path function
+ * 09. Draggable feature for Instruction bar and Algo bar
+ * 10. Start Button Controls (Algorithm calls)
+ */
+
+/**
+ * 01. Imports
+ */
 import { dijkstra } from "./dijkstra.js";
 import { aStar } from "./aStar.js";
 import { BFS } from "./BFS.js";
@@ -5,7 +22,9 @@ import { greedyBFS } from "./greedyBFS.js";
 import { animateCells, countLength } from "./utility.js";
 import { resetTimer } from "./timer.js";
 
-//GLOBAL VARIABLES
+/**
+ * 02. Global Variables
+ */
 const height = window.innerHeight * 0.8;
 const width = window.innerWidth * 0.9;
 const cellSize = 25;
@@ -24,7 +43,10 @@ let pathFound = false;
 let inProgress = false;
 //To add the weights
 let keyDown = false;
-//Instantiate the grid
+
+/**
+ * 03. Node class
+ */
 export class Node {
   constructor(row, col, nodeClass, nodeId) {
     this.row = row;
@@ -43,10 +65,12 @@ export class Node {
     this.h = Infinity;
   }
 }
-//Generate the grid
-// let startNode = new Node();
-// let endNode = new Node();
 
+/**
+ * 04. Grid Class
+ *      - generateGrid()
+ *      - eventListener()
+ */
 class Grid {
   constructor() {
     this.grid = [];
@@ -69,12 +93,6 @@ class Grid {
         //Instantiate a new Node object
         let node = new Node(row, col, new_nodeClass, new_nodeId);
 
-        // if (node.isClass === "start" && node.status === "start") {
-        //   startNode = node;
-        // } else if (node.isClass === "end" && node.status === "end") {
-        //   endNode = node;
-        // }
-
         mygrid += `<td class = ${new_nodeClass} id = ${new_nodeId}></td>`;
         currRow.push(node);
       }
@@ -85,6 +103,7 @@ class Grid {
     mygrid += `</table>`;
     document.getElementById("tableContainer").innerHTML = mygrid;
   }
+
   eventListener() {
     for (let r = 0; r < totalRows; r += 1) {
       for (let c = 0; c < totalCols; c += 1) {
@@ -92,12 +111,12 @@ class Grid {
         let currId = currNode.id;
         //Current Element in the grid
         let currElement = document.getElementById(currId);
-
-        //  # Event Listeners --mousedown
-        //                      --mouseenter
-        //                      --mouseup
-        //             helper  --mousePressed
-
+        /**
+        * Event Listeners  --mousedown
+        *                  --mouseenter
+        *                  --mouseup
+        * helper           --mousePressed
+        */
         currElement.addEventListener("mousedown", (e) => {
           mousePressed = true;
           if (currNode.status === "start" || currNode.status === "end") {
@@ -140,15 +159,22 @@ class Grid {
   }
 }
 
-//Create Walls
-/* 1) If the click is on the Start Node and it is being dragged then move the startNode
-   2) If the click is on the End Node and it is being dragged then change position
-   3) If the click is on a "unvisited" node then update "wall" and if dragged then createWalls
-   4) If the click is on a "visited" node then update and make it a unvisted node.*/
+/**
+ * Create Walls
+ * 1) If the click is on the Start Node and it is being dragged then move the startNode
+ * 2) If the click is on the End Node and it is being dragged then change position
+ * 3) If the click is on a "unvisited" node then update "wall" and if dragged then createWalls
+ * 4) If the click is on a "visited" node then update and make it a unvisted node.
+*/
+
+/**
+ * 05. Grid Object Creation
+ */
 let gridObject = new Grid();
 gridObject.generateGrid();
 gridObject.eventListener();
 
+// Helper function used in eventListener() in Grid class
 function updateStatus(currNode) {
   let element = document.getElementById(currNode.id);
   let relevantStatuses = ["start", "end"];
@@ -173,9 +199,16 @@ function updateStatus(currNode) {
     }
   }
 }
-//Pressed down on the start node....update the next node that is traversed
-//But once the next node is hovered over with pressed down then the node is not updated---so uodate the
-//prevNode as the updated node
+
+
+/**
+ * 06. moveSpecialNode (To reset start and end node)
+ * 
+ * Pressed down on the start node....update the next node that is traversed
+ * But once the next node is hovered over with pressed down then the node is not updated---so update the
+ * prevNode as the updated node
+ */
+
 function moveSpecialNode(currNode) {
   let currElement = document.getElementById(currNode.id);
   let prevElement;
@@ -200,10 +233,9 @@ function moveSpecialNode(currNode) {
   }
 }
 
-/* BUTTONS ----> EventListeners -----> Algorithm Selection -----> Algorithm Fetch*/
-/* Parameters will be startNode,endNode,gridArray and the grid*/
-
-//CEAR GRID
+/**
+ * 07. Clear Grid function
+ */
 let clearBtn = document.getElementById("clearBtn");
 
 export function clearGrid() {
@@ -241,7 +273,10 @@ export function clearGrid() {
   }
 }
 clearBtn.addEventListener("click", clearGrid);
-//CLEAR PATH
+
+/**
+ * 08. Clear Path function
+ */
 let clearPathBtn = document.getElementById("clearPathBtn");
 
 export function clearPath() {
@@ -285,6 +320,8 @@ export function clearPath() {
   }
 }
 clearPathBtn.addEventListener("click", clearPath);
+
+// Update start button text based on selected Algo
 const algorithms = new Map([
   ["aStar", "A*"],
   ["greedyBFS", "Greedy Best-First Search"],
@@ -312,12 +349,10 @@ function updateStartBtn(id) {
   let updated_string = "Start " + name;
   startBtn.innerHTML = updated_string;
 }
-//clearPath();
 
-/* ---------------------- */
-/*-- Draggable Feature -- */
-/*----------------------- */
-
+/**
+ * 09. Draggable Feature for Instruction bar and Algo bar
+ */
 dragElement(document.getElementById("side-bar"));
 dragElement(document.getElementById("info-bar"));
 
@@ -377,9 +412,11 @@ const removeWeights = () => {
   }
 };
 
-/* ------ Draggable Feature ends
-/* ------------------------ */
-
+/**
+ * 10. Start Button Controls (Algorithm calls)
+ * 
+ * BUTTONS -> EventListeners -> Algorithm Selection -> Algorithm Fetch
+ */
 const startAlgo = () => {
   let startBtnText = startBtn.innerText;
   switch (startBtnText) {
