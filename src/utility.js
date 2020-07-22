@@ -120,20 +120,25 @@ export const getSpecialNodes = () => {
   let valid_buttons = [copy_start, copy_end];
   return valid_buttons;
 };
-/* ---------------------countLength-----------*/
-function countLength(nodesToAnimate, algo) {
-  let count = 0;
-  nodesToAnimate.forEach((node) => {
-    if (node[1] === "shortest") {
-      count++;
-    }
-  });
+
+/* --------- Count distance of path-----------*/
+export function countLength(count, algo) {
   if (algo === "aStar") {
-    document.getElementById("aStarCount").innerHTML = `Count: ${count}`;
+    document.getElementById(
+      "aStarCount"
+    ).innerHTML = `Distance Count: ${count}`;
   } else if (algo === "BFS") {
-    document.getElementById("BFSCount").innerHTML = `Count: ${count}`;
+    document.getElementById("BFSCount").innerHTML = `Distance Count: ${count}`;
   } else if (algo === "dijkstra") {
-    document.getElementById("dijkstraCount").innerHTML = `Count: ${count}`;
+    document.getElementById(
+      "dijkstraCount"
+    ).innerHTML = `Distance Count: ${count}`;
+  } else {
+    // To reset the count on Clear Path and Clear Grid
+    let countElement = document.getElementsByClassName("count");
+    for (let i = 0; i < countElement.length; i++) {
+      countElement[i].innerText = `Distance Count: ${count}`;
+    }
   }
 }
 /*------------resetCount -------------*/
@@ -143,6 +148,7 @@ export function resetCount() {
     x[i].innerHTML = `Count:`;
   }
 }
+
 /*------------getNeighbours------------*/
 export function getNeighbours(i, j) {
   let neighbors = [];
@@ -204,6 +210,8 @@ export async function animateCells(
   startbtnText,
   algo
 ) {
+  countLength(0, algo);
+  let count = 1;
   start(startbtnText);
   console.log("animation started");
   inProgress = true;
@@ -225,8 +233,13 @@ export async function animateCells(
       }
       continue;
     } else cell.className = colorClass;
+
+    // Update count
+    if (colorClass == "shortest") {
+      count++;
+      countLength(count, algo);
+    }
   }
-  countLength(nodesToAnimate, algo);
   nodesToAnimate = [];
   inProgress = false;
   toggleScreen(inProgress);

@@ -147,55 +147,7 @@ class Grid {
 let gridObject = new Grid();
 gridObject.generateGrid();
 gridObject.eventListener();
-// for (let r = 0; r < totalRows; r += 1) {
-//   for (let c = 0; c < totalCols; c += 1) {
-//     let currNode = gridObject.grid[r][c];
-//     let currId = currNode.id;
-//     //Current Element in the grid
-//     let currElement = document.getElementById(currId);
 
-//     //  # Event Listeners --mousedown
-//     //                      --mouseenter
-//     //                      --mouseup
-//     //             helper  --mousePressed
-
-//     currElement.addEventListener("mousedown", (e) => {
-//       mousePressed = true;
-//       if (currNode.status === "start" || currNode.status === "end") {
-//         pressedNodeStatus = currNode.status;
-//         prevNode = new Node();
-//         prevNode = currNode;
-//       } else {
-//         pressedNodeStatus = "normal";
-//         //Manipulate the normal node - convert to "WALL" or "A normal node" or to a weight
-//         updateStatus(currNode);
-//       }
-//       e.preventDefault();
-//     });
-//     currElement.addEventListener("mouseenter", (e) => {
-//       if (mousePressed && pressedNodeStatus !== "normal") {
-//         //Means that the pressed node is a "Start" or "end"
-//         //User wants to move the start or end button
-//         prevNode = moveSpecialNode(currNode);
-
-//         //set to default position
-//       } else if (mousePressed && pressedNodeStatus === "normal") {
-//         updateStatus(currNode);
-//       }
-//     });
-//     currElement.addEventListener("mouseup", (e) => {
-//       mousePressed = false;
-//     });
-//   }
-// }
-// /*---------WEIGHTS----------*/
-// window.addEventListener("keydown", (e) => {
-//   //Return the key that is pressed
-//   keyDown = e.code;
-// });
-// window.addEventListener("keyup", () => {
-//   keyDown = false;
-// });
 function updateStatus(currNode) {
   let element = document.getElementById(currNode.id);
   let relevantStatuses = ["start", "end"];
