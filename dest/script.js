@@ -25,7 +25,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-//GLOBAL VARIABLES
+/**
+ * 02. Global Variables
+ */
 var height = window.innerHeight * 0.8;
 var width = window.innerWidth * 0.9;
 var cellSize = 25;
@@ -46,7 +48,10 @@ var pressedNodeStatus = "normal";
 var pathFound = false;
 var inProgress = false; //To add the weights
 
-var keyDown = false; //Instantiate the grid
+var keyDown = false;
+/**
+ * 03. Node class
+ */
 
 var Node = function Node(row, col, nodeClass, nodeId) {
   _classCallCheck(this, Node);
@@ -65,9 +70,12 @@ var Node = function Node(row, col, nodeClass, nodeId) {
   this.f = Infinity;
   this.g = Infinity;
   this.h = Infinity;
-}; //Generate the grid
-// let startNode = new Node();
-// let endNode = new Node();
+};
+/**
+ * 04. Grid Class
+ *      - generateGrid()
+ *      - eventListener()
+ */
 
 
 exports.Node = Node;
@@ -101,12 +109,7 @@ var Grid = /*#__PURE__*/function () {
           } //Instantiate a new Node object
 
 
-          var node = new Node(row, col, new_nodeClass, new_nodeId); // if (node.isClass === "start" && node.status === "start") {
-          //   startNode = node;
-          // } else if (node.isClass === "end" && node.status === "end") {
-          //   endNode = node;
-          // }
-
+          var node = new Node(row, col, new_nodeClass, new_nodeId);
           mygrid += "<td class = ".concat(new_nodeClass, " id = ").concat(new_nodeId, "></td>");
           currRow.push(node);
         }
@@ -127,10 +130,13 @@ var Grid = /*#__PURE__*/function () {
           var currNode = gridObject.grid[r][c];
           var currId = currNode.id; //Current Element in the grid
 
-          var currElement = document.getElementById(currId); //  # Event Listeners --mousedown
-          //                      --mouseenter
-          //                      --mouseup
-          //             helper  --mousePressed
+          var currElement = document.getElementById(currId);
+          /**
+          * Event Listeners  --mousedown
+          *                  --mouseenter
+          *                  --mouseup
+          * helper           --mousePressed
+          */
 
           currElement.addEventListener("mousedown", function (e) {
             mousePressed = true;
@@ -182,17 +188,23 @@ var Grid = /*#__PURE__*/function () {
   }]);
 
   return Grid;
-}(); //Create Walls
+}();
+/**
+ * Create Walls
+ * 1) If the click is on the Start Node and it is being dragged then move the startNode
+ * 2) If the click is on the End Node and it is being dragged then change position
+ * 3) If the click is on a "unvisited" node then update "wall" and if dragged then createWalls
+ * 4) If the click is on a "visited" node then update and make it a unvisted node.
+*/
 
-/* 1) If the click is on the Start Node and it is being dragged then move the startNode
-   2) If the click is on the End Node and it is being dragged then change position
-   3) If the click is on a "unvisited" node then update "wall" and if dragged then createWalls
-   4) If the click is on a "visited" node then update and make it a unvisted node.*/
+/**
+ * 05. Grid Object Creation
+ */
 
 
 var gridObject = new Grid();
 gridObject.generateGrid();
-gridObject.eventListener();
+gridObject.eventListener(); // Helper function used in eventListener() in Grid class
 
 function updateStatus(currNode) {
   var element = document.getElementById(currNode.id);
@@ -217,9 +229,14 @@ function updateStatus(currNode) {
       }
     }
   }
-} //Pressed down on the start node....update the next node that is traversed
-//But once the next node is hovered over with pressed down then the node is not updated---so uodate the
-//prevNode as the updated node
+}
+/**
+ * 06. moveSpecialNode (To reset start and end node)
+ * 
+ * Pressed down on the start node....update the next node that is traversed
+ * But once the next node is hovered over with pressed down then the node is not updated---so update the
+ * prevNode as the updated node
+ */
 
 
 function moveSpecialNode(currNode) {
@@ -241,10 +258,9 @@ function moveSpecialNode(currNode) {
     return currNode;
   }
 }
-/* BUTTONS ----> EventListeners -----> Algorithm Selection -----> Algorithm Fetch*/
-
-/* Parameters will be startNode,endNode,gridArray and the grid*/
-//CEAR GRID
+/**
+ * 07. Clear Grid function
+ */
 
 
 var clearBtn = document.getElementById("clearBtn");
@@ -285,7 +301,10 @@ function clearGrid() {
   }
 }
 
-clearBtn.addEventListener("click", clearGrid); //CLEAR PATH
+clearBtn.addEventListener("click", clearGrid);
+/**
+ * 08. Clear Path function
+ */
 
 var clearPathBtn = document.getElementById("clearPathBtn");
 
@@ -327,7 +346,8 @@ function clearPath() {
   }
 }
 
-clearPathBtn.addEventListener("click", clearPath);
+clearPathBtn.addEventListener("click", clearPath); // Update start button text based on selected Algo
+
 var algorithms = new Map([["aStar", "A*"], ["greedyBFS", "Greedy Best-First Search"], ["dijkstra", "Dijkstra"], ["BFS", "Breadth-First Search"]]);
 var algoID = document.getElementById("accordion");
 algoID.addEventListener("click", function (e) {
@@ -349,13 +369,10 @@ function updateStartBtn(id) {
 
   var updated_string = "Start " + name;
   startBtn.innerHTML = updated_string;
-} //clearPath();
-
-/* ---------------------- */
-
-/*-- Draggable Feature -- */
-
-/*----------------------- */
+}
+/**
+ * 09. Draggable Feature for Instruction bar and Algo bar
+ */
 
 
 dragElement(document.getElementById("side-bar"));
@@ -415,8 +432,11 @@ var removeWeights = function removeWeights() {
     }
   }
 };
-/* ------ Draggable Feature ends
-/* ------------------------ */
+/**
+ * 10. Start Button Controls (Algorithm calls)
+ * 
+ * BUTTONS -> EventListeners -> Algorithm Selection -> Algorithm Fetch
+ */
 
 
 var startAlgo = function startAlgo() {
