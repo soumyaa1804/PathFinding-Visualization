@@ -71,9 +71,10 @@ let myGrid = gridObject.grid;
 document.getElementById("tableContainer").innerHTML = gridHTML;
 
 /* ------------------------- */
-/* ---- MOUSE FUNCTIONS ---- */
-/* ------------------------- */
 
+/* ---- MOUSE FUNCTIONS ---- */
+
+/* ------------------------- */
 // let cells = document.getElementsByTagName("td");
 // for (let i = 0; i < cells.length; i += 1) {
 //   let startCellRow = gridObject.startNodeRow;
@@ -84,7 +85,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   let endCellIndex = endCellRow * totalCols + endCellCol;
 //   let currCellRowIdx = Math.floor(i / totalCols);
 //   let currCellColIdx = Math.floor(i % totalCols);
-
 //   cells[i].addEventListener("mousedown", (e) => {
 //     e.preventDefault();
 //     if (!inProgress && !e.button && !justFinished) {
@@ -118,14 +118,12 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //       }
 //     }
 //   });
-
 //   // cells[i].addEventListener("mouseup", () => {
 //   //   createWalls = false;
 //   //   movingStart = false;
 //   //   movingEnd = false;
 //   //   console.log("mouseup");
 //   // });
-
 //   cells[i].addEventListener("mouseenter", (e) => {
 //     e.preventDefault();
 //     if (!createWalls && !createUnvisited && !movingStart && !movingEnd) {
@@ -150,7 +148,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //       console.log(cells[i].className);
 //     }
 //   });
-
 //   // cells[i].addEventListener("click", () => {
 //   //   if ((inProgress == false) && !(i == startCellIndex) && !(i == endCellIndex)) {
 //   //     if (myGrid[currCellRowIdx][currCellColIdx].status == "wall") {
@@ -164,7 +161,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   //   }
 //   // });
 // }
-
 // let moveStartOrEnd = (prevIndex, newIndex, startOrEnd, newCell) => {
 //   var newCellRow = Math.floor(newIndex / totalCols);
 //   var newCellCol = newIndex % totalCols;
@@ -174,7 +170,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   var prevCellElement = document.getElementById(
 //     `${prevCellRow}-${prevCellCol}`
 //   );
-
 //   if (startOrEnd == "start") {
 //     if (newCellRow == myGrid.endNodeRow && newCellCol == myGrid.endNodeCol) {
 //       return;
@@ -191,7 +186,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   //clearBoard(keepWalls = true);
 //   return;
 // };
-
 // function moveSpecialNode(currNode) {
 //   let currElement = document.getElementById(currNode.id);
 //   let prevElement;
@@ -214,7 +208,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //     return currNode;
 //   }
 // }
-
 // let bodyElement = document.querySelector("body");
 // bodyElement.addEventListener("mouseup", (e) => {
 //   e.preventDefault();
@@ -224,13 +217,10 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   createUnvisited = false;
 //   console.log("Mouseup in body");
 // });
-
 // /* ------------------------------------ */
 // /*-- Draggable Feature from W3 School-- */
 // /*------------------------------------- */
-
 // dragElement(document.getElementById("side-bar"));
-
 // function dragElement(elmnt) {
 //   var pos1 = 0,
 //     pos2 = 0,
@@ -243,7 +233,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //     // otherwise, move the DIV from anywhere inside the DIV:
 //     elmnt.onmousedown = dragMouseDown;
 //   }
-
 //   function dragMouseDown(e) {
 //     e = e || window.event;
 //     e.preventDefault();
@@ -254,7 +243,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //     // call a function whenever the cursor moves:
 //     document.onmousemove = elementDrag;
 //   }
-
 //   function elementDrag(e) {
 //     e = e || window.event;
 //     e.preventDefault();
@@ -267,7 +255,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //     elmnt.style.top = elmnt.offsetTop - pos2 + "px";
 //     elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
 //   }
-
 //   function closeDragElement() {
 //     // stop moving when mouse button is released:
 //     document.onmouseup = null;
@@ -275,7 +262,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   }
 // }
 // /* --- Draggable Feature ends ----- */
-
 // /* --- Update Start button according to selected Algo ----- */
 // const algorithms = new Map([
 //   ["aStar", "A*"],
@@ -285,9 +271,7 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   ["DFS", "Depth First Search"],
 //   ["JPS", "Jump Point Search"],
 // ]);
-
 // const algoID = document.getElementById("accordion");
-
 // algoID.addEventListener("click", (e) => {
 //   const validID = ["aStar", "dijkstra", "GBFS", "BFS", "DFS", "JPS"];
 //   let target_id = e.target.id;
@@ -298,7 +282,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 // });
 // //Get the start Element
 // let startBtn = document.getElementById("startBtn");
-
 // function updateStartBtn(id) {
 //   //get the name
 //   let name = algorithms.get(id);
@@ -306,10 +289,8 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   let updated_string = "Start " + name;
 //   startBtn.innerHTML = updated_string;
 // }
-
 // /* --- Clear grid button ----- */
 // let clearBtn = document.getElementById("clearBtn");
-
 // function clearGrid() {
 //   justFinished = false;
 //   for (let r = 0; r < totalRows; r++) {
@@ -324,31 +305,24 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   }
 // }
 // clearBtn.addEventListener("click", clearGrid);
-
 // /* ------------------------ */
 // /*-- Class Declarations  -- */
 // /*------------------------- */
-
 // /* -------- Queue ------- */
-
 // class Queue {
 //   constructor() {
 //     this.items = new Array();
 //   }
-
 //   dequeue() {
 //     return this.items.shift();
 //   }
-
 //   enqueue(element) {
 //     this.items.push(element);
 //     return;
 //   }
-
 //   empty() {
 //     return this.items.length === 0;
 //   }
-
 //   clear() {
 //     this.items = new Array();
 //     return;
@@ -356,13 +330,11 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 // }
 
 /*------ Min Heap ----- */
-
 // class MinHeap {
 //   heap;
 //   constructor() {
 //     this.heap = [null];
 //   }
-
 //   insert = (num) => {
 //     this.heap.push(num);
 //     if (this.heap.length > 2) {
@@ -382,7 +354,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //       }
 //     }
 //   };
-
 //   remove = () => {
 //     let smallest = this.heap[1];
 //     if (this.heap.length > 2) {
@@ -422,7 +393,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //     return smallest;
 //   };
 // }
-
 // function BFS() {
 //   var myQueue = new Queue();
 //   // var prev = createPrev();
@@ -465,7 +435,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //       myQueue.enqueue(neighbours[k]);
 //     }
 //   }
-
 //   if (pathFound) {
 //     var r = newEndNode[0];
 //     var c = newEndNode[1];
@@ -484,7 +453,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   }
 //   return pathFound;
 // }
-
 // // function createPrev() {
 // //   var prev = [];
 // //   for (var i = 0; i < totalRows; i++) {
@@ -496,7 +464,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 // //   }
 // //   return prev;
 // // }
-
 // // function createVisited() {
 // //   var visited = [];
 // //   var cells = document.getElementsByTagName("td");
@@ -513,7 +480,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 // //   }
 // //   return visited;
 // // }
-
 // function getNeighbours(i, j) {
 //   var neighbors = [];
 //   if (i > 0) {
@@ -530,7 +496,6 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   }
 //   return neighbors;
 // }
-
 // async function animateCells() {
 //   inProgress = true;
 //   // animationState = null;
@@ -568,13 +533,11 @@ document.getElementById("tableContainer").innerHTML = gridHTML;
 //   justFinished = true;
 //   return new Promise(resolve => resolve(true));
 // }
-
 // // function cellIsAWall(i, j, cells) {
 // //   justFinished = false;
 // //   var cellNum = (i * (totalCols)) + j;
 // //   return cells[cellNum].classList.contains("wall");
 // // }
-
 // var startButton = document.getElementById("startBtn");
 // startBtn.addEventListener("click", () => {
 //   if (inProgress) {

@@ -3,22 +3,27 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getSpecialNodes = exports.minHeap = exports.Queue = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 exports.countLength = countLength;
 exports.getNeighbours = getNeighbours;
 exports.animateCells = animateCells;
+exports.getSpecialNodes = exports.minHeap = exports.Queue = void 0;
 
 var _script = require("./script.js");
 
 var _timer = require("./timer.js");
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 /* -------- Queue ------- */
-var Queue = exports.Queue = function () {
+var Queue = /*#__PURE__*/function () {
   function Queue() {
     _classCallCheck(this, Queue);
 
@@ -51,11 +56,12 @@ var Queue = exports.Queue = function () {
 
   return Queue;
 }();
-
 /*------ Min Heap ----- */
 
 
-var minHeap = exports.minHeap = function () {
+exports.Queue = Queue;
+
+var minHeap = /*#__PURE__*/function () {
   function minHeap() {
     _classCallCheck(this, minHeap);
 
@@ -79,13 +85,16 @@ var minHeap = exports.minHeap = function () {
       if (this.isEmpty()) {
         return null;
       }
+
       var min = this.heap[0];
       this.heap[0] = this.heap[this.heap.length - 1];
       this.heap[this.heap.length - 1] = min;
       this.heap.pop();
+
       if (!this.isEmpty()) {
         this.siftDown(0);
       }
+
       return min;
     }
   }, {
@@ -101,6 +110,7 @@ var minHeap = exports.minHeap = function () {
       if (index == 0) {
         return null;
       }
+
       return Math.floor((index - 1) / 2);
     }
   }, {
@@ -115,16 +125,20 @@ var minHeap = exports.minHeap = function () {
       var leftChildValid = children[0] <= this.heap.length - 1;
       var rightChildValid = children[1] <= this.heap.length - 1;
       var newIndex = index;
+
       if (leftChildValid && this.heap[newIndex][0] > this.heap[children[0]][0]) {
         newIndex = children[0];
       }
+
       if (rightChildValid && this.heap[newIndex][0] > this.heap[children[1]][0]) {
         newIndex = children[1];
-      }
-      // No sifting down needed
+      } // No sifting down needed
+
+
       if (newIndex === index) {
         return;
       }
+
       var val = this.heap[index];
       this.heap[index] = this.heap[newIndex];
       this.heap[newIndex] = val;
@@ -135,25 +149,29 @@ var minHeap = exports.minHeap = function () {
     key: "siftUp",
     value: function siftUp(index) {
       var parent = this.parent(index);
+
       if (parent !== null && this.heap[index][0] < this.heap[parent][0]) {
         var val = this.heap[index];
         this.heap[index] = this.heap[parent];
         this.heap[parent] = val;
         this.siftUp(parent);
       }
+
       return;
     }
   }]);
 
   return minHeap;
 }();
-
 /*-------getSpecialNodes------*/
 
 
-var getSpecialNodes = exports.getSpecialNodes = function getSpecialNodes() {
+exports.minHeap = minHeap;
+
+var getSpecialNodes = function getSpecialNodes() {
   var copy_start = null;
   var copy_end = null;
+
   for (var r = 0; r < _script.totalRows; r++) {
     for (var c = 0; c < _script.totalCols; c++) {
       if (_script.gridArray[r][c].status === "start" && _script.gridArray[r][c].isClass === "start") {
@@ -163,40 +181,46 @@ var getSpecialNodes = exports.getSpecialNodes = function getSpecialNodes() {
       }
     }
   }
+
   var valid_buttons = [copy_start, copy_end];
   return valid_buttons;
 };
-
 /* --------- Count distance of path-----------*/
+
+
+exports.getSpecialNodes = getSpecialNodes;
+
 function countLength(count, algo) {
   if (algo === "aStar") {
-    document.getElementById("aStarCount").innerHTML = "Distance Count: " + count;
+    document.getElementById("aStarCount").innerHTML = "Distance Count: ".concat(count);
   } else if (algo === "greedyBFS") {
-    document.getElementById("greedyBFSCount").innerHTML = "Distance Count: " + count;
+    document.getElementById("greedyBFSCount").innerHTML = "Distance Count: ".concat(count);
   } else if (algo === "dijkstra") {
-    document.getElementById("dijkstraCount").innerHTML = "Distance Count: " + count;
+    document.getElementById("dijkstraCount").innerHTML = "Distance Count: ".concat(count);
   } else if (algo === "BFS") {
-    document.getElementById("BFSCount").innerHTML = "Distance Count: " + count;
+    document.getElementById("BFSCount").innerHTML = "Distance Count: ".concat(count);
   } else {
     // To reset the count on Clear Path and Clear Grid
     var countElement = document.getElementsByClassName("count");
+
     for (var _i = 0; _i < countElement.length; _i++) {
-      countElement[_i].innerText = "Distance Count: " + count;
+      countElement[_i].innerText = "Distance Count: ".concat(count);
     }
   }
 }
-
 /*------------getNeighbours------------*/
+
+
 function getNeighbours(i, j) {
-  var neighbors = [];
-  // direction vectors
+  var neighbors = []; // direction vectors
   // 0-3: East, South, West, North
   // 4-7: South-East, North-East, South-West, North-West
+
   var dx = [1, 0, -1, 0, 1, 1, -1, -1];
   var dy = [0, 1, 0, -1, 1, -1, 1, -1];
   var diagonal = document.getElementById("diagonal-flag").checked;
+  var length; // length of direction vector
 
-  var length = void 0; // length of direction vector
   if (diagonal === false) {
     length = 4;
   } else length = 8;
@@ -204,6 +228,7 @@ function getNeighbours(i, j) {
   for (var d = 0; d < length; d++) {
     var rr = i + dx[d];
     var cc = j + dy[d];
+
     if (rr >= 0 && rr < _script.totalRows && cc >= 0 && cc < _script.totalCols) {
       if (_script.gridArray[rr][cc].isVisited || _script.gridArray[rr][cc].status === "wall") {
         continue;
@@ -221,56 +246,104 @@ function getNeighbours(i, j) {
         }
     }
   }
+
   return neighbors;
 }
-
 /*---------Animation-------*/
-async function animateCells(inProgress, nodesToAnimate, startbtnText, algo) {
-  var count = 1;
-  (0, _timer.start)(startbtnText);
-  console.log("animation started");
-  inProgress = true;
-  toggleScreen(inProgress);
-  var cells = document.getElementsByTagName("td");
-  for (var i = 0; i < nodesToAnimate.length; i++) {
-    var nodeCoordinates = nodesToAnimate[i][0];
-    var x = nodeCoordinates.row;
-    var y = nodeCoordinates.col;
-    var num = x * _script.totalCols + y;
-    var cell = cells[num];
-    var colorClass = nodesToAnimate[i][1]; // success, visited or searching
-    // Wait until its time to animate
-    await new Promise(function (resolve) {
-      return setTimeout(resolve, 5);
-    });
-    if (cell.className == "start" || cell.className == "end") {
-      if (cell.className == "end" && colorClass === "shortest") {
-        (0, _timer.start)(startbtnText);
-        console.log("End reached!");
-      }
-      continue;
-    } else cell.className = colorClass;
 
-    // Update count
-    if (colorClass == "shortest") {
-      count++;
-      countLength(count, algo);
-    }
-  }
-  nodesToAnimate = [];
-  inProgress = false;
-  toggleScreen(inProgress);
-  return new Promise(function (resolve) {
-    return resolve(true);
-  });
+
+function animateCells(_x, _x2, _x3, _x4) {
+  return _animateCells.apply(this, arguments);
 }
+
+function _animateCells() {
+  _animateCells = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(inProgress, nodesToAnimate, startbtnText, algo) {
+    var count, cells, i, nodeCoordinates, x, y, num, cell, colorClass;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            count = 1;
+            (0, _timer.start)(startbtnText);
+            console.log("animation started");
+            inProgress = true;
+            toggleScreen(inProgress);
+            cells = document.getElementsByTagName("td");
+            i = 0;
+
+          case 7:
+            if (!(i < nodesToAnimate.length)) {
+              _context.next = 26;
+              break;
+            }
+
+            nodeCoordinates = nodesToAnimate[i][0];
+            x = nodeCoordinates.row;
+            y = nodeCoordinates.col;
+            num = x * _script.totalCols + y;
+            cell = cells[num];
+            colorClass = nodesToAnimate[i][1]; // success, visited or searching
+            // Wait until its time to animate
+
+            _context.next = 16;
+            return new Promise(function (resolve) {
+              return setTimeout(resolve, 5);
+            });
+
+          case 16:
+            if (!(cell.className == "start" || cell.className == "end")) {
+              _context.next = 21;
+              break;
+            }
+
+            if (cell.className == "end" && colorClass === "shortest") {
+              (0, _timer.start)(startbtnText);
+              console.log("End reached!");
+            }
+
+            return _context.abrupt("continue", 23);
+
+          case 21:
+            cell.className = colorClass;
+
+          case 22:
+            // Update count
+            if (colorClass == "shortest") {
+              count++;
+              countLength(count, algo);
+            }
+
+          case 23:
+            i++;
+            _context.next = 7;
+            break;
+
+          case 26:
+            nodesToAnimate = [];
+            inProgress = false;
+            toggleScreen(inProgress);
+            return _context.abrupt("return", new Promise(function (resolve) {
+              return resolve(true);
+            }));
+
+          case 30:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _animateCells.apply(this, arguments);
+}
+
 function toggleScreen(inProgress) {
   if (inProgress) {
     //Get the elements
     //Start Button disable
     document.getElementById("startBtn").disabled = true; //clear Path disable
-    document.getElementById("clearPathBtn").disabled = true;
-    //clear grid disable
+
+    document.getElementById("clearPathBtn").disabled = true; //clear grid disable
+
     document.getElementById("clearBtn").disabled = true;
     document.getElementById("diagonal-flag").disabled = true;
     var tds = document.querySelectorAll("td");
@@ -280,32 +353,37 @@ function toggleScreen(inProgress) {
   } else {
     //Get the elements
     //Start Button enable
-    document.getElementById("startBtn").disabled = false;
-    //clear Path enable
-    document.getElementById("clearPathBtn").disabled = false;
-    //clear grid enable
+    document.getElementById("startBtn").disabled = false; //clear Path enable
+
+    document.getElementById("clearPathBtn").disabled = false; //clear grid enable
+
     document.getElementById("clearBtn").disabled = false;
     document.getElementById("diagonal-flag").disabled = false;
+
     var _tds = document.querySelectorAll("td");
+
     _tds.forEach(function (td) {
       return td.style.pointerEvents = "all";
-    });
-    // //Clear the board
+    }); // //Clear the board
     // document
     //   .getElementById("tableContainer")
     //   .addEventListener("mousedown", clearPath);
+
   }
 }
-
 /* Animate instruction icon on click */
+
+
 var icon = document.getElementById("info-icon");
 icon.addEventListener("click", rotateIcon);
 var i = true;
+
 function rotateIcon() {
   if (i == true) {
     icon.className = "fa fa-chevron-up rotate down";
   } else {
     icon.className = "fa fa-chevron-up rotate";
   }
+
   i = !i;
 }
