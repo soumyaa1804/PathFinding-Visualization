@@ -136,6 +136,13 @@ function countLength(nodesToAnimate, algo) {
     document.getElementById("dijkstraCount").innerHTML = `Count: ${count}`;
   }
 }
+/*------------resetCount -------------*/
+export function resetCount() {
+  var x = document.querySelectorAll(".count");
+  for (let i = 0; i < x.length; i++) {
+    x[i].innerHTML = `Count:`;
+  }
+}
 /*------------getNeighbours------------*/
 export function getNeighbours(i, j) {
   let neighbors = [];

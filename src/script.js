@@ -1,7 +1,7 @@
 import { dijkstra } from "./dijkstra.js";
 import { aStar } from "./aStar.js";
 import { BFS } from "./BFS.js";
-import { animateCells } from "./utility.js";
+import { animateCells, resetCount } from "./utility.js";
 import { resetTimer } from "./timer.js";
 
 //GLOBAL VARIABLES
@@ -215,6 +215,7 @@ function updateStatus(currNode) {
           currNode.weight !== 5 ? "unvisited-weight" : "unvisited";
         currNode.weight = element.className !== "unvisited-weight" ? 0 : 5;
         currNode.status = "unvisited";
+        currNode.isClass = element.className;
       }
     }
   }
@@ -256,6 +257,7 @@ export function clearGrid() {
   let node = new Node();
   nodesToAnimate = [];
   resetTimer();
+  resetCount();
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
       node = gridArray[r][c];
@@ -292,6 +294,7 @@ let clearPathBtn = document.getElementById("clearPathBtn");
 export function clearPath() {
   let node = new Node();
   resetTimer();
+  resetCount();
   nodesToAnimate = [];
   for (let r = 0; r < totalRows; r++) {
     for (let c = 0; c < totalCols; c++) {
