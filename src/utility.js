@@ -203,7 +203,7 @@ export async function animateCells(
   startbtnText,
   algo
 ) {
-  //countLength(0, algo);
+  //countLength(0,algo)
   let count = 1;
   start(startbtnText);
   console.log("animation started");
