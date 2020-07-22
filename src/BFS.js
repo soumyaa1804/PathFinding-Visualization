@@ -3,13 +3,16 @@ import { Node, gridArray, totalCols, totalRows } from "./script.js";
 
 export function BFS(nodesToAnimate, pathFound) {
   let myQueue = new Queue();
+  // Get start node and end node
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
   let endNode = specialNodes[1];
+  
   startNode.isVisited = true;
   myQueue.enqueue(startNode);
   nodesToAnimate.push([startNode, "searching"]);
   let currNode = new Node();
+  
   while (!myQueue.empty()) {
     currNode = myQueue.dequeue();
     var r = currNode.row;
@@ -36,12 +39,12 @@ export function BFS(nodesToAnimate, pathFound) {
   if (pathFound) {
     nodesToAnimate.push([endNode, "shortest"]);
     let prevNode = new Node();
-    console.log("current node should be endnode", currNode);
     prevNode = endNode.parent;
     while (prevNode !== null) {
       nodesToAnimate.push([prevNode, "shortest"]);
       prevNode = prevNode.parent;
     }
   }
+
   return pathFound;
 }

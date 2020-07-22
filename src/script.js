@@ -286,14 +286,15 @@ export function clearPath() {
 clearPathBtn.addEventListener("click", clearPath);
 const algorithms = new Map([
   ["aStar", "A*"],
+  ["greedyBFS", "Greedy Best-First Search"],
   ["dijkstra", "Dijkstra"],
-  ["BFS", "Breadth First Search"],
+  ["BFS", "Breadth-First Search"],
 ]);
 
 const algoID = document.getElementById("accordion");
 
 algoID.addEventListener("click", (e) => {
-  const validID = ["aStar", "dijkstra", "BFS"];
+  const validID = ["aStar", "greedyBFS", "dijkstra", "BFS"];
   let target_id = e.target.id;
   if (validID.includes(target_id)) {
     updateStartBtn(target_id);
@@ -410,7 +411,7 @@ const startAlgo = () => {
       }
       break;
     }
-    case "Start Breadth First Search": {
+    case "Start Breadth-First Search": {
       clearPath();
       removeWeights();
       nodesToAnimate = [];

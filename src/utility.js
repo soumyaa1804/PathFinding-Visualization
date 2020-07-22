@@ -1,4 +1,4 @@
-import { gridArray, totalRows, totalCols, clearPath } from "./script.js";
+import { gridArray, totalRows, totalCols } from "./script.js";
 import { start } from "./timer.js";
 
 /* -------- Queue ------- */
@@ -127,12 +127,14 @@ export function countLength(count, algo) {
     document.getElementById(
       "aStarCount"
     ).innerHTML = `Distance Count: ${count}`;
-  } else if (algo === "BFS") {
-    document.getElementById("BFSCount").innerHTML = `Distance Count: ${count}`;
+  } else if (algo === "greedyBFS") {
+    document.getElementById("greedyBFSCount").innerHTML = `Distance Count: ${count}`;
   } else if (algo === "dijkstra") {
     document.getElementById(
       "dijkstraCount"
     ).innerHTML = `Distance Count: ${count}`;
+  } else if (algo === "BFS") {
+    document.getElementById("BFSCount").innerHTML = `Distance Count: ${count}`;
   } else {
     // To reset the count on Clear Path and Clear Grid
     let countElement = document.getElementsByClassName("count");
