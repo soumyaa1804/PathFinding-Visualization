@@ -11,7 +11,7 @@ Mangalyaan is a web application that helps a Mars rover to find the shortest pat
 ## Demo
 [Mangalyaan](https://mangalyaan.netlify.app/)
 
-## Authors
+## Contributors
 - [Anusha Bansal](https://github.com/AnushaKittu)
 
 - [Soumya Sharma](https://github.com/soumyaa1804)
