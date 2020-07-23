@@ -1,7 +1,7 @@
 {
   "name": "pathfinding-visualization",
   "version": "1.0.0",
-  "description": "",
+  "description": "![Mars Colonization Program](./assets/programBanner.png)",
   "main": "index.js",
   "scripts": {
     "build": "babel src -d dest"

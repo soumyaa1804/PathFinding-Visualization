@@ -3,7 +3,7 @@ import { Node, gridArray } from "./script.js";
 
 function updateNeighbours(currNode, neighbours, endNode) {
   neighbours.forEach((neighbour) => {
-    neighbour.h = neighbour.weight * getDistance(neighbour, endNode);
+    neighbour.h = neighbour.weight + getDistance(neighbour, endNode);
     var newf = neighbour.h;
     if (newf < neighbour.f) neighbour.f = newf;
     neighbour.parent = currNode;
@@ -44,72 +44,72 @@ function getDistance(nodeA, nodeB) {
 }
 
 const greedyBFS = (nodesToAnimate, pathFound) => {
-    //Get the startNode and the endNode
-    let specialNodes = getSpecialNodes();
-    var startNode = specialNodes[0];
-    var endNode = specialNodes[1];
+  //Get the startNode and the endNode
+  let specialNodes = getSpecialNodes();
+  var startNode = specialNodes[0];
+  var endNode = specialNodes[1];
 
-    //Make a min heap to keep track of nodes with lowest f
-    //UnvisitedNodes array
-    let openList = new minHeap();
-    //Update the distances of startNode
-    //Distance of startNode from startNode
+  //Make a min heap to keep track of nodes with lowest f
+  //UnvisitedNodes array
+  let openList = new minHeap();
+  //Update the distances of startNode
+  //Distance of startNode from startNode
 
-    startNode.h = getDistance(startNode, endNode);
+  startNode.h = getDistance(startNode, endNode);
 
-    startNode.f = startNode.h;
+  startNode.f = startNode.h;
 
-    openList.push([startNode.f, startNode]);
+  openList.push([startNode.f, startNode]);
 
-    while (!openList.isEmpty()) {
-      var currNode = new Node();
-      let currArr = openList.getMin();
-      currNode = currArr[1];
-  
-      //Check if the endNode
-      if (currNode.status == endNode.status) {
-        pathFound = true;
-        backtrack(endNode, nodesToAnimate);
-        break;
-      }
-      if (currNode.isVisited) {
-        console.log(74, currNode.isVisited);
-        continue;
-      }
-      currNode.isVisited = true;
-      nodesToAnimate.push([currNode, "visited"]);
-  
-      var neighboursIndex = getNeighbours(currNode.row, currNode.col);
-      let neighbours = [];
-      for(const indices of neighboursIndex) {
-        let m = indices[0];
-        let n = indices[1];
-        let neighbour = new Node();
-        neighbour = gridArray[m][n];
-        neighbours.push(neighbour);
-      }
-      updateNeighbours(currNode, neighbours, endNode);
-      console.log("astar neigh", neighbours);
-      for (let i = 0; i < neighbours.length; i++) {
-        let neighbour = neighbours[i];
-        nodesToAnimate.push([neighbour, "searching"]);
-        openList.push([neighbour.f, neighbour]);
-      }
+  while (!openList.isEmpty()) {
+    var currNode = new Node();
+    let currArr = openList.getMin();
+    currNode = currArr[1];
+
+    //Check if the endNode
+    if (currNode.status == endNode.status) {
+      pathFound = true;
+      backtrack(endNode, nodesToAnimate);
+      break;
     }
-    while (!openList.isEmpty()) {
-      let cell = new Node();
-      let arr = openList.getMin();
-      cell = arr[1];
-      if (cell.isVisited) {
-        continue;
-      }
-      cell.isVisited = true;
-      nodesToAnimate.push([cell, "visited"]);
+    if (currNode.isVisited) {
+      console.log(74, currNode.isVisited);
+      continue;
     }
-    //alert("No Path Exists");
-    console.log(endNode);
-    console.log("inside a*", pathFound);
-    openList.clear();
-    return pathFound;
+    currNode.isVisited = true;
+    nodesToAnimate.push([currNode, "visited"]);
+
+    var neighboursIndex = getNeighbours(currNode.row, currNode.col);
+    let neighbours = [];
+    for (const indices of neighboursIndex) {
+      let m = indices[0];
+      let n = indices[1];
+      let neighbour = new Node();
+      neighbour = gridArray[m][n];
+      neighbours.push(neighbour);
+    }
+    updateNeighbours(currNode, neighbours, endNode);
+    console.log("astar neigh", neighbours);
+    for (let i = 0; i < neighbours.length; i++) {
+      let neighbour = neighbours[i];
+      nodesToAnimate.push([neighbour, "searching"]);
+      openList.push([neighbour.f, neighbour]);
+    }
+  }
+  while (!openList.isEmpty()) {
+    let cell = new Node();
+    let arr = openList.getMin();
+    cell = arr[1];
+    if (cell.isVisited) {
+      continue;
+    }
+    cell.isVisited = true;
+    nodesToAnimate.push([cell, "visited"]);
+  }
+  //alert("No Path Exists");
+  console.log(endNode);
+  console.log("inside a*", pathFound);
+  openList.clear();
+  return pathFound;
 };
 export { greedyBFS };

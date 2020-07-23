@@ -5,7 +5,7 @@
  * getSpecialNode()
  * countLength()
  * getNeighbour()
- * animateCells() 
+ * animateCells()
  * toggleScreen() (Disable items when animation is in progress)
  */
 
@@ -18,7 +18,7 @@ import { start } from "./timer.js";
 /**
  * Queue class
  *  -dequeue() returns first element added
- *  -enqueue() 
+ *  -enqueue()
  *  -empty() @returns true/false
  *  -clear()
  */
@@ -51,7 +51,7 @@ export class Queue {
  *  -isEmpty()
  *  -clear()
  *  -getMin()
- *  -push() @param item 
+ *  -push() @param item
  */
 export class minHeap {
   constructor() {
@@ -125,7 +125,7 @@ export class minHeap {
 }
 
 /**
- * @description get updated start and end node 
+ * @description get updated start and end node
  * @returns array of nodes containing start and end nodes
  */
 export const getSpecialNodes = () => {
@@ -180,9 +180,9 @@ export function countLength(count, algoId) {
 }
 
 /**
- * @desc Returns neighbours of a node according 
+ * @desc Returns neighbours of a node according
  *       to if diagonal movement is allowed or not.
- * 
+ *
  * @param {number} i row index of node
  * @param {numbet} j column index of node
  */
@@ -240,9 +240,9 @@ export function getNeighbours(i, j) {
 }
 
 /**
- * @desc Animate all the cells that are added to 
+ * @desc Animate all the cells that are added to
  *       nodesToAnimate array according to their status.
- * 
+ *
  * @param {boolean} inProgress If animation is in progress
  * @param {array} nodesToAnimate Array containing nodes along with their status
  * @param {string} startbtnText Text on start button
@@ -293,7 +293,7 @@ export async function animateCells(
 /**
  * @desc Disable each cell of the grid and all buttons
  *       if animation is in progress
- * @param {boolean} inProgress 
+ * @param {boolean} inProgress
  */
 function toggleScreen(inProgress) {
   if (inProgress) {

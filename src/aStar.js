@@ -5,9 +5,10 @@ import { Node, gridArray } from "./script.js";
 function updateNeighbours(neighbours, currNode, algo, endNode) {
   if (algo === "aStar") {
     neighbours.forEach((neighbour) => {
-      var newGCost = 1 + currNode.g;
+      var newGCost = currNode.g + neighbour.weight;
+
       //Whenever weights are involved f(n) = g(n) + W*h(n)
-      let estimation_cost = neighbour.weight * getDistance(neighbour, endNode);
+      let estimation_cost = getDistance(neighbour, endNode);
       let newCost = newGCost + estimation_cost;
       if (newCost < neighbour.f) {
         neighbour.g = newGCost;
@@ -44,44 +45,28 @@ function backtrack(endNode, nodesToAnimate) {
   }
 }
 const aStar = (nodesToAnimate, pathFound) => {
-  //Get the startNode and the endNode
   let specialNodes = getSpecialNodes();
   var startNode = specialNodes[0];
   var endNode = specialNodes[1];
 
-  //nodesToAnimate = [];
-
-  //Make a min heap to keep track of nodes with lowest f
-  //UnvisitedNodes array
   let openList = new minHeap();
-  //Update the distances of startNode
-  //Distance of startNode from startNode
   startNode.g = 0;
   startNode.h = getDistance(startNode, endNode);
-  //Considering directions as only four
   startNode.f = startNode.g + startNode.h;
-  //Push start node in the open List
-  //startNode.isVisited = true;
-  //nodesToAnimate.push([startNode, "searching"]);
+
   openList.push([startNode.f, startNode]);
-  //nodesToAnimate.push([startNode, "searching"]);
+
   while (!openList.isEmpty()) {
-    //The node having the lowest f value
-    //console.log("loop", openList);
     var currNode = new Node();
     let currArr = openList.getMin();
     currNode = currArr[1];
-    console.log("72", currNode);
 
-    //nodesToAnimate.push([currNode, "searching"]);
-    //Check if the endNode
     if (currNode.status == endNode.status) {
       pathFound = true;
       backtrack(endNode, nodesToAnimate);
       break;
     }
     if (currNode.isVisited) {
-      console.log(74, currNode.isVisited);
       continue;
     }
     currNode.isVisited = true;
@@ -114,9 +99,6 @@ const aStar = (nodesToAnimate, pathFound) => {
     cell.isVisited = true;
     nodesToAnimate.push([cell, "visited"]);
   }
-  //alert("No Path Exists");
-  console.log(endNode);
-  console.log("inside a*", pathFound);
   openList.clear();
   return pathFound;
 };
