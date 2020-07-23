@@ -9,7 +9,7 @@
 Mangalyaan is a web application that helps a Mars rover to find the shortest path between two points on a solid surface while making sure it does not land into the hollow pits (represented by transparent surface) that may take it to the free space and the rover will get lost forever. :rocket: 
 
 ## Demo
-[Mangalyaan](https://mangalyaan.netlify.app/)
+Hosted on Microsoft Azure. [Mangalyaan](https://mangalyaan.z23.web.core.windows.net/)
 
 ## Contributors
 - [Anusha Bansal](https://github.com/AnushaKittu)
