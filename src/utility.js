@@ -1,12 +1,14 @@
 /**
- * Imports
- * Queue class
- * Min Heap class
- * getSpecialNode()
- * countLength()
- * getNeighbour()
- * animateCells()
- * toggleScreen() (Disable items when animation is in progress)
+ * Contents:
+ * 
+ * -Imports
+ * -Queue class
+ * -Min Heap class
+ * -getSpecialNode() get updated start and end node after dragging them
+ * -countLength() count length of the path
+ * -getNeighbour()
+ * -animateCells()
+ * -toggleScreen() (Disable items when animation is in progress)
  */
 
 /**
@@ -50,8 +52,8 @@ export class Queue {
  * Min heap class
  *  -isEmpty()
  *  -clear()
- *  -getMin()
- *  -push() @param item
+ *  -getMin() 
+ *  -push() @param {Array} item Array of type [number, Node] 
  */
 export class minHeap {
   constructor() {
@@ -126,6 +128,7 @@ export class minHeap {
 
 /**
  * @description get updated start and end node
+ * 
  * @returns array of nodes containing start and end nodes
  */
 export const getSpecialNodes = () => {
@@ -152,6 +155,7 @@ export const getSpecialNodes = () => {
 
 /**
  * @description Count length of distance
+ * 
  * @param {number} count Distance count
  * @param {string} algoId Algo id or else "reset" to reset the count
  */
@@ -180,8 +184,8 @@ export function countLength(count, algoId) {
 }
 
 /**
- * @desc Returns neighbours of a node according
- *       to if diagonal movement is allowed or not.
+ * @description Returns neighbours of a node according
+ *              to if diagonal movement is allowed or not.
  *
  * @param {number} i row index of node
  * @param {numbet} j column index of node
@@ -240,8 +244,8 @@ export function getNeighbours(i, j) {
 }
 
 /**
- * @desc Animate all the cells that are added to
- *       nodesToAnimate array according to their status.
+ * @description Animate all the cells that are added to
+ *              nodesToAnimate array according to their status.
  *
  * @param {boolean} inProgress If animation is in progress
  * @param {array} nodesToAnimate Array containing nodes along with their status
@@ -291,8 +295,9 @@ export async function animateCells(
 }
 
 /**
- * @desc Disable each cell of the grid and all buttons
- *       if animation is in progress
+ * @description Disable each cell of the grid and all buttons
+ *              if animation is in progress
+ * 
  * @param {boolean} inProgress
  */
 function toggleScreen(inProgress) {

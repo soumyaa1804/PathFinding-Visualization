@@ -1,6 +1,21 @@
-import { getSpecialNodes, Queue, getNeighbours } from "./utility.js";
-import { Node, gridArray, totalCols, totalRows } from "./script.js";
+/**
+ * Breadth-First Search
+ * 
+ * An uninformed search algorithm.
+ * Completeness: BFS is complete, meaning for a given search tree, BFS will come up with a solution if it exists.
+ * Optimality: BFS is optimal as long as the costs of all edges are equal.
+ */
 
+import { getSpecialNodes, Queue, getNeighbours } from "./utility.js";
+import { Node, gridArray } from "./script.js";
+
+/**
+ * @description BFS Algorithm
+ * 
+ * @param {Array} nodesToAnimate array of type [node, "status"] 
+ * @param {boolean} pathFound false in the beginning.
+ * @returns true if path found or else return false.
+ */
 export function BFS(nodesToAnimate, pathFound) {
   let myQueue = new Queue();
   // Get start node and end node
@@ -13,6 +28,7 @@ export function BFS(nodesToAnimate, pathFound) {
   nodesToAnimate.push([startNode, "searching"]);
   let currNode = new Node();
   
+  // dequeue till queue becomes empty or finds end node
   while (!myQueue.empty()) {
     currNode = myQueue.dequeue();
     var r = currNode.row;
@@ -36,6 +52,7 @@ export function BFS(nodesToAnimate, pathFound) {
     }
   }
 
+  // backtrack if path found
   if (pathFound) {
     nodesToAnimate.push([endNode, "shortest"]);
     let prevNode = new Node();

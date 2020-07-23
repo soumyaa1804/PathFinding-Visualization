@@ -1,9 +1,19 @@
-//Invoked when Start Dijkstra is 'CLICKED'
-//Get the start and end node
+/**
+ * Dijkstra Algorithm
+ * Weighted search algorithm.
+ * Invoked when Start Dijkstra is 'CLICKED'
+ */
 
 import { Node, totalRows, totalCols, gridArray } from "./script.js";
 import { getNeighbours, getSpecialNodes } from "./utility.js";
 
+/**
+ * @description Dijkstra Algorithm
+ * 
+ * @param {Array} nodesToAnimate array of type [node, "status"] 
+ * @param {boolean} pathFound false in the beginning.
+ * @returns true if path found or else return false.
+ */
 function dijkstra(nodesToAnimate, pathFound) {
   let specialNodes = getSpecialNodes();
   let startNode = specialNodes[0];
@@ -65,6 +75,13 @@ function getUnvisitedNodes() {
   }
   return nodes;
 }
+/**
+ * @description update neighbour's distance
+ * 
+ * @param {Array} neighbours array of neighbouring nodes
+ * @param {Node} currNode parent node of neighbours
+ * @param {string} algo algorithm's HTML id
+ */
 function updateNeighbours(neighbours, currNode, algo) {
   let row = currNode.row;
   let col = currNode.col;

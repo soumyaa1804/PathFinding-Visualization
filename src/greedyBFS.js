@@ -1,3 +1,11 @@
+/**
+ * Greedy Best-First Search
+ * 
+ * An informed searching algorithm
+ * Complete: Greedy best-first search is incomplete, even if the given state space is finite.
+ * Optimal: Greedy best first search algorithm is not optimal.
+ */
+
 import { getSpecialNodes, minHeap, getNeighbours } from "/src/utility.js";
 import { Node, gridArray } from "./script.js";
 

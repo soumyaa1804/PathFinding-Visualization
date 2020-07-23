@@ -1,3 +1,13 @@
+/**
+ * A* searching algorithm
+ * 
+ * Complete: A* algorithm is complete as long as branching factor (branches from 1 node) 
+ * is finite and cost at every action is fixed.
+ * Optimal: A* search algorithm is optimal if it follows below two conditions: Admissibility and consistency.
+ * 
+ * reference: https://www.javatpoint.com/ai-informed-search-algorithms
+ */
+
 import { getSpecialNodes, minHeap, getNeighbours } from "/src/utility.js";
 import { Node, gridArray } from "./script.js";
 //Invoked when start visualizing is 'CLICKED'

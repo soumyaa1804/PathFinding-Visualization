@@ -1,19 +1,19 @@
 /**
  * Contents:
- * 01. Imports
- * 02. Global Variables
- * 03. Node class
- * 04. Grid class
- * 05. Grid object creation
- * 06. moveSpecialNode (To reset start and end node)
- * 07. Clear Grid function
- * 08. Clear Path function
- * 09. Draggable feature for Instruction bar and Algo bar
- * 10. Start Button Controls (Algorithm calls)
+ * - Imports
+ * - Global Variables
+ * - Node class
+ * - Grid class
+ * - Grid object creation
+ * - moveSpecialNode (To reset start and end node)
+ * - Clear Grid function
+ * - Clear Path function
+ * - Draggable feature for Instruction bar and Algo bar
+ * - Start Button Controls (Algorithm calls)
  */
 
 /**
- * 01. Imports
+ * Imports
  */
 import { dijkstra } from "./dijkstra.js";
 import { aStar } from "./aStar.js";
@@ -23,7 +23,7 @@ import { animateCells, countLength } from "./utility.js";
 import { resetTimer } from "./timer.js";
 
 /**
- * 02. Global Variables
+ * Global Variables
  */
 const height = window.innerHeight * 0.8;
 const width = window.innerWidth * 0.9;
@@ -45,7 +45,7 @@ let inProgress = false;
 let keyDown = false;
 
 /**
- * 03. Node class
+ * Node class
  */
 export class Node {
   constructor(row, col, nodeClass, nodeId) {
@@ -67,9 +67,9 @@ export class Node {
 }
 
 /**
- * 04. Grid Class
- *      - generateGrid()
- *      - eventListener()
+ * Grid Class
+ *  - generateGrid()
+ *  - eventListener()
  */
 class Grid {
   constructor() {
@@ -132,8 +132,10 @@ class Grid {
         });
         currElement.addEventListener("mouseenter", (e) => {
           if (mousePressed && pressedNodeStatus !== "normal") {
-            //Means that the pressed node is a "Start" or "end"
-            //User wants to move the start or end button
+            /**
+             * Means that the pressed node is a "Start" or "end"
+             * User wants to move the start or end button
+             */
             prevNode = moveSpecialNode(currNode);
 
             //set to default position
@@ -148,7 +150,7 @@ class Grid {
         });
       }
     }
-    /*---------WEIGHTS----------*/
+    /*-------  WEIGHTS  --------*/
     window.addEventListener("keydown", (e) => {
       //Return the key that is pressed
       keyDown = e.code;
@@ -168,7 +170,7 @@ class Grid {
 */
 
 /**
- * 05. Grid Object Creation
+ * Grid Object Creation
  */
 let gridObject = new Grid();
 gridObject.generateGrid();
@@ -201,7 +203,7 @@ function updateStatus(currNode) {
 }
 
 /**
- * 06. moveSpecialNode (To reset start and end node)
+ * moveSpecialNode (To reset start and end node)
  * 
  * Pressed down on the start node....update the next node that is traversed
  * But once the next node is hovered over with pressed down then the node is not updated---so update the
@@ -232,7 +234,7 @@ function moveSpecialNode(currNode) {
 }
 
 /**
- * 07. Clear Grid function
+ * Clear Grid function
  */
 let clearBtn = document.getElementById("clearBtn");
 
@@ -273,7 +275,7 @@ export function clearGrid() {
 clearBtn.addEventListener("click", clearGrid);
 
 /**
- * 08. Clear Path function
+ * Clear Path function
  */
 let clearPathBtn = document.getElementById("clearPathBtn");
 
@@ -349,7 +351,7 @@ function updateStartBtn(id) {
 }
 
 /**
- * 09. Draggable Feature for Instruction bar and Algo bar
+ * Draggable Feature for Instruction bar and Algo bar
  */
 dragElement(document.getElementById("side-bar"));
 dragElement(document.getElementById("info-bar"));
@@ -411,7 +413,7 @@ const removeWeights = () => {
 };
 
 /**
- * 10. Start Button Controls (Algorithm calls)
+ * Start Button Controls (Algorithm calls)
  * 
  * BUTTONS -> EventListeners -> Algorithm Selection -> Algorithm Fetch
  */
