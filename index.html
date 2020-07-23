@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8" />
+  <meta 
+    name="description" 
+    content="PathFinding visualization project, 'Mangalyaan', that visualizes 4 shortest path algorithms, A*, Best-First Search, Dijkstra and Breadth-First Search">
+  <meta 
+    name="authors" 
+    content="Anusha Bansal and Soumya Sharma">
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, shrink-to-fit=no"
   />
-
+  <title>PathFinding Visualization</title>
   <!-- Style sheet script.js -->
-  <link
-    rel="stylesheet"
-    href="./styles/main.css"
-  />
   <link
     href="https://fonts.googleapis.com/css2?family=Girassol&display=swap"
     rel="stylesheet"
@@ -31,14 +32,14 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous"
   />
-  <!-- Material Design Bootstrap
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet"> -->
-  <title>PathFinding Visualization</title>
+  <link
+  rel="stylesheet"
+  href="./styles/main.css"
+/>
 </head>
 
 <body>
   <div id="particles-js"></div>
-
   <div class="float-container main">
     <!-- Heading Mangalyaan -->
     <div class="header pt-4">
@@ -54,6 +55,7 @@
     <div id="tableContainer"></div>
   </div>
 
+  <!-- [Start] Instruction bar (draggable) -->
   <div
     class="info-bar"
     id="info-bar"
@@ -108,11 +110,11 @@
     </div>
   </div>
   </div>
+  <!-- [End] Instruction bar -->
 
-  <!-- Draggable Sidebar -->
+  <!-- [Start] Algorithm Sidebar (draggable) -->
   <div
-    class="
-                side-bar"
+    class="side-bar"
     id="side-bar"
   >
     <div class="card mb-3">
@@ -125,6 +127,7 @@
         </a>
       </div>
     </div>
+
     <div
       id="accordion"
       class="mb-3"
@@ -289,6 +292,7 @@
       </div>
     </div>
 
+    <!-- Control Buttons -->
     <div class="card mt-3">
       <div class="card-header">
         <button
@@ -315,6 +319,7 @@
       </div>
     </div>
   </div>
+  <!-- [End] Algorithm Side-bar -->
 
   <!-- Optional JavaScript -->
 
@@ -335,9 +340,12 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"
   ></script>
-  <!-- <script src="./scripts/newScripts.js"></script> -->
+
+  <!-- For animated background -->
   <script src="src/particles.js"></script>
   <script src="src/app.js"></script>
+
+  <!-- Main scripts -->
   <script
     type="module"
     src="src/script.js"
