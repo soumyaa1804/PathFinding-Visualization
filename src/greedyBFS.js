@@ -44,10 +44,9 @@ function getDistance(nodeA, nodeB) {
     return dx + dy;
   } else {
     if (dx > dy) {
-      //Better results than using sqrt(2) and 1
-      return 14 * dy + 10 * (dx - dy);
+      return (1.4 * dy) + (dx - dy);
     }
-    return 14 * dx + 10 * (dy - dx);
+    return (1.4 * dx) + (dy - dx);
   }
 }
 
