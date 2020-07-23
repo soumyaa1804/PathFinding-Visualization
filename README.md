@@ -1,4 +1,3 @@
-# Engage 2020 Mentorship Program by Microsoft
 ![Mars Colonization Program](./assets/programBanner.png)
 
 ### [The Mars Colonization Program](https://microsoft.acehacker.com/mars/)
