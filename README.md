@@ -1,4 +1,5 @@
 # Engage 2020 Mentorship Program by Microsoft
+![Mars Colonization Program](./assets/programBanner.png)
 
 ### [The Mars Colonization Program](https://microsoft.acehacker.com/mars/)
 
@@ -6,13 +7,12 @@
 
 
 # Mangalyaan
-
 Mangalyaan is a web application that helps a Mars rover to find the shortest path between two points on a solid surface while making sure it does not land into the hollow pits (represented by transparent surface) that may take it to the free space and the rover will get lost forever. :rocket: 
 
 ## Demo
-
 [Mangalyaan](https://mangalyaan.netlify.app/)
 
 ## Authors
-[Anusha Bansal](https://github.com/AnushaKittu)
-[Soumya Sharma](https://github.com/soumyaa1804)
+- [Anusha Bansal](https://github.com/AnushaKittu)
+
+- [Soumya Sharma](https://github.com/soumyaa1804)
