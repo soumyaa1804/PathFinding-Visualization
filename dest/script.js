@@ -262,6 +262,8 @@ function moveSpecialNode(currNode) {
 }
 /**
  * Clear Grid function
+ * 
+ * @description leave only start node and end node
  */
 
 
@@ -306,6 +308,8 @@ function clearGrid() {
 clearBtn.addEventListener("click", clearGrid);
 /**
  * Clear Path function
+ * 
+ * @description leave only start node, end node, walls and weighted nodes
  */
 
 var clearPathBtn = document.getElementById("clearPathBtn");
