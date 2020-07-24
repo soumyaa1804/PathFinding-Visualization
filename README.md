@@ -22,16 +22,16 @@ The uninformed search does not contain any domain knowledge such as closeness, t
 
 ### 1. Breadth First Search Algorithm
 Breadth-first search (BFS) is an algorithm for traversing or searching tree or graph data structures. It starts at the start Node in the grid, and explores all of the neighbour nodes at the present depth prior to moving on to the nodes at the next depth level. It can be implemented using FIFO queue data structure. It is an unweighted algorithm.
-!(./assets/BFS start.png)
-!(./assets/BFS end.png)
-!(./assets/BFS diagonal.png)
+!(./assets/BFSStart.png)
+!(./assets/BFSEnd.png)
+!(./assets/BFSdiagonal.png)
 
 ### 2. Dijkstra's Algorithm
 Dijkstra's algorithm find the shortest path between two given nodes, but a more common variant fixes a single node as the "source" node and finds shortest paths from the source to all other nodes in the graph, producing a shortest-path tree.
 Although in our case we are making a small change by passing the information about the target node so that the algorithm can work efficiently.
-(./assets/dijkstra start.png)
-(./assets/dijkstra end.png)
-(./assets/dijkstra diagonal.png)
+(./assets/dijkstraStart.png)
+(./assets/dijkstraEnd.png)
+(./assets/dijkstradiagonal.png)
 
 ## Informed Searches
 Informed search algorithms use domain knowledge. In an informed search, problem information is available which can guide the search. Informed search strategies can find a solution more efficiently than an uninformed search strategy. Informed search is also called a Heuristic search.
@@ -42,15 +42,15 @@ A heuristic is a way which might not always be guaranteed for best solutions but
 Greedy best-first search algorithm always selects the path which appears best at that moment. It is the combination of depth-first search and breadth-first search algorithms. It uses the heuristic function and search. Best-first search allows us to take the advantages of both algorithms. With the help of best-first search, at each step, we can choose the most promising node. In the best first search algorithm, we expand the node which is closest to the goal node and the closest cost is estimated by heuristic function, i.e.
 f(n)= h(n).   
 Were, h(n)= estimated cost from node n to the goal.
-(./assets/GBFS start.png)
-(./assets/GBFS end.png)
-(./assets/GBFS diagonal.png)
+(./assets/GBFSStart.png)
+(./assets/GBFSEnd.png)
+(./assets/GBFSdiagonal.png)
 
 ### 2. A* Algorithm
 A* search is the most commonly known form of best-first search. It uses heuristic function h(n), and cost to reach the node n from the start state g(n). It has combined features of UCS and greedy best-first search, by which it solve the problem efficiently. A* search algorithm finds the shortest path through the search space using the heuristic function. This search algorithm expands less search tree and provides optimal result faster. A* algorithm uses g(n)+h(n).
-(./assets/aStar start.png)
-(./assets/aStar end.png)
-(./assets/aStar diagonal.png)
+(./assets/aStarStart.png)
+(./assets/aStarEnd.png)
+(./assets/aStardiagonal.png)
 
 ### Contributors
 - [Anusha Bansal](https://github.com/AnushaKittu)
