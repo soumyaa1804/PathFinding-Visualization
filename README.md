@@ -17,7 +17,16 @@ Prerequisites
 What things you need to install the software and how to install them
 
 node.js
+<br>
 babel
+
+# Documentation
+For documentation,
+https://github.com/soumyaa1804/PathFinding-Visualization/wiki
+
+# Demo
+For the demo, 
+https://mangalyaan.netlify.app/
 
 #  Use of ARTIFICIAL INTELLIGENCE
 Most of the algorithms used to help make the rover an intelligent agent are the AI search algorithms. As the rover has intelligence in a specific field that is to find the shortest path with minimum cost it is considered to be using weak artificial intelligence. It perceives information like if there are obstacles in the way or a rough terrain (weights that increases cost) via sensors and from this observation it makes decisions and with the help of actuators it proceeds and takes action. 
