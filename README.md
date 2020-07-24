@@ -91,4 +91,5 @@ A* search is the most commonly known form of best-first search. It uses heuristi
 
 ### References
 https://www.javatpoint.com/search-algorithms-in-ai
+<br>
 https://en.wikipedia.org/wiki/Artificial_intelligence
