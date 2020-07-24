@@ -10,6 +10,15 @@ It is developed to find the shortest path between two points while avoiding obst
 #  How it works
 It uses pathfinding algorithms to find the shortest path between two points.
 
+# Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+Prerequisites
+What things you need to install the software and how to install them
+
+node.js
+babel
+
 #  Use of ARTIFICIAL INTELLIGENCE
 Most of the algorithms used to help make the rover an intelligent agent are the AI search algorithms. As the rover has intelligence in a specific field that is to find the shortest path with minimum cost it is considered to be using weak artificial intelligence. It perceives information like if there are obstacles in the way or a rough terrain (weights that increases cost) via sensors and from this observation it makes decisions and with the help of actuators it proceeds and takes action. 
 The mangalyaan acts as a rational agent meaning it has a clear preference and acts in a way to maximize its perfomance and give the best possible results.
@@ -105,3 +114,5 @@ Some times the obstacles surround the starting point and there exist no path to 
 https://www.javatpoint.com/search-algorithms-in-ai
 <br>
 https://en.wikipedia.org/wiki/Artificial_intelligence
+https://www.youtube.com/watch?v=sZ0z7B7QmjI
+http://theory.stanford.edu/~amitp/GameProgramming/
