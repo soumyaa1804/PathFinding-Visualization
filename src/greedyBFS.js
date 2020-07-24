@@ -43,10 +43,11 @@ function getDistance(nodeA, nodeB) {
     //Manhattan Distance
     return dx + dy;
   } else {
+    // Diagonal Distance
     if (dx > dy) {
-      return (1.4 * dy) + (dx - dy);
+      return (1.4 * dy) + (1 * (dx - dy));
     }
-    return (1.4 * dx) + (dy - dx);
+    return (1.4 * dx) + (1 * (dy - dx));
   }
 }
 
