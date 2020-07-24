@@ -120,10 +120,30 @@ td:hover {
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
 }
+
 .rotate.down {
   -moz-transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
+}
+
+.github-info {
+  border: 1px solid #79d9ce;
+  background-color: rgb(95, 107, 119);
+  opacity: 0.9;
+  width: 30%;
+  color: white;
+  bottom: 10px;
+  position: absolute;
+  left: 35%;
+  border-radius: 50px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.github-info a {
+  color: white;
+  text-decoration: none;
 }
 
 .color-code {
@@ -157,17 +177,22 @@ td:hover {
   background-color: springgreen;
   color: springgreen;
 }
+
 .shortest {
   background-color: aqua;
   color: aqua;
 }
+
 .unvisited-weight {
   background-color: silver;
   color: silver;
 }
+
 ul {
   list-style-type: square;
 }
+
 li {
   margin-bottom: 25px;
 }
+
