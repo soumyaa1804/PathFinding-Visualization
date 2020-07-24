@@ -11,14 +11,11 @@ It is developed to find the shortest path between two points while avoiding obst
 It uses pathfinding algorithms to find the shortest path between two points.
 
 # Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See documentation for notes on how to deploy the project on a live system.
 
-Prerequisites
+Prerequisites:
 What things you need to install the software and how to install them
-
 node.js
-<br>
-babel
 
 # Documentation
 For documentation,
