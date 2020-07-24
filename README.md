@@ -22,9 +22,17 @@ The uninformed search does not contain any domain knowledge such as closeness, t
 
 ### 1. Breadth First Search Algorithm
 Breadth-first search (BFS) is an algorithm for traversing or searching tree or graph data structures. It starts at the start Node in the grid, and explores all of the neighbour nodes at the present depth prior to moving on to the nodes at the next depth level. It can be implemented using FIFO queue data structure. It is an unweighted algorithm.
-<img width="900" height="75px" width="300px" style="float:left padding-right:10px" src="./assets/BFSStart.png">
-<img width="900" style = "margin-bottom:50px" src="./assets/BFSEnd.png">
-<img width="900" style = "margin-bottom:50px" src="./assets/BFSdiagonal.png">
+<br>
+<br>
+<img width="900"  src="./assets/BFSStart.png">
+<br>
+<br>
+<img width="900"  src="./assets/BFSEnd.png">
+<br>
+<br>
+<img width="900" src="./assets/BFSdiagonal.png">
+<br>
+<br>
 
 ### 2. Dijkstra's Algorithm
 Dijkstra's algorithm find the shortest path between two given nodes, but a more common variant fixes a single node as the "source" node and finds shortest paths from the source to all other nodes in the graph, producing a shortest-path tree.
