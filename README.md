@@ -83,7 +83,19 @@ A* search is the most commonly known form of best-first search. It uses heuristi
 <img width="900" src="./assets/aStardiagonal.png">
 <br>
 <br>
+# Unique Features
 
+### Rough Terrain Region
+The Martian surface contains thousands of impact craters because, unlike Earth, Mars has a stable crust, low erosion rate, and no active sources of lava. So, impact craters on Mars are not obliterated as they are on Earth. These rough terrains are very damaging for the mangalyaan to pass through to reach the destination, hence to avoid such wear and tear of the machine and excess use of energy which directly increases the costs, we have introduced extra costs (weights) to the nodes where the users want these rough terrain to be so that it can help rover avoid these crater pits and reach its target point efficiently with minimum cost possible.
+The weighted algorithms that are dijkstra's algorithm, A* algorithm and Greedy Best-First Algorithm consider these weights and try to get the path which is the most optimized one, whereas Breadth-First Search algorithm is unweighted algorithm so the application does not allow user to enter weights.
+
+### Warning - NO PATH FOUND
+Some times the obstacles surround the starting point and there exist no path to the destination point, in that case the application foretell and alerts the user - **NO PATH FOUND**.
+<br>
+<br>
+<img width="900" src="./assets/NoPath.png">
+<br>
+<br>
 ### Contributors
 - [Anusha Bansal](https://github.com/AnushaKittu)
 
