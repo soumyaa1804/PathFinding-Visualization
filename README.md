@@ -4,6 +4,8 @@
 Mangalyaan web application is a visualizing tool that helps the Mars rover (Mangalyaan) to find the shortest path between a start point and an end point using artificial intelligence search algorithms. Mangalyaan's main objective is to assist the crew that is chosen to establish a permenant human settlement on Mars, by providing the optimized paths between the departing point and the destination point. Mangalyaan is an intelligent machine, that is, it can be programmed to take actions or make choices/decisions based on input from sensors and the information provided to it. It is an entity which acts, directing its activity towards achieving goals that is to find optimized path to the destination while avoiding all the obstacles like big huge rocks and minimizing cost by circumventing rough terrains. This cost might include cost of wear and tear of the rover and cost of energy wasted.
 Different algorithms are observed and applied to help the mangalyaan to become intelligent and make smart decisions.
 
+**This project is a part of [The Mars Colonization Program](https://microsoft.acehacker.com/mars/) conducted by Microsoft in association with [Ace Hacker](https://www.acehacker.com/).** 
+
 #  What it can do
 It is developed to find the shortest path between two points while avoiding obstacles.
 
