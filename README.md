@@ -6,10 +6,10 @@ Different algorithms are observed and applied to help the mangalyaan to become i
 
 **This project is a part of [The Mars Colonization Program](https://microsoft.acehacker.com/mars/) conducted by Microsoft in association with [Ace Hacker](https://www.acehacker.com/).** 
 
-#  What it can do
+#  What it can do?
 It is developed to find the shortest path between two points while avoiding obstacles.
 
-#  How it works
+#  How it works?
 It uses pathfinding algorithms to find the shortest path between two points.
 
 # Getting Started
